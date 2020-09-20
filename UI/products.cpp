@@ -14,6 +14,7 @@ ProductsWindow::ProductsWindow() {
 	{
 		Exclamation("Can't find DB");
 	}
+	
 	SQL;
 	Sqlite3Session sqlite3;
 	if(!sqlite3.Open(DBFile)) {

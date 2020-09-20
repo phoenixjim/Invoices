@@ -13,6 +13,8 @@ file
 	UI/products.cpp,
 	Tables/Invoices.sch,
 	Tables/sqlinclude.h,
+	UI/listlineitems.cpp,
+	UI/listinvoices.cpp,
 	UI/Invoices.lay,
 	UI/listinvoices.h,
 	UI/listlineitems.h,

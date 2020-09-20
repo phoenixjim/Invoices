@@ -9,9 +9,7 @@
 
 struct ListLineItemsWindow : WithListLineItemsWindowLayout<TopWindow> {
 public:
-	ListLineItemsWindow() {
-	CtrlLayout(*this, "List Line Items");
-};
+	ListLineItemsWindow();
 	void Paint(Draw& w) {
         w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
      }

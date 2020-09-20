@@ -20,6 +20,8 @@ using namespace Upp;
 #include "profitloss.h"
 #include "setcompany.h"
 Convert& DateIntConvert();
+Convert& ConvDouble();
+
 // this should be a simple file browser function - can do this here
 // struct SelectDBWindow : WithSelectDBWindowLayout<TopWindow> {
 // 	SelectDBWindow() { CtrlLayout(*this, "Select Database File"); }

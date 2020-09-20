@@ -1,5 +1,20 @@
 #include "Invoices.h"
 
+struct ConvDoubleCls : Convert
+{
+	virtual Value Format ( const Value &q ) const;
+};
+
+Value ConvDoubleCls::Format ( const Value &q ) const
+	{
+		return q.IsNull() ? Null : UPP::Format ( "%.2f", q );
+	}
+
+Convert& ConvDouble()
+{
+	return Single<ConvDoubleCls>();
+}
+
 struct DateIntConvertCls : Convert {
     virtual Value Format(const Value& q) const;
     virtual Value Scan(const Value& text) const;
@@ -8,7 +23,7 @@ struct DateIntConvertCls : Convert {
 
 Value DateIntConvertCls::Format(const Value& q) const
 {
-    return IsNull(q) ? String() : ::Format(Date(0001, 1, 1) + (int)q);
+    return IsNull(q) ? String() : ::Format(Date( 1970, 1, 1) + (int)q);
 }
 
 Value DateIntConvertCls::Scan(const Value& text) const
@@ -16,9 +31,10 @@ Value DateIntConvertCls::Scan(const Value& text) const
     String txt = text;
     if(IsNull(txt))
         return Null;
+    txt.TrimLast(6);
     Date d;
     if(StrToDate(d, txt))
-        return d - Date(0001, 1, 1);
+        return d - Date(1970, 1, 1);
     return ErrorValue("Invalid date!");
 }
 
@@ -82,7 +98,10 @@ Invoices::Invoices()
         VectorMap<String, String> cfg = LoadIniFile(configfile);
         DBFile = cfg.Get("DBFile", Null);
 	}
-
+	else {
+		GetOutputDirectory();
+		SelectDB();
+	}
 }
 
 String Invoices::SelectDB()

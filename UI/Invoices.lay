@@ -75,9 +75,11 @@ END_LAYOUT
 LAYOUT(CreateInvoiceWindowLayout, 400, 200)
 END_LAYOUT
 
-LAYOUT(ListInvoicesWindowLayout, 400, 200)
+LAYOUT(ListInvoicesWindowLayout, 1128, 584)
+	ITEM(SqlArray, ListInvoicesArray, SetFrame(ThinInsetFrame()).RightPosZ(8, 928).VSizePosZ(8, 12))
 END_LAYOUT
 
-LAYOUT(ListLineItemsWindowLayout, 400, 200)
+LAYOUT(ListLineItemsWindowLayout, 1044, 540)
+	ITEM(SqlArray, ListLineItemsArray, SetFrame(ThinInsetFrame()).LeftPosZ(188, 848).TopPosZ(4, 528))
 END_LAYOUT
 

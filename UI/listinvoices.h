@@ -9,9 +9,7 @@
 
 struct ListInvoicesWindow : WithListInvoicesWindowLayout<TopWindow> {
 public:
-	ListInvoicesWindow() {
-	CtrlLayout(*this, "List Invoices");
-};
+	ListInvoicesWindow();
 	void Paint(Draw& w) {
         w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
      }
