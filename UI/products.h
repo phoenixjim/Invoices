@@ -12,6 +12,16 @@ public:
 	void Paint(Draw& w) {
         w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
      }
+String	DBFile;
+String OutputDirectory;
+String configfile = ConfigFile();
+String cfg;
+
+FileSel selectdbwin;
+FileSel selectodirwin;
+
+String GetOutputDirectory();
+String SelectDB();
 };
 
 #endif

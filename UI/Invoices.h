@@ -48,23 +48,11 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 	SetCompanyWindow setcompanywin;
 	ShowDBWindow showdbwin;
 
-	FileSel selectdbwin;
-	
-	FileSel selectodirwin;
-	
 	MenuBar		 mainmenu;
-	
-	String	DBFile;
-	String OutputDirectory;
-	String configfile = ConfigFile();
-	String cfg;
 	
 public:
 	typedef Invoices CLASSNAME;
 	Invoices();
-	
-	String GetOutputDirectory();
-	String SelectDB();
 	
 	// Menu definition
 	void MainMenu(Bar& bar);
@@ -73,6 +61,17 @@ public:
 	void ReportsMenu(Bar& bar);
 	void ManagementMenu(Bar& bar);
 	
+String GetOutputDirectory();
+String SelectDB();
+
+String	DBFile;
+String OutputDirectory;
+String configfile = ConfigFile();
+String cfg;
+
+FileSel selectdbwin;
+FileSel selectodirwin;
+
 	// Keys for shortcuts
 	// bool Key(dword key, int count) override;
 };

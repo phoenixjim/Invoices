@@ -13,7 +13,7 @@ if(FileExists(configfile))
 	}
 	else 
 	{
-		Exclamation("Can't find DB");
+		Exclamation("Can't find DB - ListLineItems");
 }
 	SQL;
 	Sqlite3Session sqlite3;

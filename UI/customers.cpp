@@ -15,10 +15,6 @@ CustomersWindow::CustomersWindow() {
         VectorMap<String, String> cfg = LoadIniFile(configfile);
         DBFile = cfg.Get("DBFile", Null);
 	}
-	else 
-	{
-		Exclamation("Can't find DB");
-	} 
 	SQL;
 	Sqlite3Session sqlite3;
 	if(!sqlite3.Open(DBFile)) {
@@ -53,3 +49,4 @@ CustomersWindow::CustomersWindow() {
 	// CustArray.WhenLeftDouble = THISBACK(EditBorrow);
 	CustArray.GoEndPostQuery();
 }
+

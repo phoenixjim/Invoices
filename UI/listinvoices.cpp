@@ -12,7 +12,7 @@
 	}
 	else 
 	{
-		Exclamation("Can't find DB");
+		Exclamation("Can't find DB - ListInvoices");
 }
 	SQL;
 	Sqlite3Session sqlite3;
