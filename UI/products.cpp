@@ -1,10 +1,18 @@
 #include "Invoices.h"
 #include "products.h"
+#include "../Tables/tables.h"
+
 ProductsWindow::ProductsWindow() {
-	String DBFile;
-	String configfile = ConfigFile();
 	CtrlLayout(*this, "Products");	
+
+	btnAddProduct << [=] { btnAddProductClick(); };
 	
+	btnUpdateProduct << [=] { btnUpdateProductClick(); };
+	
+	btnShowAllProduct << [=] { btnShowAllProductClick(); };
+	
+	btnProductRange << [=] { btnProductRangeClick(); };
+		
 	if(FileExists(configfile))
 	{
         VectorMap<String, String> cfg = LoadIniFile(configfile);
@@ -13,40 +21,65 @@ ProductsWindow::ProductsWindow() {
 	else 
 	{
 		SelectDB();
-		GetOutputDirectory();
-	} 
-
+	 } 
+	
 	SQL;
 	Sqlite3Session sqlite3;
 	if(!sqlite3.Open(DBFile)) {
 		Exclamation("Can't create or open database file\n");
 		return;
 	}
+	
 	SQL = sqlite3;
-	SqlId tbl_products("tbl_products"), id("id"), name("name"), description("description"), datePurchased("datePurchased"), cost("cost"), invoice_number("invoice_number");
+	SqlId Products("Products"), id("id"), name("name"), description("description"), datePurchased("datePurchased"), cost("cost"), invoiceNumber("invoiceNumber");
 
-	ProductArray.SetTable(tbl_products);
+	ProductArray.SetTable(Products);
 		
 	ProductArray.AddKey(id);
 	// ProductArray.Join(BOOK_ID, book); // joins id from other db to this id
-	ProductArray.AddColumn(name, "Name"); // .SetConvert(DateIntConvert());
-	ProductArray.AddColumn(description, "Description"); // .SetConvert(DateIntConvert());
+	ProductArray.AddColumn(name, "Name");
+	ProductArray.AddColumn(description, "Description");
 	ProductArray.AddColumn(datePurchased, "Date Purchased").SetConvert(DateIntConvert());
 	ProductArray.AddColumn(cost, "Cost");
-	ProductArray.AddColumn(invoice_number, "Invoice#");
+	ProductArray.AddColumn(invoiceNumber, "Invoice#");
 	ProductArray.ColumnWidths("100 100 40 30 30");
 	ProductArray.SetOrderBy(id);
 	
 	Sql sql(sqlite3);
-	sql.Execute("select * from tbl_products");
-
+	sql.Execute("select * from Products");
 
 	while(sql.Fetch())
 		ProductArray.Add(sql);
+
 	// ProductArray.WhenBar = THISBACK(BorrowMenu);
-	// ProductArray.WhenLeftDouble = THISBACK(EditBorrow);
-	ProductArray.GoEndPostQuery();
-	
+	ProductArray.WhenLeftDouble = [=] { EditRow();};
+	// ProductArray.GoEndPostQuery();
+}
+
+void ProductsWindow::btnAddProductClick()
+{
+
+	PromptOK(__func__);
+}
+
+void ProductsWindow::btnUpdateProductClick()
+{
+	PromptOK(__func__);
+}
+
+void ProductsWindow::btnShowAllProductClick()
+{
+	PromptOK(__func__);
+}
+
+void ProductsWindow::btnProductRangeClick()
+{
+	PromptOK(__func__);
+}
+
+void ProductsWindow::EditRow()
+{
+	PromptOK(__func__);
 }
 
 String ProductsWindow::SelectDB()
@@ -67,7 +100,7 @@ String ProductsWindow::SelectDB()
 	return selectdbwin.Get();
 
 }
-
+/*
 String ProductsWindow::GetOutputDirectory()
 {
 	if ( !selectodirwin.ExecuteSelectDir ( t_ ( "Choose output directory" ) ) )
@@ -83,3 +116,4 @@ String ProductsWindow::GetOutputDirectory()
 	}
 	return selectodirwin.Get();
 }
+*/

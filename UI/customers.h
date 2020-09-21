@@ -7,12 +7,22 @@
 // #define MODEL "Invoices/Tables/Invoices.sch"
 // #include <Sql/sch_header.h>
 struct CustomersWindow : WithCustomersWindowLayout<TopWindow> {
-	
+	String DBFile;
+	String	configfile = ConfigFile();
+	String	cfg;
+
+	FileSel selectdbwin;
 public:
     CustomersWindow();
-	void Paint(Draw& w) {
+	virtual void Paint(Draw& w) {
         w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
-     }
+    }
+    void btnAddCustomerClick();
+	void btnUpdateCustomerClick();
+	void btnSearchCustomerClick();
+	void EditRow();
+	String SelectDB();
+	void FakeStub();
 };
 	
 

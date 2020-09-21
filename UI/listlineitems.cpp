@@ -4,7 +4,7 @@
 ListLineItemsWindow::ListLineItemsWindow() {
 	String DBFile;
 	String configfile = ConfigFile();
-
+	/*
 	CtrlLayout(*this, "List Line Items");
 if(FileExists(configfile))
 	{
@@ -54,4 +54,5 @@ if(FileExists(configfile))
 
 	while(sql.Fetch())
 		ListLineItemsArray.Add(sql);
+		*/
 	};

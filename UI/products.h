@@ -1,5 +1,6 @@
 #ifndef _Invoices_products_h_
 #define _Invoices_products_h_
+
 #include <SqlCtrl/SqlCtrl.h>
 #include <plugin/sqlite3/Sqlite3.h>
 
@@ -7,21 +8,26 @@
 // #define MODEL "Invoices/Tables/Invoices.sch"
 // #include <Sql/sch_header.h>
 struct ProductsWindow : WithProductsWindowLayout<TopWindow> {
+	String	DBFile;
+	String	configfile = ConfigFile();
+	String	cfg;
+
+	FileSel selectdbwin;
+
+	
 public:
 	ProductsWindow();
-	void Paint(Draw& w) {
+	virtual void Paint(Draw& w) {
         w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
-     }
-String	DBFile;
-String OutputDirectory;
-String configfile = ConfigFile();
-String cfg;
-
-FileSel selectdbwin;
-FileSel selectodirwin;
-
-String GetOutputDirectory();
-String SelectDB();
+    }
+    void btnAddProductClick();
+	void btnUpdateProductClick();
+	void btnShowAllProductClick();
+	void btnProductRangeClick();
+	void EditRow();
+	
+	// String GetOutputDirectory();
+	String SelectDB();
 };
 
 #endif

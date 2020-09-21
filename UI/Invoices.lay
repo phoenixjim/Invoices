@@ -45,9 +45,10 @@ LAYOUT(CustomersWindowLayout, 1112, 476)
 	ITEM(EditString, txtCustCity, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(136, 256).TopPosZ(232, 19))
 	ITEM(EditString, txtCustState, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(136, 256).TopPosZ(272, 19))
 	ITEM(EditString, txtCustZip, MaxChars(10).SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(136, 64).TopPosZ(308, 19))
-	ITEM(Button, btnUpdateCLAYOUTCustomersWindowLayout1112520ustomer, SetLabel(t_("Update")).SetFont(SansSerifZ(16)).SetFrame(ButtonFrame()).LeftPosZ(304, 88).TopPosZ(348, 28))
+	ITEM(Button, btnUpdateCustomer, SetLabel(t_("Update")).SetFont(SansSerifZ(16)).SetFrame(ButtonFrame()).LeftPosZ(304, 88).TopPosZ(348, 28))
 	ITEM(Button, btnSearchCustomer, SetLabel(t_("Search")).SetFont(SansSerifZ(16)).SetFrame(ButtonFrame()).LeftPosZ(24, 88).TopPosZ(400, 28))
 	ITEM(Button, btnAddCustomer, SetLabel(t_("Add")).SetFont(SansSerifZ(16)).SetFrame(ButtonFrame()).LeftPosZ(24, 88).TopPosZ(352, 28))
+	ITEM(Button, btnFake, HCenterPosZ(56, -348).VCenterPosZ(15, 254))
 END_LAYOUT
 
 LAYOUT(ProductsWindowLayout, 960, 464)
@@ -66,13 +67,13 @@ LAYOUT(ProductsWindowLayout, 960, 464)
 	ITEM(Button, btnUpdateProduct, SetLabel(t_("Update")).SetFont(SansSerifZ(16)).SetFrame(ButtonFrame()).LeftPosZ(108, 84).TopPosZ(352, 28))
 	ITEM(Button, btnAddProduct, SetLabel(t_("Add")).SetFont(SansSerifZ(16)).SetFrame(ButtonFrame()).LeftPosZ(16, 84).TopPosZ(352, 28))
 	ITEM(Button, btnShowAllProduct, SetLabel(t_("Show All")).SetFont(SansSerifZ(16)).SetFrame(ButtonFrame()).LeftPosZ(16, 84).TopPosZ(408, 28))
-	ITEM(Button, btnShowProduct, SetLabel(t_("Show")).SetFont(SansSerifZ(16)).SetFrame(ButtonFrame()).LeftPosZ(108, 84).TopPosZ(408, 28))
+	ITEM(Button, btnProductRange, SetLabel(t_("Show")).SetFont(SansSerifZ(16)).SetFrame(ButtonFrame()).LeftPosZ(108, 84).TopPosZ(408, 28))
 	ITEM(DropDate, dtpDateStart, SetFrame(FieldFrame()).LeftPosZ(248, 104).TopPosZ(384, 19))
 	ITEM(DropDate, dtpDateEnd, SetFrame(FieldFrame()).LeftPosZ(248, 104).TopPosZ(412, 19))
 	ITEM(DocEdit, txtDesctription, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(108, 244).TopPosZ(168, 128))
 END_LAYOUT
 
-LAYOUT(CreateInvoiceWindowLayout, 400, 200)
+LAYOUT(CreateInvoiceWindowLayout, 1100, 728)
 END_LAYOUT
 
 LAYOUT(ListInvoicesWindowLayout, 1128, 584)

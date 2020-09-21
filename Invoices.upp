@@ -5,6 +5,7 @@ uses
 	plugin/sqlite3;
 
 file
+	Tables/tables.h,
 	UI/customers.cpp,
 	UI/customers.h,
 	UI/createinvoice.h,

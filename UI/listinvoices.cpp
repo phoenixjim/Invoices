@@ -5,6 +5,7 @@
 	String DBFile;
 	String configfile = ConfigFile();
 	CtrlLayout(*this, "List Invoices");
+	/*
 	if(FileExists(configfile))
 	{
         VectorMap<String, String> cfg = LoadIniFile(configfile);
@@ -54,4 +55,5 @@
 	// ListInvoicesArray.WhenBar = THISBACK(BorrowMenu);
 	// ListInvoicesArray.WhenLeftDouble = THISBACK(EditBorrow);
 	// ListInvoicesArray.GoEndPostQuery();
+	*/
 };
