@@ -78,6 +78,23 @@ END_LAYOUT
 
 LAYOUT(ListInvoicesWindowLayout, 1128, 584)
 	ITEM(SqlArray, ListInvoicesArray, SetFrame(ThinInsetFrame()).RightPosZ(8, 928).VSizePosZ(8, 12))
+	ITEM(Button, btnPrint, SetLabel(t_("Print Selected")).LeftPosZ(4, 80).TopPosZ(12, 15))
+	ITEM(Button, btnApplyPayment, SetLabel(t_("Apply Payment")).LeftPosZ(4, 80).TopPosZ(32, 15))
+	ITEM(Button, btnEdit, SetLabel(t_("Edit Selected")).LeftPosZ(96, 80).TopPosZ(12, 15))
+	ITEM(Button, btnVoid, SetLabel(t_("Void Selected")).LeftPosZ(4, 80).TopPosZ(52, 15))
+	ITEM(Button, btnPaidInFull, SetLabel(t_("Mark PIF")).LeftPosZ(96, 80).TopPosZ(52, 15))
+	ITEM(Button, btnFixDate, SetLabel(t_("Fix Dates")).LeftPosZ(4, 80).TopPosZ(72, 15))
+	ITEM(Button, btnByPaid, SetLabel(t_("All Paid")).LeftPosZ(8, 80).TopPosZ(112, 15))
+	ITEM(Button, btnByBalanceDue, SetLabel(t_("Balance Due")).LeftPosZ(100, 76).TopPosZ(112, 15))
+	ITEM(LabelBox, dv___9, SetLabel(t_("Show:")).LeftPosZ(4, 180).TopPosZ(92, 124))
+	ITEM(EditDouble, edbPayment, AlignRight(true).LeftPosZ(96, 80).TopPosZ(32, 19))
+	ITEM(Button, btnByDates, SetLabel(t_("Date Range")).LeftPosZ(8, 80).TopPosZ(196, 15))
+	ITEM(Button, btnByCustomer, SetLabel(t_("By Customer")).LeftPosZ(52, 80).TopPosZ(132, 15))
+	ITEM(Button, btnByVoided, SetLabel(t_("All Voided")).LeftPosZ(8, 80).TopPosZ(172, 15))
+	ITEM(DropDate, ddRange2, LeftPosZ(92, 88).TopPosZ(192, 19))
+	ITEM(DropDate, ddRange1, LeftPosZ(92, 88).TopPosZ(168, 19))
+	ITEM(DropDate, ddFixDate, LeftPosZ(96, 88).TopPosZ(72, 19))
+	ITEM(DropList, dlCustomers, LeftPosZ(8, 172).TopPosZ(148, 19))
 END_LAYOUT
 
 LAYOUT(ListLineItemsWindowLayout, 1044, 540)

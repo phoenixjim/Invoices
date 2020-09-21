@@ -8,11 +8,17 @@
 // #include <Sql/sch_header.h>
 
 struct ListInvoicesWindow : WithListInvoicesWindowLayout<TopWindow> {
+	String DBFile;
+	String	configfile = ConfigFile();
+	String	cfg;
+
+	FileSel selectdbwin;
 public:
 	ListInvoicesWindow();
-	void Paint(Draw& w) {
+	virtual void Paint(Draw& w) {
         w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
-     }
+    }
+	String SelectDB();
 };
 
 
