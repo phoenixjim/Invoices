@@ -77,7 +77,7 @@ LAYOUT(CreateInvoiceWindowLayout, 1100, 728)
 END_LAYOUT
 
 LAYOUT(ListInvoicesWindowLayout, 1128, 584)
-	ITEM(SqlArray, ListInvoicesArray, SetFrame(ThinInsetFrame()).RightPosZ(8, 928).VSizePosZ(8, 12))
+	ITEM(SqlArray, ListInvoicesArray, MultiSelect(true).SetFrame(ThinInsetFrame()).RightPosZ(8, 928).VSizePosZ(8, 12))
 	ITEM(Button, btnPrint, SetLabel(t_("Print Selected")).LeftPosZ(4, 80).TopPosZ(12, 15))
 	ITEM(Button, btnApplyPayment, SetLabel(t_("Apply Payment")).LeftPosZ(4, 80).TopPosZ(32, 15))
 	ITEM(Button, btnEdit, SetLabel(t_("Edit Selected")).LeftPosZ(96, 80).TopPosZ(12, 15))
@@ -95,6 +95,7 @@ LAYOUT(ListInvoicesWindowLayout, 1128, 584)
 	ITEM(DropDate, ddRange1, LeftPosZ(92, 88).TopPosZ(168, 19))
 	ITEM(DropDate, ddFixDate, LeftPosZ(96, 88).TopPosZ(72, 19))
 	ITEM(DropList, dlCustomers, LeftPosZ(8, 172).TopPosZ(148, 19))
+	ITEM(Button, btnFake, SetLabel(t_("btnFake")).LeftPosZ(68, 56).TopPosZ(596, 15))
 END_LAYOUT
 
 LAYOUT(ListLineItemsWindowLayout, 1044, 540)
