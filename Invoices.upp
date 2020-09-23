@@ -5,26 +5,14 @@ uses
 	plugin/sqlite3;
 
 file
-	Tables/tables.h,
+	configs.cpp,
+	configs.h,
 	UI/customers.cpp,
 	UI/customers.h,
-	UI/createinvoice.h,
-	UI/createinvoice.cpp,
-	UI/products.h,
-	UI/products.cpp,
-	Tables/Invoices.sch,
-	Tables/sqlinclude.h,
-	UI/listlineitems.cpp,
-	UI/listinvoices.cpp,
-	UI/Invoices.lay,
-	UI/listinvoices.h,
-	UI/listlineitems.h,
-	UI/taxmenu.h,
-	UI/taxbycustomer.h,
-	UI/incomebycustomer.h,
-	UI/profitloss.h,
+	UI/sqlincludes.h,
+	UI/converts.h,
 	UI/Invoices.h,
-	UI/setcompany.h,
+	UI/converts.cpp,
 	UI/main.cpp;
 
 mainconfig

@@ -1,17 +1,10 @@
 #ifndef _Invoices_customers_h_
 #define _Invoices_customers_h_
-#include <SqlCtrl/SqlCtrl.h>
-#include <plugin/sqlite3/Sqlite3.h>
+#include <Invoices/UI/sqlincludes.h>
+#include "../configs.h"
 
-#define SCHEMADIALECT <plugin/sqlite3/Sqlite3Schema.h>
-// #define MODEL "Invoices/Tables/Invoices.sch"
-// #include <Sql/sch_header.h>
 struct CustomersWindow : WithCustomersWindowLayout<TopWindow> {
-	String DBFile;
-	String	configfile = ConfigFile();
-	String	cfg;
-
-	FileSel selectdbwin;
+	Configs	myConfig;
 public:
     CustomersWindow();
 	virtual void Paint(Draw& w) {
@@ -21,8 +14,8 @@ public:
 	void btnUpdateCustomerClick();
 	void btnSearchCustomerClick();
 	void EditRow();
-	String SelectDB();
-	void FakeStub();
+
+	// void FakeStub();
 };
 	
 

@@ -95,10 +95,10 @@ LAYOUT(ListInvoicesWindowLayout, 1128, 584)
 	ITEM(DropDate, ddRange1, LeftPosZ(92, 88).TopPosZ(168, 19))
 	ITEM(DropDate, ddFixDate, LeftPosZ(96, 88).TopPosZ(72, 19))
 	ITEM(DropList, dlCustomers, LeftPosZ(8, 172).TopPosZ(148, 19))
-	ITEM(Button, btnFake, SetLabel(t_("btnFake")).LeftPosZ(68, 56).TopPosZ(596, 15))
 END_LAYOUT
 
 LAYOUT(ListLineItemsWindowLayout, 1044, 540)
 	ITEM(SqlArray, ListLineItemsArray, SetFrame(ThinInsetFrame()).LeftPosZ(188, 848).TopPosZ(4, 528))
+	ITEM(Button, btnFake, LeftPosZ(168, 56).TopPosZ(632, 15))
 END_LAYOUT
 
