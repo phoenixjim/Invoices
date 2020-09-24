@@ -7,10 +7,14 @@ uses
 file
 	configs.cpp,
 	configs.h,
-	UI/customers.cpp,
-	UI/customers.h,
+	UI/products.cpp,
+	UI/Invoices.cpp,
+	UI/Customers.cpp,
+	UI/Invoices.lay,
+	UI/DBUI.h,
 	UI/sqlincludes.h,
 	UI/converts.h,
+	UI/LineItems.cpp,
 	UI/Invoices.h,
 	UI/converts.cpp,
 	UI/main.cpp;

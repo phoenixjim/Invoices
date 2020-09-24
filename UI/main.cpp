@@ -1,27 +1,28 @@
 #include "Invoices.h"
 
+#define MODEL "Invoices/Tables/Invoices.sch"
+#include <Sql/sch_schema.h>
+#undef MODEL
+
 void Invoices::MainMenu(Bar& bar)
 {
 	bar.Add(t_("Customers"),  [=]{ if(!cwin.IsOpen()) cwin.Open(this); });
 
-//    bar.Add(t_("Products"), [=]{ if(!prodwin.IsOpen()) prodwin.Open(this); });
+    bar.Add(t_("Products"), [=]{ if(!prodwin.IsOpen()) prodwin.Open(this); });
 	
-//	bar.Sub(t_("Transactions"), THISFN(TransactionsMenu));
+	bar.Sub(t_("Transactions"), THISFN(TransactionsMenu));
 //	bar.Sub(t_("Reports"), THISFN(ReportsMenu));
 	bar.Sub(t_("Management"), THISFN(ManagementMenu));
 	bar.Add(t_("Exit"), THISFN(Close));
 }
-/*
+
 void Invoices::TransactionsMenu(Bar& bar)
 {
-	bar.Add(t_("Create Invoice"), [=]{ if(!createinvoicewin.IsOpen())
-	createinvoicewin.Open(this); });
-	bar.Add(t_("List Invoices"), [=]{ if(!listinvoiceswin.IsOpen())
-	listinvoiceswin.Open(this); });
-	bar.Add(t_("List Line Items"), [=]{ if(!listlineitemswin.IsOpen())
-	listlineitemswin.Open(this); });
+	bar.Add(t_("Create Invoice"), [=]{ if(!createinvoicewin.IsOpen()) 	createinvoicewin.Open(this); });
+	bar.Add(t_("List Invoices"), [=]{ if(!invoiceswin.IsOpen()) 	invoiceswin.Open(this); });
+	bar.Add(t_("List Line Items"), [=]{ if(!listlineitemswin.IsOpen()) 	listlineitemswin.Open(this); });
 }
-
+/*
 void Invoices::ReportsMenu(Bar& bar)
 {
 	bar.Add(t_("Income / Sales Tax"), [=]{ if(!taxreportwin.IsOpen()) taxreportwin.Open(this); });
@@ -72,5 +73,23 @@ bool Invoices::Key(dword key, int count)
 
 GUI_APP_MAIN
 {
+	Configs myConfig;
+	if(FileExists(myConfig.configfile))
+	{
+        VectorMap<String, String> cfg = LoadIniFile(myConfig.configfile);
+        myConfig.DBFile = cfg.Get("DBFile", Null);
+	}
+	else {
+		myConfig.DBFile = myConfig.SelectDB();
+	}
+	
+	Sqlite3Session sqlite3;
+	if(!sqlite3.Open("/home/james/upp/MyApps/Customers/sample.db")) {
+		Exclamation("Can't create or open database file\n");
+		return;
+	}
+	
+	SQL = sqlite3;
+	
 	Invoices().Run();
 }

@@ -25,32 +25,6 @@ END_LAYOUT
 LAYOUT(SelectOutputDirWindowLayout, 400, 200)
 END_LAYOUT
 
-LAYOUT(CustomersWindowLayout, 1112, 476)
-	ITEM(SqlArray, CustArray, AutoHideSb(true).LeftPosZ(436, 656).TopPosZ(28, 420))
-	ITEM(Label, dv___1, SetLabel(t_("Customer ID")).SetFont(SansSerifZ(16)).LeftPosZ(20, 100).TopPosZ(36, 19))
-	ITEM(Label, dv___2, SetLabel(t_("Name")).SetFont(SansSerifZ(16)).LeftPosZ(20, 100).VSizePosZ(76, 381))
-	ITEM(Label, dv___3, SetLabel(t_("Email")).SetFont(SansSerifZ(16)).LeftPosZ(20, 100).TopPosZ(116, 19))
-	ITEM(Label, dv___4, SetLabel(t_("Contact")).SetFont(SansSerifZ(16)).LeftPosZ(20, 100).TopPosZ(156, 19))
-	ITEM(Label, dv___5, SetLabel(t_("Address")).SetFont(SansSerifZ(16)).LeftPosZ(20, 100).TopPosZ(196, 19))
-	ITEM(Label, dv___6, SetLabel(t_("City")).SetFont(SansSerifZ(16)).LeftPosZ(20, 100).TopPosZ(232, 19))
-	ITEM(Label, dv___7, SetLabel(t_("State")).SetFont(SansSerifZ(16)).LeftPosZ(20, 100).TopPosZ(272, 19))
-	ITEM(Label, dv___8, SetLabel(t_("Zip")).SetFont(SansSerifZ(16)).LeftPosZ(20, 100).TopPosZ(308, 19))
-	ITEM(EditIntNotNull, txtCustID, Min(-1).NotNull(false).SetFont(SansSerifZ(16)).SetEditable(false).SetFrame(FieldFrame()).WantFocus(false).LeftPosZ(136, 64).TopPosZ(36, 19))
-	ITEM(Option, chkTaxable, SetLabel(t_("Taxable?")).SetFont(SansSerifZ(16)).LeftPosZ(228, 108).TopPosZ(36, 16))
-	ITEM(EditString, txtCustSearch, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(136, 256).TopPosZ(404, 19))
-	ITEM(EditString, txtCustName, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(136, 256).TopPosZ(76, 19))
-	ITEM(EditString, txtCustEmail, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(136, 256).TopPosZ(116, 19))
-	ITEM(EditString, txtCustPhone, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(136, 256).TopPosZ(156, 19))
-	ITEM(EditString, txtCustAddress, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(136, 256).TopPosZ(196, 19))
-	ITEM(EditString, txtCustCity, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(136, 256).TopPosZ(232, 19))
-	ITEM(EditString, txtCustState, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(136, 256).TopPosZ(272, 19))
-	ITEM(EditString, txtCustZip, MaxChars(10).SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(136, 64).TopPosZ(308, 19))
-	ITEM(Button, btnUpdateCustomer, SetLabel(t_("Update")).SetFont(SansSerifZ(16)).SetFrame(ButtonFrame()).LeftPosZ(304, 88).TopPosZ(348, 28))
-	ITEM(Button, btnSearchCustomer, SetLabel(t_("Search")).SetFont(SansSerifZ(16)).SetFrame(ButtonFrame()).LeftPosZ(24, 88).TopPosZ(400, 28))
-	ITEM(Button, btnAddCustomer, SetLabel(t_("Add")).SetFont(SansSerifZ(16)).SetFrame(ButtonFrame()).LeftPosZ(24, 88).TopPosZ(352, 28))
-	ITEM(Button, btnFake, HCenterPosZ(56, -348).VCenterPosZ(15, 254))
-END_LAYOUT
-
 LAYOUT(ProductsWindowLayout, 960, 464)
 	ITEM(SqlArray, ProductArray, SetFrame(ThinInsetFrame()).LeftPosZ(384, 572).TopPosZ(20, 440))
 	ITEM(Label, dv___1, SetLabel(t_("Product ID")).SetFont(SansSerifZ(16)).LeftPosZ(8, 88).TopPosZ(28, 32))
@@ -70,14 +44,14 @@ LAYOUT(ProductsWindowLayout, 960, 464)
 	ITEM(Button, btnProductRange, SetLabel(t_("Show")).SetFont(SansSerifZ(16)).SetFrame(ButtonFrame()).LeftPosZ(108, 84).TopPosZ(408, 28))
 	ITEM(DropDate, dtpDateStart, SetFrame(FieldFrame()).LeftPosZ(248, 104).TopPosZ(384, 19))
 	ITEM(DropDate, dtpDateEnd, SetFrame(FieldFrame()).LeftPosZ(248, 104).TopPosZ(412, 19))
-	ITEM(DocEdit, txtDesctription, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(108, 244).TopPosZ(168, 128))
+	ITEM(DocEdit, txtDescription, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(108, 244).TopPosZ(168, 128))
 END_LAYOUT
 
 LAYOUT(CreateInvoiceWindowLayout, 1100, 728)
 END_LAYOUT
 
-LAYOUT(ListInvoicesWindowLayout, 1128, 584)
-	ITEM(SqlArray, ListInvoicesArray, MultiSelect(true).SetFrame(ThinInsetFrame()).RightPosZ(8, 928).VSizePosZ(8, 12))
+LAYOUT(InvoicesWindowLayout, 1128, 584)
+	ITEM(SqlArray, InvoicesArray, SetFrame(ThinInsetFrame()).RightPosZ(8, 928).VSizePosZ(8, 12))
 	ITEM(Button, btnPrint, SetLabel(t_("Print Selected")).LeftPosZ(4, 80).TopPosZ(12, 15))
 	ITEM(Button, btnApplyPayment, SetLabel(t_("Apply Payment")).LeftPosZ(4, 80).TopPosZ(32, 15))
 	ITEM(Button, btnEdit, SetLabel(t_("Edit Selected")).LeftPosZ(96, 80).TopPosZ(12, 15))
@@ -97,8 +71,32 @@ LAYOUT(ListInvoicesWindowLayout, 1128, 584)
 	ITEM(DropList, dlCustomers, LeftPosZ(8, 172).TopPosZ(148, 19))
 END_LAYOUT
 
-LAYOUT(ListLineItemsWindowLayout, 1044, 540)
-	ITEM(SqlArray, ListLineItemsArray, SetFrame(ThinInsetFrame()).LeftPosZ(188, 848).TopPosZ(4, 528))
-	ITEM(Button, btnFake, LeftPosZ(168, 56).TopPosZ(632, 15))
+LAYOUT(LineItemsWindowLayout, 808, 540)
+	ITEM(SqlArray, LineItemsArray, SetFrame(ThinInsetFrame()).LeftPosZ(4, 800).TopPosZ(4, 528))
+END_LAYOUT
+
+LAYOUT(CustomersWindowLayout, 664, 460)
+	ITEM(Button, btnNewCustomer, SetLabel(t_("Add New Customer")).SetFrame(ThinInsetFrame()).LeftPosZ(272, 120).TopPosZ(436, 15))
+	ITEM(SqlArray, CustArray, AutoHideSb(true).LeftPosZ(4, 656).TopPosZ(4, 420))
+END_LAYOUT
+
+LAYOUT(CustomerAddLayout, 436, 368)
+	ITEM(Label, dv___0, SetLabel(t_("Name")).SetFont(SansSerifZ(16)).LeftPosZ(36, 100).VSizePosZ(16, 332))
+	ITEM(Label, dv___1, SetLabel(t_("Email")).SetFont(SansSerifZ(16)).LeftPosZ(36, 100).TopPosZ(56, 19))
+	ITEM(Label, dv___2, SetLabel(t_("Contact")).SetFont(SansSerifZ(16)).LeftPosZ(36, 100).TopPosZ(96, 19))
+	ITEM(Label, dv___3, SetLabel(t_("Address")).SetFont(SansSerifZ(16)).LeftPosZ(36, 100).TopPosZ(136, 19))
+	ITEM(Label, dv___4, SetLabel(t_("City")).SetFont(SansSerifZ(16)).LeftPosZ(36, 100).TopPosZ(172, 19))
+	ITEM(Label, dv___5, SetLabel(t_("State")).SetFont(SansSerifZ(16)).LeftPosZ(36, 100).TopPosZ(212, 19))
+	ITEM(Label, dv___6, SetLabel(t_("Zip")).SetFont(SansSerifZ(16)).LeftPosZ(36, 100).TopPosZ(248, 19))
+	ITEM(Option, chkTaxable, SetLabel(t_("Taxable?")).SetFont(SansSerifZ(16)).LeftPosZ(152, 108).TopPosZ(300, 16))
+	ITEM(EditString, txtCustName, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(152, 256).TopPosZ(16, 19))
+	ITEM(EditString, txtCustEmail, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(152, 256).TopPosZ(56, 19))
+	ITEM(EditString, txtCustPhone, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(152, 256).TopPosZ(96, 19))
+	ITEM(EditString, txtCustAddress, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(152, 256).TopPosZ(136, 19))
+	ITEM(EditString, txtCustCity, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(152, 256).TopPosZ(172, 19))
+	ITEM(EditString, txtCustState, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(152, 256).TopPosZ(212, 19))
+	ITEM(EditString, txtCustZip, MaxChars(10).SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(152, 64).TopPosZ(248, 19))
+	ITEM(Button, ok, SetLabel(t_("OK")).LeftPosZ(68, 64).TopPosZ(332, 24))
+	ITEM(Button, cancel, SetLabel(t_("Cancel")).LeftPosZ(292, 64).TopPosZ(332, 24))
 END_LAYOUT
 
