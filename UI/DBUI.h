@@ -72,10 +72,10 @@ public:
 	virtual void Paint(Draw& w) {
         w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
     }
-    void btnAddProductClick();
-	void btnUpdateProductClick();
-	void btnShowAllProductClick();
-	void btnProductRangeClick();
+    void AddNewProduct();
+	// void btnUpdateProductClick();
+	// void btnShowAllProductClick();
+	// void btnProductRangeClick();
 	void EditRow();
 	
 	// String GetOutputDirectory();

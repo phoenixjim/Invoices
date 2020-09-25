@@ -84,7 +84,7 @@ GUI_APP_MAIN
 	}
 	
 	Sqlite3Session sqlite3;
-	if(!sqlite3.Open("/home/james/upp/MyApps/Customers/sample.db")) {
+	if(!sqlite3.Open(myConfig.DBFile)) {
 		Exclamation("Can't create or open database file\n");
 		return;
 	}

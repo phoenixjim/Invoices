@@ -1,5 +1,37 @@
-#include "UI/DBUI.h"
-#include "configs.h"
+#include "DBUI.h"
+#include "../configs.h"
+
+class AddProduct : public WithProductAddLayout<TopWindow> {
+	public:
+		SqlCtrls ctrls;
+		typedef AddProduct CLASSNAME;
+		AddProduct();
+};
+
+/*
+
+*/
+
+AddProduct::AddProduct()
+{
+	CtrlLayoutOKCancel(*this, "Add Product");
+	ctrls 
+		(PROD_ID, txtProductID)
+		(INVOICEID, txtInvoiceNo)
+		(PRODNAME, txtProductName)
+		(PRODDESCRIPTION, txtDescription)
+		(DATEPURCHASED, dtpDatePurchased)
+		(COST, txtProductCost)
+		;
+		/*
+	INT_ (PROD_ID)	NOT_NULL PRIMARY_KEY AUTO_INCREMENT
+	STRING_ (PRODNAME, 150)	NOT_NULL
+	STRING_ (PRODDESCRIPTION, 200)
+	INT_ (DATEPURCHASED)
+	DOUBLE_ (COST)	NOT_NULL
+	INT_ (INVOICEID)	NOT_NULL
+*/
+}
 
 ProductsWindow::ProductsWindow() {
 	CtrlLayout(*this, "Products");	
@@ -14,20 +46,13 @@ ProductsWindow::ProductsWindow() {
 	ITEM(DocEdit, txtDesctription, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(108, 244).TopPosZ(168, 128))
 
 */
-	ctrls 
-		(INVOICEID, txtInvoiceNo)
-		(PRODNAME, txtProductName)
-		(PRODDESCRIPTION, txtDescription)
-		(DATEPURCHASED, dtpDatePurchased)
-		(COST, txtProductCost)
-		;
-	btnAddProduct << [=] { btnAddProductClick(); };
+	btnAddProduct << [=] { AddNewProduct(); };
 	
-	btnUpdateProduct << [=] { btnUpdateProductClick(); };
+	// btnUpdateProduct << [=] { btnUpdateProductClick(); };
 	
-	btnShowAllProduct << [=] { btnShowAllProductClick(); };
+	// btnShowAllProduct << [=] { btnShowAllProductClick(); };
 	
-	btnProductRange << [=] { btnProductRangeClick(); };
+	// btnProductRange << [=] { btnProductRangeClick(); };
 		
 	ProductArray.SetTable(PRODUCTS, PROD_ID);
 		
@@ -46,12 +71,12 @@ ProductsWindow::ProductsWindow() {
 	// ProductArray.GoEndPostQuery();
 }
 
-void ProductsWindow::btnAddProductClick()
+void ProductsWindow::AddNewProduct()
 {
 
 	PromptOK(__func__);
 }
-
+/*
 void ProductsWindow::btnUpdateProductClick()
 {
 	PromptOK(__func__);
@@ -66,7 +91,7 @@ void ProductsWindow::btnProductRangeClick()
 {
 	PromptOK(__func__);
 }
-
+*/
 void ProductsWindow::EditRow() // CONTINUE HERE
 {
 	int idNum;
@@ -75,14 +100,13 @@ void ProductsWindow::EditRow() // CONTINUE HERE
 	idNum = ProductArray.GetKey();
 	if (IsNull(idNum))
 		return;
-	SQL * Select(ctrls).From(CUSTOMERS).Where(CUST_ID == idNum);
-	if(!ctrls.Fetch(SQL))
+	AddProduct dlg;
+	SQL * Select(dlg.ctrls).From(PRODUCTS).Where(PROD_ID == idNum);
+	if(!dlg.ctrls.Fetch(SQL))
 		return;
-	/*
 	if(dlg.Run() != IDOK)
 		return;
-	SQL * dlg.ctrls.Update(CUSTOMERS).Where(CUST_ID == idNum);
-	CustArray.ReQuery();
-	CustArray.FindSetCursor(idNum);
-	*/
+	SQL * dlg.ctrls.Update(PRODUCTS).Where(PROD_ID == idNum);
+	ProductArray.ReQuery();
+	ProductArray.FindSetCursor(idNum);
 }
