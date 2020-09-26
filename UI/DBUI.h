@@ -10,6 +10,14 @@ using namespace Upp;
 #include <Invoices/UI/sqlincludes.h>
 #include "converts.h"
 #include "../configs.h"
+enum pNames
+        { 
+        Service=1,
+        Part,
+        Gift,
+        Refund
+        };
+     
 //Customers
 struct CustomersWindow : WithCustomersWindowLayout<TopWindow> {
 	Configs	myConfig;
@@ -68,7 +76,7 @@ public:
 	typedef ProductsWindow CLASSNAME;
 	ProductsWindow();
 	SqlCtrls ctrls;
-
+	
 	virtual void Paint(Draw& w) {
         w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
     }
@@ -84,8 +92,16 @@ public:
 
 // CreateInvoice
 struct CreateInvoiceWindow : WithCreateInvoiceWindowLayout<TopWindow> {
+	long nextInvoice;
+	void CustChanged();
+	void ProdChanged();
+	void AdjustPrice();
+	void SaveInvoice();
+	void CancelInvoice();
+	void AddItem();
+	void ClearItem();
 public:
-	CreateInvoiceWindow() { CtrlLayout(*this, "Create Invoice"); }
+	CreateInvoiceWindow();
 	void Paint(Draw& w) {
         w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
      }

@@ -59,11 +59,11 @@ ProductsWindow::ProductsWindow() {
 	// ProductArray.Join(BOOK_ID, book); // joins id from other db to this id
 	ProductArray.AddColumn(PRODNAME, "Name");
 	ProductArray.AddColumn(PRODDESCRIPTION, "Description");
-	ProductArray.AddColumn(DATEPURCHASED, "Date Purchased").SetConvert(DateIntConvert());
+	ProductArray.AddColumn(DATEPURCHASED, "Date Purchased");
 	ProductArray.AddColumn(COST, "Cost");
 	ProductArray.AddColumn(INVOICEID, "Invoice#");
 	ProductArray.ColumnWidths("100 100 40 30 30");
-	ProductArray.SetOrderBy(PROD_ID);
+	ProductArray.SetOrderBy(PROD_ID).Removing();
 	ProductArray.Query();
 
 	// ProductArray.WhenBar = THISBACK(BorrowMenu);

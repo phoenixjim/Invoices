@@ -2,7 +2,7 @@
 
 String Configs::SelectDB()
 {
-	selectdbwin.Type(t_("Invoices DB"), "*.jts");
+	selectdbwin.Type(t_("Invoices DB"), "*.db");
 	if(!selectdbwin.ExecuteOpen(t_("Select DB File")))
 	{
         return "";
@@ -35,3 +35,10 @@ String Configs::GetOutputDirectory()
 	return selectodirwin.Get();
 }
 
+void Configs::Initialize()
+{
+	DBFile = SelectDB();
+	OutputDirectory = GetOutputDirectory();
+	// more configs here
+	
+}

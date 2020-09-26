@@ -1,5 +1,5 @@
-#include "UI/DBUI.h"
-#include "configs.h"
+#include "DBUI.h"
+#include "../configs.h"
 
 // ListLineItems
 LineItemsWindow::LineItemsWindow() {

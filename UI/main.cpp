@@ -1,4 +1,5 @@
 #include "Invoices.h"
+#include <string>
 
 #define MODEL "Invoices/Tables/Invoices.sch"
 #include <Sql/sch_schema.h>
@@ -76,11 +77,21 @@ GUI_APP_MAIN
 	Configs myConfig;
 	if(FileExists(myConfig.configfile))
 	{
+		String invoiceNum;
+		
         VectorMap<String, String> cfg = LoadIniFile(myConfig.configfile);
         myConfig.DBFile = cfg.Get("DBFile", Null);
+        myConfig.companyname = cfg.Get("companyname", Null);
+        myConfig.companyaddress = cfg.Get("companyaddress", Null);
+        myConfig.companycity = cfg.Get("companycity", Null);
+        myConfig.companystate = cfg.Get("companystate", Null);
+        myConfig.companyzip = cfg.Get("companyzip", Null);
+        myConfig.companyphone = cfg.Get("companyphone", Null);
+        myConfig.companyemail = cfg.Get("companyemail", Null);
+        myConfig.OutputDirectory = cfg.Get("OutputDirectory", Null);
 	}
 	else {
-		myConfig.DBFile = myConfig.SelectDB();
+		myConfig.Initialize();
 	}
 	
 	Sqlite3Session sqlite3;

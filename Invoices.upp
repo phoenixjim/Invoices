@@ -9,6 +9,7 @@ file
 	configs.h,
 	UI/products.cpp,
 	UI/Invoices.cpp,
+	UI/CreateInvoice.cpp,
 	UI/Customers.cpp,
 	UI/Invoices.lay,
 	UI/DBUI.h,
