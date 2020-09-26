@@ -8,18 +8,17 @@ using namespace Upp;
 #include "DBUI.h"
 #include "../configs.h"
 
-// Just a quick info dialog showing currently selected file
-struct ShowDBWindow : WithShowDBWindowLayout<TopWindow> {
-	ShowDBWindow() { CtrlLayout(*this, "Show Current Database File"); }
-};
-
 class Invoices : public WithInvoicesLayout<TopWindow> {
 	CustomersWindow	cwin;
 	InvoicesWindow invoiceswin;
 	LineItemsWindow listlineitemswin;
 	ProductsWindow prodwin;
 	CreateInvoiceWindow createinvoicewin;
-	
+	TaxWindow taxreportwin;
+	IncomeWindow incomewin;
+	ProfitLossWindow profitwin;
+	CompanyInfoWindow setcompanywin;
+		
 	MenuBar		mainmenu;
 
 public:
@@ -32,7 +31,7 @@ public:
 	void		MainMenu(Bar& bar);
 
 	void		TransactionsMenu(Bar& bar);
-	// void		ReportsMenu(Bar& bar);
+	void		ReportsMenu(Bar& bar);
 	void		ManagementMenu(Bar& bar);
 	
 	// Keys for shortcuts

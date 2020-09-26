@@ -107,5 +107,40 @@ public:
      }
 };
 
+struct TaxWindow : WithTaxWindowLayout<TopWindow> {
+	public:
+		typedef TaxWindow CLASSNAME;
+		TaxWindow() { CtrlLayoutOKCancel(*this, "Income/Sales Tax Reports"); };
+		void Paint(Draw& w) {
+        w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
+     }
+};
 
+struct IncomeWindow : WithIncomeByCustomerLayout<TopWindow> {
+	public:
+		typedef IncomeWindow CLASSNAME;
+		IncomeWindow() { CtrlLayoutOKCancel(*this, "Income by Customer Reports"); };
+		void Paint(Draw& w) {
+        w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
+     }
+};
+
+struct ProfitLossWindow : WithProfitLossWindowLayout<TopWindow> {
+	public:
+		typedef ProfitLossWindow CLASSNAME;
+		ProfitLossWindow() { CtrlLayoutOKCancel(*this, "Profit / Loss Reports"); };
+		void Paint(Draw& w) {
+        w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
+     }
+};
+
+struct CompanyInfoWindow : WithCompanyInfoWindowLayout<TopWindow> {
+	public:
+		typedef CompanyInfoWindow CLASSNAME;
+		CompanyInfoWindow() { CtrlLayoutOKCancel(*this, "Set Company Info"); };
+		void Paint(Draw& w) {
+        w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
+     }
+};
 #endif
+

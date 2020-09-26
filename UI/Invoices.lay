@@ -1,25 +1,38 @@
 LAYOUT(InvoicesLayout, 460, 116)
 END_LAYOUT
 
-LAYOUT(TaxWindowLayout, 400, 200)
+LAYOUT(TaxWindowLayout, 216, 112)
+	ITEM(Label, dv___0, SetLabel(t_("Start")).SetFont(SansSerifZ(12)).LeftPosZ(8, 84).TopPosZ(8, 19))
+	ITEM(Label, dv___1, SetLabel(t_("End")).SetFont(SansSerifZ(12)).LeftPosZ(8, 84).TopPosZ(36, 19))
+	ITEM(DropDate, dateStart, LeftPosZ(104, 104).TopPosZ(4, 19))
+	ITEM(DropDate, dateEnd, LeftPosZ(104, 104).TopPosZ(32, 19))
+	ITEM(Option, anon, SetLabel(t_("Anonymous?")).SetFont(SansSerifZ(12)).LeftPosZ(56, 92).TopPosZ(68, 16))
+	ITEM(Button, ok, SetLabel(t_("Create")).SetFont(SansSerifZ(12)).LeftPosZ(20, 56).TopPosZ(88, 15))
+	ITEM(Button, cancel, SetLabel(t_("Cancel")).SetFont(SansSerifZ(12)).LeftPosZ(124, 56).TopPosZ(88, 15))
 END_LAYOUT
 
-LAYOUT(TaxByCustomerWindowLayout, 400, 200)
+LAYOUT(ProfitLossWindowLayout, 216, 92)
+	ITEM(Label, dv___0, SetLabel(t_("Start")).SetFont(SansSerifZ(12)).LeftPosZ(8, 84).TopPosZ(8, 19))
+	ITEM(Label, dv___1, SetLabel(t_("End")).SetFont(SansSerifZ(12)).LeftPosZ(8, 84).TopPosZ(36, 19))
+	ITEM(DropDate, dateStart, LeftPosZ(104, 104).TopPosZ(4, 19))
+	ITEM(DropDate, dateEnd, LeftPosZ(104, 104).TopPosZ(32, 19))
+	ITEM(Button, ok, SetLabel(t_("Create")).SetFont(SansSerifZ(12)).LeftPosZ(20, 56).TopPosZ(68, 15))
+	ITEM(Button, cancel, SetLabel(t_("Cancel")).SetFont(SansSerifZ(12)).LeftPosZ(124, 56).TopPosZ(68, 15))
 END_LAYOUT
 
-LAYOUT(IncomeByCustomerWindowLayout, 400, 200)
+LAYOUT(IncomeByCustomerLayout, 216, 148)
+	ITEM(Label, dv___0, SetLabel(t_("Start")).SetFont(SansSerifZ(12)).LeftPosZ(8, 84).TopPosZ(8, 19))
+	ITEM(Label, dv___1, SetLabel(t_("End")).SetFont(SansSerifZ(12)).LeftPosZ(8, 84).TopPosZ(32, 19))
+	ITEM(Label, dv___2, SetLabel(t_("Customer")).SetFont(SansSerifZ(12)).LeftPosZ(8, 60).TopPosZ(96, 19))
+	ITEM(DropDate, dateStart, LeftPosZ(104, 104).TopPosZ(4, 19))
+	ITEM(DropDate, dateEnd, LeftPosZ(104, 104).TopPosZ(32, 19))
+	ITEM(Option, anon, SetLabel(t_("Anonymous?")).SetFont(SansSerifZ(12)).LeftPosZ(56, 92).TopPosZ(68, 16))
+	ITEM(Button, ok, SetLabel(t_("Create")).SetFont(SansSerifZ(12)).LeftPosZ(20, 56).TopPosZ(128, 15))
+	ITEM(Button, cancel, SetLabel(t_("Cancel")).SetFont(SansSerifZ(12)).LeftPosZ(120, 56).TopPosZ(128, 15))
+	ITEM(DropList, dv___8, LeftPosZ(76, 132).TopPosZ(96, 19))
 END_LAYOUT
 
-LAYOUT(ProfitLossWindowLayout, 400, 200)
-END_LAYOUT
-
-LAYOUT(SelectDBWindowLayout, 400, 200)
-END_LAYOUT
-
-LAYOUT(ShowDBWindowLayout, 400, 200)
-END_LAYOUT
-
-LAYOUT(SetCompanyWindowLayout, 360, 252)
+LAYOUT(CompanyInfoWindowLayout, 360, 252)
 	ITEM(Label, dv___0, SetLabel(t_("Business Name")).SetFont(SansSerifZ(12)).LeftPosZ(20, 96).TopPosZ(16, 19))
 	ITEM(Label, dv___1, SetLabel(t_("Owner")).SetFont(SansSerifZ(12)).LeftPosZ(20, 96).TopPosZ(40, 19))
 	ITEM(Label, dv___2, SetLabel(t_("Address")).SetFont(SansSerifZ(12)).LeftPosZ(20, 96).TopPosZ(64, 19))
@@ -38,9 +51,6 @@ LAYOUT(SetCompanyWindowLayout, 360, 252)
 	ITEM(EditString, txtBusZip, SetFont(SansSerifZ(12)).LeftPosZ(136, 200).TopPosZ(136, 19))
 	ITEM(EditString, txtBusPhone, SetFont(SansSerifZ(12)).LeftPosZ(136, 200).TopPosZ(160, 19))
 	ITEM(EditString, txtBusEmail, SetFont(SansSerifZ(12)).LeftPosZ(136, 200).TopPosZ(184, 19))
-END_LAYOUT
-
-LAYOUT(SelectOutputDirWindowLayout, 400, 200)
 END_LAYOUT
 
 LAYOUT(LineItemsWindowLayout, 808, 540)
