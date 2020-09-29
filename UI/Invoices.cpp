@@ -32,17 +32,17 @@ InvoicesWindow::InvoicesWindow()
 	// InvoicesArray.Join(BOOK_ID, book); // joins id from other db to this id
 	InvoicesArray.AddColumn ( INVOICENUMBER, "Invoice#" );
 	InvoicesArray.AddColumn ( CUSTOMERID, "Cust id" );
-	InvoicesArray.AddColumn ( TRANSACTIONDATE, "Transaction Date" ); //.SetConvert ( DateIntConvert() );
+	InvoicesArray.AddColumn ( TRANSACTIONDATE, "Transaction Date" ).SetConvert ( DateIntConvert() );
 	InvoicesArray.AddColumn ( TERMS, "Terms" );
 	InvoicesArray.AddColumn ( NONTAXABLESUB, "Non-Taxable Sub" ).SetConvert ( ConvDouble() );
 	InvoicesArray.AddColumn ( TAXABLESUB, "Taxable Sub" ).SetConvert ( ConvDouble() );
 	InvoicesArray.AddColumn ( TAX, "Tax" ).SetConvert ( ConvDouble() );
 	InvoicesArray.AddColumn ( GRANDTOTAL, "Grand Total" ).SetConvert ( ConvDouble() );
 	InvoicesArray.AddColumn ( AMTPAID, "Amount Paid" ).SetConvert ( ConvDouble() );
-	InvoicesArray.AddColumn ( DATEPAID, "Date Paid" ); // .SetConvert ( DateIntConvert() );
+	InvoicesArray.AddColumn ( DATEPAID, "Date Paid" ).SetConvert ( DateIntConvert() );
 	InvoicesArray.AddColumn ( STATUS, "Status" );
 	// InvoicesArray.ColumnWidths("5 5 10 12 5 5 5 5 5 5");
-	InvoicesArray.SetOrderBy ( INVOICENUMBER );
+	InvoicesArray.SetOrderBy ( Descending(INVOICENUMBER) );
 
 	// InvoicesArray.WhenLeftClick << [=] { selectedRow = InvoicesArray.GetClickRow(); } ;
 	InvoicesArray.Query();
