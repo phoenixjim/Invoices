@@ -7,9 +7,12 @@ using namespace Upp;
 
 struct Configs {
 public:
+	//CompanyInfoWindow cwindow;
+	
 	String	GetOutputDirectory();
 	String	SelectDB();
 	void 	Initialize();
+	void	SaveSettings();
 	
 	String	DBFile;
 	String	OutputDirectory;

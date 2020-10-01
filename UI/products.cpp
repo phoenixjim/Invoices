@@ -75,7 +75,6 @@ void ProductsWindow::AddNewProduct()
     int id = SQL.GetInsertedId();
 
     ProductArray.ReQuery();
-
     ProductArray.FindSetCursor(id);
 }
 /*

@@ -10,27 +10,6 @@ class AddCustomer : public WithCustomerAddLayout<TopWindow> {
 		AddCustomer();
 };
 
-/*
-	ITEM(Option, chkTaxable, SetLabel(t_("Taxable?")).SetFont(SansSerifZ(16)).LeftPosZ(228, 108).TopPosZ(36, 16))
-	ITEM(EditString, txtCustSearch, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(136, 256).TopPosZ(404, 19))
-	ITEM(EditString, txtCustName, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(136, 256).TopPosZ(76, 19))
-	ITEM(EditString, txtCustEmail, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(136, 256).TopPosZ(116, 19))
-	ITEM(EditString, txtCustPhone, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(136, 256).TopPosZ(156, 19))
-	ITEM(EditString, txtCustAddress, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(136, 256).TopPosZ(196, 19))
-	ITEM(EditString, txtCustCity, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(136, 256).TopPosZ(232, 19))
-	ITEM(EditString, txtCustState, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(136, 256).TopPosZ(272, 19))
-	ITEM(EditString, txtCustZip, MaxChars(10).SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(136, 64).TopPosZ(308, 19))
-
-	STRING_ (CUSTNAME, 150) NOT_NULL
-	STRING_ (EMAIL, 150)
-	STRING_ (CONTACT, 150)
-	STRING_ (ADDRESS, 150)
-	STRING_ (CITY, 50)
-	STRING_ (STATE, 20)
-	STRING_ (ZIP, 10)
-	INT_ (TAXABLE) NOT_NULL
-*/
-
 AddCustomer::AddCustomer()
 {
 	CtrlLayoutOKCancel(*this, "Add Customer");
@@ -58,9 +37,8 @@ CustomersWindow::CustomersWindow() {
 	
 	CustArray.SetTable(CUSTOMERS, CUST_ID);
 		
-	// CustArray.Join(BOOK_ID, book); // joins id from other db to this id
-	CustArray.AddColumn(CUSTNAME, "Name"); // .SetConvert(DateIntConvert());
-	CustArray.AddColumn(EMAIL, "Email"); // .SetConvert(DateIntConvert());
+	CustArray.AddColumn(CUSTNAME, "Name");
+	CustArray.AddColumn(EMAIL, "Email");
 	CustArray.AddColumn(CONTACT, "Phone");
 	CustArray.AddColumn(ADDRESS, "Address");
 	CustArray.AddColumn(CITY, "City");
@@ -68,7 +46,7 @@ CustomersWindow::CustomersWindow() {
 	CustArray.AddColumn(ZIP, "Zip");
 	CustArray.AddColumn(TAXABLE, "Taxable?");
 	CustArray.ColumnWidths("40 40 20 50 20 15 10 5");
-	CustArray.NoRemoving();
+	CustArray.Appending().NoRemoving();
 	CustArray.SetOrderBy(CUST_ID);
 	
 	CustArray.Query();
@@ -88,8 +66,6 @@ void CustomersWindow::EditRow()
 	AddCustomer dlg;
 	dlg.Title("Edit Customer");
 
-	//if(!dlg.ctrls.Load(CUSTOMERS, CUST_ID == idNum))
-	//	return;
 	SQL * Select(dlg.ctrls).From(CUSTOMERS).Where(CUST_ID == idNum);
 	if(!dlg.ctrls.Fetch(SQL))
 		return;

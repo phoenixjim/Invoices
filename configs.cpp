@@ -11,10 +11,7 @@ String Configs::SelectDB()
 	from http://leonardoce.interfree.it/leowiki.html "simple configfile"
 	*/
 	cfg << "DBFile=" << selectdbwin.Get() << "\n";
-	if(!SaveFile(ConfigFile(), cfg))
-	{
-    	Exclamation("Error saving configuration!");
-	}
+	SaveSettings();
 	return selectdbwin.Get();
 
 }
@@ -37,8 +34,29 @@ String Configs::GetOutputDirectory()
 
 void Configs::Initialize()
 {
-	DBFile = SelectDB();
-	OutputDirectory = GetOutputDirectory();
-	// more configs here
+	if (DBFile.IsEmpty()) DBFile = SelectDB();
 	
+	if (OutputDirectory.IsEmpty()) OutputDirectory = GetOutputDirectory();
+	if (companyname.IsEmpty()) {
+		cfg << "DBFile" << DBFile;
+		cfg << "OutputDirectory" << OutputDirectory;
+		cfg << "companyname=";
+		cfg << "companyowner=";
+		cfg << "companyaddress=";
+		cfg << "companycity=";
+		cfg << "companystate=";
+		cfg << "companyzip=";
+		cfg << "companyphone=";
+		cfg << "companyemail=";
+	}
+	SaveSettings();
+	// more configs here
+}
+
+void Configs::SaveSettings()
+{
+	if(!SaveFile(ConfigFile(), cfg))
+	{
+    	Exclamation("Error saving configuration!");
+	}
 }

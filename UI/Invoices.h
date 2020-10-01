@@ -17,11 +17,11 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 	TaxWindow taxreportwin;
 	IncomeWindow incomewin;
 	ProfitLossWindow profitwin;
-	CompanyInfoWindow setcompanywin;
 		
 	MenuBar		mainmenu;
 
 public:
+	CompanyInfoWindow setcompanywin;
 	typedef Invoices CLASSNAME;
 	Configs myConfig;
 

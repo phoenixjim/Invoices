@@ -12,12 +12,13 @@ file
 	UI/CreateInvoice.cpp,
 	UI/Customers.cpp,
 	UI/Invoices.lay,
+	UI/Company.cpp,
 	UI/DBUI.h,
 	UI/sqlincludes.h,
 	UI/converts.h,
+	UI/converts.cpp,
 	UI/LineItems.cpp,
 	UI/Invoices.h,
-	UI/converts.cpp,
 	UI/main.cpp;
 
 mainconfig

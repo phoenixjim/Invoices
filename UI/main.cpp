@@ -42,6 +42,7 @@ void Invoices::ManagementMenu(Bar& bar)
 Invoices::Invoices()
 {
 	CtrlLayout(*this, "Invoices");
+	UseHomeDirectoryConfig(false);
 	AddFrame(mainmenu);
 	mainmenu.Set(THISFN(MainMenu));
 	
@@ -51,6 +52,7 @@ Invoices::Invoices()
 	{
         VectorMap<String, String> cfg = LoadIniFile(myConfig.configfile);
         myConfig.DBFile = cfg.Get("DBFile", Null);
+        myConfig.OutputDirectory = cfg.Get("OutputDirectory", Null);
 	}
 	else {
 		myConfig.GetOutputDirectory();
@@ -74,6 +76,7 @@ bool Invoices::Key(dword key, int count)
 GUI_APP_MAIN
 {
 	Configs myConfig;
+	/*
 	if(FileExists(myConfig.configfile))
 	{
 		String invoiceNum;
@@ -92,13 +95,17 @@ GUI_APP_MAIN
 	else {
 		myConfig.Initialize();
 	}
-	
+	*/
+	myConfig.Initialize();
+	// myConfig.OutputDirectory = myConfig.GetOutputDirectory();
+
 	Sqlite3Session sqlite3;
 	if(!sqlite3.Open(myConfig.DBFile)) {
 		Exclamation("Can't create or open database file\n");
 		return;
 	}
 	
+
 	SQL = sqlite3;
 	
 	Invoices().Run();

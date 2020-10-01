@@ -54,3 +54,29 @@ Convert& DateIntConvert()
     return Single<DateIntConvertCls>();
 }
 
+/*
+Value CountryConvert::Format(const Value& q) const
+{
+	if(q.IsNull()) return Null;
+	static VectorMap<int, String> country;
+	static Time lastcleartime;
+	if(GetSysTime()-lastcleartime > 600){
+		country.Clear();
+		lastcleartime=GetSysTime();
+	}
+	if(country.Find(q) > 0)
+		return country.Get(q, String());
+	else {
+		Sql sql;
+		sql * Select(COU_ID, COU_NAME).From(COUNTRY_T).Where(COU_ID==q);
+		if(sql.Fetch()) {
+			int sid = sql[COU_ID];
+			//if(country.Find(sid) < 0)
+			country.Add(sid, sql[COU_NAME]);
+			return country.Get(q, String());
+		}else
+			return (String)("");
+
+	}
+}
+*/

@@ -15,7 +15,8 @@ enum pNames
         Service=1,
         Part,
         Gift,
-        Refund
+        Refund,
+        Note
         };
      
 //Customers
@@ -62,6 +63,8 @@ public:
 
 // ListLineItems
 struct LineItemsWindow : WithLineItemsWindowLayout<TopWindow> {
+	void EditRow();
+	void AddNewItem();
 public:
 	typedef LineItemsWindow CLASSNAME;
 	LineItemsWindow();
@@ -92,7 +95,11 @@ public:
 
 // CreateInvoice
 struct CreateInvoiceWindow : WithCreateInvoiceWindowLayout<TopWindow> {
+	Configs myConfig;
 	long nextInvoice;
+
+	double CalcItemTotal(int itemnumber);
+	void CalcInvoiceTotal();
 	void CustChanged();
 	void ProdChanged();
 	void AdjustPrice();
@@ -100,6 +107,8 @@ struct CreateInvoiceWindow : WithCreateInvoiceWindowLayout<TopWindow> {
 	void CancelInvoice();
 	void AddItem();
 	void ClearItem();
+	double round(double d, int n);
+	void DeleteRow();
 public:
 	CreateInvoiceWindow();
 	void Paint(Draw& w) {
@@ -135,9 +144,12 @@ struct ProfitLossWindow : WithProfitLossWindowLayout<TopWindow> {
 };
 
 struct CompanyInfoWindow : WithCompanyInfoWindowLayout<TopWindow> {
+	Configs myConfig;
+	void Save();
+	void Cancel();
 	public:
 		typedef CompanyInfoWindow CLASSNAME;
-		CompanyInfoWindow() { CtrlLayoutOKCancel(*this, "Set Company Info"); };
+		CompanyInfoWindow();
 		void Paint(Draw& w) {
         w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
      }
