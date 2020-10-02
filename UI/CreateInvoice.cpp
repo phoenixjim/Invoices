@@ -1,5 +1,4 @@
 #include "DBUI.h"
-#include <string>
 
 CreateInvoiceWindow::CreateInvoiceWindow()
  { 
@@ -40,6 +39,7 @@ CreateInvoiceWindow::CreateInvoiceWindow()
 	txtInvoice.SetText(IntStr64(nextInvoice));
 	cbCustomers.WhenAction << [=] { CustChanged(); };
 	cbProducts.WhenAction << [=] { ProdChanged(); };
+	dtpBillDate.SetConvert(DateIntConvert());
  }
  
 void CreateInvoiceWindow::CustChanged()
@@ -88,22 +88,47 @@ void CreateInvoiceWindow::AdjustPrice()
 void CreateInvoiceWindow::SaveInvoice()
 {
 	int idNum = arrayLineItems.GetCount();
+
 	if (idNum < 1 || cbCustomers.GetData().IsNull() || dtpBillDate.GetData().IsNull())
 	{
 		PromptOK("Are you missing something? (Customer, Date or items)");
 		return;
 	}
-	double nonTaxable = 0.0, taxable = 0.0, salestax = 0.0, grandtotal = 0.0, itemtotal = 0.0;
-	for (int i = 0; i < arrayLineItems.GetCount(); i++)
+	double nonTaxable = 0.0, taxable = 0.0, salestax = 0.0, grandTotal = 0.0;
+
+	for (int i = 0; i < idNum; i++)
 	{
 		if (optCustTaxable.Get() == true && arrayLineItems.GetColumn(i, 4)  == 1) {
-			taxable = round(StrDbl(arrayLineItems.GetColumn(i, 2).ToString()) * StrDbl(arrayLineItems.GetColumn(i, 3).ToString()), 2);
+			taxable += round(StrDbl(arrayLineItems.GetColumn(i, 2).ToString()) * StrDbl(arrayLineItems.GetColumn(i, 3).ToString()), 2);
 		}
-		else 	nonTaxable = round(StrDbl(arrayLineItems.GetColumn(i, 2).ToString()) * StrDbl(arrayLineItems.GetColumn(i, 3).ToString()), 2);
-		salestax = taxable * StrDbl(txtTaxRate.GetData().ToString());
-		itemtotal = salestax + nonTaxable + salestax;
+		else 	nonTaxable += round(StrDbl(arrayLineItems.GetColumn(i, 2).ToString()) * StrDbl(arrayLineItems.GetColumn(i, 3).ToString()), 2);
+		salestax += taxable * StrDbl(txtTaxRate.GetData().ToString());
 		
+		grandTotal += salestax + nonTaxable + salestax;
+		SQL * Insert(LINEITEMS)
+		(PRODUCTNAME, arrayLineItems.GetColumn(i,0).ToString())
+		(DESCRIPTION, arrayLineItems.GetColumn(i,1).ToString())
+		(PRICE, StrDbl(arrayLineItems.GetColumn(i,2).ToString()))
+		(QTY, StrInt(arrayLineItems.GetColumn(i,3).ToString()))
+		(TOTAL, StrDbl(arrayLineItems.GetColumn(i,5).ToString()))
+		(INVOICEIDNUMBER, StrInt64(txtInvoice.GetData().ToString()))
+		(ISTAXABLE, StrInt(arrayLineItems.GetColumn(i,4).ToString()));
 	}
+	int custId = cbCustomers.GetIndex();
+
+	SQL * Insert(INVOICES)
+		(INVOICENUMBER, StrInt64(txtInvoice.GetData().ToString()))
+		(CUSTOMERID, custId)
+		(TRANSACTIONDATE, dtpBillDate.GetData())
+		(TERMS, txtTerms.GetData().ToString())
+		(NONTAXABLESUB, nonTaxable)
+		(TAXABLESUB, taxable)
+		(TAX, salestax)
+		(GRANDTOTAL, grandTotal)
+		(AMTPAID, 0.0)
+		(STATUS, 0);
+	
+	Close();
 }
 
 void CreateInvoiceWindow::CancelInvoice()
