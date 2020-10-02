@@ -60,19 +60,6 @@ Invoices::Invoices()
 	}
 }
 
-// Shortcut keys defined
-/*
-bool Invoices::Key(dword key, int count)
-{
-	if(key == K_CTRL_E && !ewin.IsOpen())
-		ewin.Open(this);
-	else
-	if(key == K_CTRL_F && !fwin.IsOpen())
-		fwin.Open(this);
-	return false;
-}
-*/
-
 GUI_APP_MAIN
 {
 	Configs myConfig;

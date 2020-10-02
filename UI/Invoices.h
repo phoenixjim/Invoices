@@ -10,8 +10,6 @@ using namespace Upp;
 
 class Invoices : public WithInvoicesLayout<TopWindow> {
 	CustomersWindow	cwin;
-	InvoicesWindow invoiceswin;
-	LineItemsWindow listlineitemswin;
 	ProductsWindow prodwin;
 	CreateInvoiceWindow createinvoicewin;
 	TaxWindow taxreportwin;
@@ -22,6 +20,8 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 
 public:
 	CompanyInfoWindow setcompanywin;
+	InvoicesWindow invoiceswin;
+	LineItemsWindow listlineitemswin;
 	typedef Invoices CLASSNAME;
 	Configs myConfig;
 

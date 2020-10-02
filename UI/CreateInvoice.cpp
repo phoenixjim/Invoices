@@ -99,12 +99,12 @@ void CreateInvoiceWindow::SaveInvoice()
 	for (int i = 0; i < idNum; i++)
 	{
 		if (optCustTaxable.Get() == true && arrayLineItems.GetColumn(i, 4)  == 1) {
-			taxable += round(StrDbl(arrayLineItems.GetColumn(i, 2).ToString()) * StrDbl(arrayLineItems.GetColumn(i, 3).ToString()), 2);
+			taxable = round(StrDbl(arrayLineItems.GetColumn(i, 2).ToString()) * StrDbl(arrayLineItems.GetColumn(i, 3).ToString()), 2);
 		}
-		else 	nonTaxable += round(StrDbl(arrayLineItems.GetColumn(i, 2).ToString()) * StrDbl(arrayLineItems.GetColumn(i, 3).ToString()), 2);
-		salestax += taxable * StrDbl(txtTaxRate.GetData().ToString());
+		else 	nonTaxable = round(StrDbl(arrayLineItems.GetColumn(i, 2).ToString()) * StrDbl(arrayLineItems.GetColumn(i, 3).ToString()), 2);
+		salestax = round(taxable * StrDbl(txtTaxRate.GetData().ToString()), 2);
 		
-		grandTotal += salestax + nonTaxable + salestax;
+		grandTotal += salestax + nonTaxable + taxable;
 		SQL * Insert(LINEITEMS)
 		(PRODUCTNAME, arrayLineItems.GetColumn(i,0).ToString())
 		(DESCRIPTION, arrayLineItems.GetColumn(i,1).ToString())
@@ -127,7 +127,8 @@ void CreateInvoiceWindow::SaveInvoice()
 		(GRANDTOTAL, grandTotal)
 		(AMTPAID, 0.0)
 		(STATUS, 0);
-	
+	::listlineitemswin.LineItemsArray.ReQuery();
+	::invoiceswin.InvoicesArray.ReQuery();
 	Close();
 }
 
@@ -187,7 +188,7 @@ void CreateInvoiceWindow::CalcInvoiceTotal()
 			taxable += round(StrDbl(arrayLineItems.GetColumn(i, 2).ToString()) * StrDbl(arrayLineItems.GetColumn(i, 3).ToString()), 2);
 		}
 		else 	nonTaxable += round(StrDbl(arrayLineItems.GetColumn(i, 2).ToString()) * StrDbl(arrayLineItems.GetColumn(i, 3).ToString()), 2);
-		salestax += taxable * StrDbl(txtTaxRate.GetData().ToString());
+		salestax += round(taxable * StrDbl(txtTaxRate.GetData().ToString()), 2);
 	}
 	grandtotal = nonTaxable + taxable + salestax;
 	txtNonTaxable.SetData(nonTaxable);
