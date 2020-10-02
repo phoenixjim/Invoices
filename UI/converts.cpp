@@ -54,29 +54,57 @@ Convert& DateIntConvert()
     return Single<DateIntConvertCls>();
 }
 
-/*
-Value CountryConvert::Format(const Value& q) const
+struct ConvLineItemCls : Convert
 {
-	if(q.IsNull()) return Null;
-	static VectorMap<int, String> country;
-	static Time lastcleartime;
-	if(GetSysTime()-lastcleartime > 600){
-		country.Clear();
-		lastcleartime=GetSysTime();
-	}
-	if(country.Find(q) > 0)
-		return country.Get(q, String());
-	else {
-		Sql sql;
-		sql * Select(COU_ID, COU_NAME).From(COUNTRY_T).Where(COU_ID==q);
-		if(sql.Fetch()) {
-			int sid = sql[COU_ID];
-			//if(country.Find(sid) < 0)
-			country.Add(sid, sql[COU_NAME]);
-			return country.Get(q, String());
-		}else
-			return (String)("");
+	virtual Value Scan ( const Value &q ) const;
+	virtual Value Format (const Value &q) const;
+};
 
+Value ConvLineItemCls::Format ( const Value &q ) const
+	{
+	int idNum = q;
+	// idNum ++;
+	switch(idNum)
+	{
+		case 1:
+			return "Service";
+			break;
+		case 2:
+			return "Part";
+			break;
+		case 3:
+			return "Refund";
+			break;
+		case 4:
+			return "Tip";
+			break;
+		case 5:
+			return "Note";
+			break;
+		default:
+			return "Service";
 	}
 }
-*/
+
+Value ConvLineItemCls::Scan(const Value &q) const
+{
+	String text = q;
+	if(text.IsEmpty()) return Null;
+	if (text.IsEqual("Service"))
+		return 1;
+	else if (text.IsEqual("Part"))
+		return 2;
+	else if (text.IsEqual("Refund"))
+		return 3;
+	else if (text.IsEqual("Tip"))
+		return 4;
+	else if (text.IsEqual("Note"))
+		return 5;
+	else return 1;
+}
+
+Convert& ConvLineItem()
+{
+	return Single<ConvLineItemCls>();
+}
+

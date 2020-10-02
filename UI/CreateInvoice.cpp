@@ -27,11 +27,11 @@ CreateInvoiceWindow::CreateInvoiceWindow()
  		cbCustomers.Add(~SQL[CUST_ID], ~SQL[CUSTNAME]);
  	}
 	
-	cbProducts.Add(Service, "Service");
-	cbProducts.Add(Part, "Part");
-	cbProducts.Add(Gift, "Tip");
-	cbProducts.Add(Refund, "Refund");
-	cbProducts.Add(Note, "Note");
+	cbProducts.Add("Service");
+	cbProducts.Add("Part");
+	cbProducts.Add("Tip");
+	cbProducts.Add("Refund");
+	cbProducts.Add("Note");
 
 	SQL.Execute("Select MAX(INVOICENUMBER) From INVOICES");
 	SQL.Fetch();
@@ -142,26 +142,12 @@ void CreateInvoiceWindow::AddItem()
 	int idNum = cbProducts.GetIndex() + 1;
 	if (IsNull(idNum) || IsNull(txtDescription) || IsNull(txtPrice) || IsNull(txtQty))
 		return;
-	String partName;
-	switch(idNum) // Set array item Product
-	{
-		case Service:
-			partName = "Service";
-			break;
-		case Part:
-			partName = "Part";
-			break;
-		case Refund:
-			partName = "Refund";
-			break;
-		case Gift:
-			partName = "Tip";
-			break;
-		case Note:
-			partName = "Note";
-			break;
-	}
-	arrayLineItems.Add(partName,txtDescription.GetText().ToString(),StrDbl(txtPrice.GetText().ToString()),StrInt(txtQty.GetText().ToString()), optProdTaxable.Get());
+	arrayLineItems.Add(cbProducts.GetData().ToString(),
+		txtDescription.GetText().ToString(),
+		StrDbl(txtPrice.GetText().ToString()),
+		StrInt(txtQty.GetText().ToString()), 
+		optProdTaxable.Get(),
+		StrDbl(txtPrice.GetText().ToString()) * StrInt(txtQty.GetText().ToString()));
 	CalcInvoiceTotal();
 }
 

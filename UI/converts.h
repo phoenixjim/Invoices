@@ -6,9 +6,5 @@ using namespace Upp;
 
 Convert& DateIntConvert();
 Convert& ConvDouble();
-/*
-struct CountryConvert : Convert {
-	virtual Value Format(const Value& q) const;
-};
-*/
+Convert& ConvLineItem();
 #endif

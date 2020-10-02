@@ -2,42 +2,6 @@
 #include "../configs.h"
 #include <plugin/sqlite3/Sqlite3.h>
 
-struct ConvLineItemCls : Convert
-{
-	virtual Value Scan ( const Value &q ) const;
-};
-
-Value ConvLineItemCls::Scan ( const Value &q ) const
-	{
-	int idNum = q;
-	idNum ++;
-	switch(idNum)
-	{
-		case 1:
-			return "Service";
-			break;
-		case 2:
-			return "Part";
-			break;
-		case 3:
-			return "Refund";
-			break;
-		case 4:
-			return "Tip";
-			break;
-		case 5:
-			return "Note";
-			break;
-		default:
-			return "Service";
-	}
-}
-
-Convert& ConvLineItem()
-{
-	return Single<ConvLineItemCls>();
-}
-
 class AddLineItem : public WithLineItemAddLayout<TopWindow> {
 		void ProdChanged();
 public:
@@ -59,11 +23,12 @@ AddLineItem::AddLineItem()
 		(ISTAXABLE, optProdTaxable)
 	;
 	// cbProducts.SetConvert(ConvLineItem());
-	cbProducts.Add(1, "Service");
-	cbProducts.Add(2, "Part");
-	cbProducts.Add(3, "Tip");
-	cbProducts.Add(4, "Refund");
-	cbProducts.Add(5, "Note");
+	
+	cbProducts.Add("Service");
+	cbProducts.Add("Part");
+	cbProducts.Add("Tip");
+	cbProducts.Add("Refund");
+	cbProducts.Add("Note");
 	
 	cbProducts.WhenAction << [=] { ProdChanged(); };
 }
@@ -124,47 +89,12 @@ void LineItemsWindow::EditRow()
 	SQL * Select(dlg.ctrls).From(LINEITEMS).Where(LINEITEM_ID == idNum);
 	if(!dlg.ctrls.Fetch(SQL))
 		return;
-	int prodid = 0;
-	if (SQL[PRODUCTNAME].ToString().Compare("Service") == 0)
-		prodid = 0;
-	else if (SQL[PRODUCTNAME].ToString().Compare("Part") == 0)
-		prodid = 1;
-	else if (SQL[PRODUCTNAME].ToString().Compare("Tip") == 0)
-		prodid = 2;
-	else if (SQL[PRODUCTNAME].ToString().Compare("Refund") == 0)// refund, or Note now
-		prodid = 3;
-	else prodid = 4; // Note
-	dlg.cbProducts.SetIndex(prodid);
+	
 	if(dlg.Run() != IDOK)
 		return;
-	String ProductName;
-	switch (dlg.cbProducts.GetIndex()) {
-        case 0:
-            ProductName = "Service";
-            break;
-        case 1:
-            ProductName = "Part";
-            break;
-        case 2:
-            ProductName = "Tip";
-            break;
-        case 3:
-            ProductName = "Refund";
-            break;
-        case 4:
-            ProductName = "Note";
-            break;
-    }
-
-	SQL & ::Update( LINEITEMS ) (INVOICEIDNUMBER , StrInt(dlg.txtInvoiceNum.GetData().ToString()))
-	( PRODUCTNAME , ProductName)
-	( DESCRIPTION , dlg.txtDescription.GetData().ToString())
-	( PRICE , StrDbl(dlg.txtPrice.GetData().ToString()))
-	( QTY , StrDbl(dlg.txtQty.GetData().ToString()))
-	( TOTAL , StrDbl(dlg.txtTotal.GetData().ToString()))
-	( ISTAXABLE , StrInt(dlg.optProdTaxable.GetData().ToString()))
-	.Where( LINEITEM_ID == idNum);
-
+	
+	SQL * dlg.ctrls.Update(LINEITEMS).Where(LINEITEM_ID == idNum);
+	
 	LineItemsArray.ReQuery();
 	LineItemsArray.FindSetCursor(idNum);
 }
@@ -174,33 +104,7 @@ void LineItemsWindow::AddNewItem()
     dlg.Title("New Item");
     if(dlg.Execute() != IDOK)
         return;
-    String ProductName;
-    switch (dlg.cbProducts.GetIndex()) {
-        case 0:
-            ProductName = "Service";
-            break;
-        case 1:
-            ProductName = "Part";
-            break;
-        case 2:
-            ProductName = "Tip";
-            break;
-        case 3:
-            ProductName = "Refund";
-            break;
-        case 4:
-            ProductName = "Note";
-            break;
-    }
-    
-	SQL & ::Insert(LINEITEMS)
-	(INVOICEIDNUMBER, StrInt(dlg.txtInvoiceNum.GetData().ToString()))
-	(PRODUCTNAME, ProductName)
-	(DESCRIPTION, dlg.txtDescription.GetData().ToString())
-	(PRICE, StrDbl(dlg.txtPrice.GetData().ToString()))
-	(QTY, StrDbl(dlg.txtQty.GetData().ToString()))
-	(TOTAL, StrDbl(dlg.txtTotal.GetData().ToString()))
-	(ISTAXABLE, StrInt(dlg.optProdTaxable.GetData().ToString()));
+    SQL * dlg.ctrls.Insert(LINEITEMS);
 	
 	int id = SQL.GetInsertedId();
 
