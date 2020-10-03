@@ -128,9 +128,6 @@ void CreateInvoiceWindow::SaveInvoice()
 		(AMTPAID, 0.0)
 		(STATUS, 0);
 		
-	
-	Invoices().listlineitemswin.LineItemsArray.ReQuery();
-	Invoices().invoiceswin.InvoicesArray.ReQuery();
 	ClearItem();
 	Close();
 }

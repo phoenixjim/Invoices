@@ -62,7 +62,7 @@ public:
 };
 
 // ListLineItems
-struct LineItemsWindow : WithLineItemsWindowLayout<TopWindow> {
+struct LineItemsWindow : public WithLineItemsWindowLayout<TopWindow> {
 	void EditRow();
 	void AddNewItem();
 public:
@@ -172,6 +172,7 @@ public:
 	CompanyInfoWindow setcompanywin;
 	InvoicesWindow invoiceswin;
 	LineItemsWindow listlineitemswin;
+	
 	typedef Invoices CLASSNAME;
 	Configs myConfig;
 
@@ -184,8 +185,7 @@ public:
 	void		ReportsMenu(Bar& bar);
 	void		ManagementMenu(Bar& bar);
 	
-	// Keys for shortcuts
-	// bool Key(dword key, int count) override;
+	void		UpdateTables();
 };
 
 #endif

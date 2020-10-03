@@ -61,6 +61,12 @@ Invoices::Invoices()
 	}
 }
 
+void Invoices::UpdateTables()
+{
+	invoiceswin.InvoicesArray.ReQuery();
+	listlineitemswin.LineItemsArray.ReQuery();
+}
+
 GUI_APP_MAIN
 {
 	Configs myConfig;
