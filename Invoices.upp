@@ -7,9 +7,11 @@ uses
 file
 	configs.cpp,
 	configs.h,
-	UI/products.cpp,
+	UI/Products.cpp,
 	UI/Invoices.cpp,
 	UI/CreateInvoice.cpp,
+	UI/ProfitLossWindow.cpp,
+	UI/IncomeWindow.cpp,
 	UI/Customers.cpp,
 	UI/Invoices.lay,
 	UI/Company.cpp,
@@ -18,6 +20,7 @@ file
 	UI/converts.h,
 	UI/converts.cpp,
 	UI/LineItems.cpp,
+	UI/TaxWindow.cpp,
 	UI/main.cpp;
 
 mainconfig

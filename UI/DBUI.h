@@ -118,7 +118,7 @@ public:
 struct TaxWindow : WithTaxWindowLayout<TopWindow> {
 	public:
 		typedef TaxWindow CLASSNAME;
-		TaxWindow() { CtrlLayoutOKCancel(*this, "Income/Sales Tax Reports"); };
+		TaxWindow();
 		void Paint(Draw& w) {
         w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
      }
@@ -127,7 +127,7 @@ struct TaxWindow : WithTaxWindowLayout<TopWindow> {
 struct IncomeWindow : WithIncomeByCustomerLayout<TopWindow> {
 	public:
 		typedef IncomeWindow CLASSNAME;
-		IncomeWindow() { CtrlLayoutOKCancel(*this, "Income by Customer Reports"); };
+		IncomeWindow();
 		void Paint(Draw& w) {
         w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
      }
@@ -136,7 +136,7 @@ struct IncomeWindow : WithIncomeByCustomerLayout<TopWindow> {
 struct ProfitLossWindow : WithProfitLossWindowLayout<TopWindow> {
 	public:
 		typedef ProfitLossWindow CLASSNAME;
-		ProfitLossWindow() { CtrlLayoutOKCancel(*this, "Profit / Loss Reports"); };
+		ProfitLossWindow();
 		void Paint(Draw& w) {
         w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
      }
