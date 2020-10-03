@@ -1,6 +1,7 @@
 #ifndef _Invoices_customers_h_
 #define _Invoices_customers_h_
 #include <CtrlLib/CtrlLib.h>
+#pragma foreign_keys = ON
 #include <SqlCtrl/SqlCtrl.h>
 using namespace Upp;
 

@@ -36,7 +36,14 @@ void Configs::Initialize()
 {
 	DBFile = "/home/james/upp/MyApps/Invoices/sample.db";
 	OutputDirectory = "/home/james/Desktop/";
-	
+	companyname = "Company Name";
+	companyowner = "James Lefavour";
+	companyaddress = "Home";
+	companycity = "My City";
+	companystate = "My State";
+	companyzip = "MyZip";
+	companyphone = "(555) 555 - 1212";
+	companyemail = "jim@myemail.com";
 	/*
 	if (DBFile.IsEmpty()) DBFile = SelectDB();
 	
