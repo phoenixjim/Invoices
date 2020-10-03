@@ -117,6 +117,9 @@ public:
 };
 
 struct TaxWindow : WithTaxWindowLayout<TopWindow> {
+	void okPressed();
+	void cancelPressed();
+	void anonChanged();
 	public:
 		typedef TaxWindow CLASSNAME;
 		TaxWindow();
