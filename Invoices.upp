@@ -18,7 +18,6 @@ file
 	UI/converts.h,
 	UI/converts.cpp,
 	UI/LineItems.cpp,
-	UI/Invoices.h,
 	UI/main.cpp;
 
 mainconfig

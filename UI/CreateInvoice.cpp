@@ -127,8 +127,11 @@ void CreateInvoiceWindow::SaveInvoice()
 		(GRANDTOTAL, grandTotal)
 		(AMTPAID, 0.0)
 		(STATUS, 0);
-	::listlineitemswin.LineItemsArray.ReQuery();
-	::invoiceswin.InvoicesArray.ReQuery();
+		
+	
+	Invoices().listlineitemswin.LineItemsArray.ReQuery();
+	Invoices().invoiceswin.InvoicesArray.ReQuery();
+	ClearItem();
 	Close();
 }
 

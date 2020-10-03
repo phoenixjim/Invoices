@@ -6,26 +6,16 @@ InvoicesWindow::InvoicesWindow()
 {
 	CtrlLayout ( *this, "List Invoices" );
 
-	btnEdit << [=] { btnEditClicked();
-				   };
-	btnPrint << [=] { btnPrintClicked();
-					};
-	btnApplyPayment << [=] { btnApplyPaymentClicked();
-						   };
-	btnVoid << [=] { btnVoidClicked() ;
-				   };
-	btnPaidInFull << [=] { btnPaidInFullClicked();
-						 };
-	btnFixDate << [=] { btnFixDateClicked();
-					  };
-	btnByPaid << [=] { btnByPaidClicked();
-					 };
-	btnByBalanceDue << [=] { btnByBalanceDueClicked();
-						   };
-	btnByDates << [=] { btnByDatesClicked();
-					  };
-	btnByCustomer << [=] { btnByCustomerClicked();
-						 };
+	btnEdit << [=] { btnEditClicked(); };
+	btnPrint << [=] { btnPrintClicked(); };
+	btnApplyPayment << [=] { btnApplyPaymentClicked(); };
+	btnVoid << [=] { btnVoidClicked() ; };
+	btnPaidInFull << [=] { btnPaidInFullClicked(); };
+	btnFixDate << [=] { btnFixDateClicked(); };
+	btnByPaid << [=] { btnByPaidClicked(); };
+	btnByBalanceDue << [=] { btnByBalanceDueClicked(); };
+	btnByDates << [=] { btnByDatesClicked(); };
+	btnByCustomer << [=] { btnByCustomerClicked(); };
 
 	InvoicesArray.SetTable ( INVOICES, INVOICE_ID );
 
@@ -51,6 +41,7 @@ InvoicesWindow::InvoicesWindow()
 	// InvoicesArray.GoEndPostQuery();
 
 }
+
 
 void InvoicesWindow::btnPrintClicked()
 {

@@ -18,7 +18,6 @@ enum pNames
         Refund,
         Note
         };
-     
 //Customers
 struct CustomersWindow : WithCustomersWindowLayout<TopWindow> {
 	Configs	myConfig;
@@ -154,5 +153,36 @@ struct CompanyInfoWindow : WithCompanyInfoWindowLayout<TopWindow> {
         w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
      }
 };
+
+class Invoices : public WithInvoicesLayout<TopWindow> {
+	CustomersWindow	cwin;
+	ProductsWindow prodwin;
+	CreateInvoiceWindow createinvoicewin;
+	TaxWindow taxreportwin;
+	IncomeWindow incomewin;
+	ProfitLossWindow profitwin;
+		
+	MenuBar		mainmenu;
+
+public:
+	CompanyInfoWindow setcompanywin;
+	InvoicesWindow invoiceswin;
+	LineItemsWindow listlineitemswin;
+	typedef Invoices CLASSNAME;
+	Configs myConfig;
+
+	Invoices();
+	
+	// Menu definition
+	void		MainMenu(Bar& bar);
+
+	void		TransactionsMenu(Bar& bar);
+	void		ReportsMenu(Bar& bar);
+	void		ManagementMenu(Bar& bar);
+	
+	// Keys for shortcuts
+	// bool Key(dword key, int count) override;
+};
+
 #endif
 

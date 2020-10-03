@@ -1,4 +1,5 @@
-#include "Invoices.h"
+// #include "Invoices.h"
+#include "DBUI.h"
 #include <string>
 
 #define MODEL "Invoices/Tables/Invoices.sch"
@@ -63,26 +64,7 @@ Invoices::Invoices()
 GUI_APP_MAIN
 {
 	Configs myConfig;
-	/*
-	if(FileExists(myConfig.configfile))
-	{
-		String invoiceNum;
-		
-        VectorMap<String, String> cfg = LoadIniFile(myConfig.configfile);
-        myConfig.DBFile = cfg.Get("DBFile", Null);
-        myConfig.companyname = cfg.Get("companyname", Null);
-        myConfig.companyaddress = cfg.Get("companyaddress", Null);
-        myConfig.companycity = cfg.Get("companycity", Null);
-        myConfig.companystate = cfg.Get("companystate", Null);
-        myConfig.companyzip = cfg.Get("companyzip", Null);
-        myConfig.companyphone = cfg.Get("companyphone", Null);
-        myConfig.companyemail = cfg.Get("companyemail", Null);
-        myConfig.OutputDirectory = cfg.Get("OutputDirectory", Null);
-	}
-	else {
-		myConfig.Initialize();
-	}
-	*/
+
 	myConfig.Initialize();
 	// myConfig.OutputDirectory = myConfig.GetOutputDirectory();
 

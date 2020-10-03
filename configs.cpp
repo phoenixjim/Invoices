@@ -34,6 +34,10 @@ String Configs::GetOutputDirectory()
 
 void Configs::Initialize()
 {
+	DBFile = "/home/james/upp/MyApps/Invoices/sample.db";
+	OutputDirectory = "/home/james/Desktop/";
+	
+	/*
 	if (DBFile.IsEmpty()) DBFile = SelectDB();
 	
 	if (OutputDirectory.IsEmpty()) OutputDirectory = GetOutputDirectory();
@@ -50,6 +54,7 @@ void Configs::Initialize()
 		cfg << "companyemail=";
 	}
 	SaveSettings();
+*/
 	// more configs here
 }
 
@@ -59,4 +64,5 @@ void Configs::SaveSettings()
 	{
     	Exclamation("Error saving configuration!");
 	}
+
 }
