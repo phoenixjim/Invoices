@@ -34,7 +34,11 @@ String Configs::GetOutputDirectory()
 
 void Configs::Initialize()
 {
+	// #ifdef _debug
 	DBFile = "/home/james/upp/MyApps/Invoices/sample.db";
+	// #else
+	// DBFile = "/home/james/OneDrive/JTS/Jim's Tech Services/invoices.db";
+	// #endif
 	OutputDirectory = "/home/james/Desktop/";
 	companyname = "Company Name";
 	companyowner = "James Lefavour";

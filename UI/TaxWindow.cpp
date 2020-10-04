@@ -4,16 +4,16 @@ TaxWindow::TaxWindow()
 {
 	CtrlLayoutOKCancel(*this, "Select date range for report:");
 	
-	sqlTaxReport.AddColumn(INVOICENUMBER, "Inv NO.");
-	sqlTaxReport.AddColumn(DATEPAID, "Date Paid").SetConvert(DateIntConvert());
-	sqlTaxReport.AddColumn(CUSTOMERID, "Cust. No."); // OR CUSTNAME, IF NOT ANON
-	// sqlTaxReport.AddColumn(CUSTNAME, "Customer Name");
-	sqlTaxReport.AddColumn(TAXABLESUB, "Taxable");
-	sqlTaxReport.AddColumn(NONTAXABLESUB, "Non-Taxable");
-	sqlTaxReport.AddColumn(TAX, "Sales Tax");
-	sqlTaxReport.AddColumn(GRANDTOTAL, "Total");
-	sqlTaxReport.AddColumn(COST, "My Parts Cost"); // PARTS COST FOR THIS INVOICE
-
+	sqlTaxReport.AddColumn(INVOICENUMBER, "Inv NO.", 100);
+	sqlTaxReport.AddColumn(DATEPAID, "Date Paid", 200).SetConvert(DateIntConvert());
+	sqlTaxReport.AddColumn(CUSTOMERID, "Cust. No.", 65); // OR CUSTNAME, IF NOT ANON
+	sqlTaxReport.AddColumn(CUSTNAME, "Customer Name", 1);
+	sqlTaxReport.AddColumn(TAXABLESUB, "Taxable", 150);
+	sqlTaxReport.AddColumn(NONTAXABLESUB, "Non-Taxable", 150);
+	sqlTaxReport.AddColumn(TAX, "Sales Tax", 150);
+	sqlTaxReport.AddColumn(GRANDTOTAL, "Total", 150);
+	sqlTaxReport.AddColumn(COST, "My Parts Cost", 150); // PARTS COST FOR THIS INVOICE
+	anon.Set(1);
 	anon.WhenAction << THISBACK(anonChanged);
 	ok << [=] { okPressed(); };
 	cancel << [=] { cancelPressed(); };
@@ -31,12 +31,14 @@ void TaxWindow::cancelPressed()
 
 void TaxWindow::anonChanged()
 {
-	PromptOK(__func__);
-	if (anon.Get() == 1)
+	if (anon.Get() == 1) {
 		// use cust Number
-		// sqlTaxReport.
+		 sqlTaxReport.ColumnWidths("150 200 65 1 150 150 150 200 200");
 		return;
-	else // use cust name
+	}
+	else  {// use cust name
+		sqlTaxReport.ColumnWidths("150 200 1 140 150 150 150 200 200");
 		return;
+	}
 		
 }
