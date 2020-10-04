@@ -7,7 +7,7 @@ TaxWindow::TaxWindow()
 	sqlTaxReport.AddColumn(INVOICENUMBER, "Inv NO.", 100);
 	sqlTaxReport.AddColumn(DATEPAID, "Date Paid", 200).SetConvert(DateIntConvert());
 	sqlTaxReport.AddColumn(CUSTOMERID, "Cust. No.", 65); // OR CUSTNAME, IF NOT ANON
-	sqlTaxReport.AddColumn(CUSTNAME, "Customer Name", 1);
+	sqlTaxReport.AddColumn(CUSTNAME, "Customer Name", 140);
 	sqlTaxReport.AddColumn(TAXABLESUB, "Taxable", 150);
 	sqlTaxReport.AddColumn(NONTAXABLESUB, "Non-Taxable", 150);
 	sqlTaxReport.AddColumn(TAX, "Sales Tax", 150);
@@ -33,11 +33,13 @@ void TaxWindow::anonChanged()
 {
 	if (anon.Get() == 1) {
 		// use cust Number
-		 sqlTaxReport.ColumnWidths("150 200 65 1 150 150 150 200 200");
+		 sqlTaxReport.HeaderTab(2).Show(true); // .ColumnWidths("150 200 65 1 150 150 150 200 200");
+		 sqlTaxReport.HeaderTab(3).Show(false);
 		return;
 	}
 	else  {// use cust name
-		sqlTaxReport.ColumnWidths("150 200 1 140 150 150 150 200 200");
+		 sqlTaxReport.HeaderTab(2).Show(false); // .ColumnWidths("150 200 65 1 150 150 150 200 200");
+		 sqlTaxReport.HeaderTab(3).Show(true);
 		return;
 	}
 		

@@ -21,8 +21,20 @@ void Invoices::MainMenu(Bar& bar)
 void Invoices::TransactionsMenu(Bar& bar)
 {
 	bar.Add(t_("Create Invoice"), [=]{ if(!createinvoicewin.IsOpen()) 	createinvoicewin.Open(this); });
-	bar.Add(t_("List Invoices"), [=]{ if(!invoiceswin.IsOpen()) 	invoiceswin.Open(this); });
-	bar.Add(t_("List Line Items"), [=]{ if(!listlineitemswin.IsOpen()) 	listlineitemswin.Open(this); });
+	bar.Add(t_("List Invoices"), [=]{
+		if(!invoiceswin.IsOpen())	{
+			invoiceswin.InvoicesArray.ReQuery();
+			invoiceswin.InvoicesArray.GoBegin();
+			invoiceswin.Open(this);
+			}
+		});
+	bar.Add(t_("List Line Items"), [=]{
+		if(!listlineitemswin.IsOpen())	{
+			listlineitemswin.LineItemsArray.ReQuery();
+			listlineitemswin.LineItemsArray.GoEnd();
+			listlineitemswin.Open(this);
+			}
+		});
 }
 
 void Invoices::ReportsMenu(Bar& bar)

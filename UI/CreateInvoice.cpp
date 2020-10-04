@@ -13,18 +13,18 @@ CreateInvoiceWindow::CreateInvoiceWindow()
  	btnSubtract << [=] { AdjustPrice(); };
  	btnCalcTotals << [=] {CalcInvoiceTotal(); };
  	
- 	arrayLineItems.AddColumn("Name", 40);
- 	arrayLineItems.AddColumn("Description", 80);
- 	arrayLineItems.AddColumn("Price", 20).SetConvert(ConvDouble());
- 	arrayLineItems.AddColumn("Qty", 15);
- 	arrayLineItems.AddColumn("Tax?", 15);
- 	arrayLineItems.AddColumn("Total", 20);
- 	arrayLineItems.Removing();
+ 	arrayLineItems.AddColumn(PRODUCTNAME, "Name", 40);
+ 	arrayLineItems.AddColumn(DESCRIPTION, "Description", 80);
+ 	arrayLineItems.AddColumn(PRICE, "Price", 20).SetConvert(ConvDouble());
+ 	arrayLineItems.AddColumn(QTY, "Qty", 15);
+ 	arrayLineItems.AddColumn(ISTAXABLE, "Tax?", 15);
+ 	arrayLineItems.AddColumn(TOTAL, "Total", 20).SetConvert(ConvDouble());
+ 	arrayLineItems.Appending() .Removing();
  
  	SQL * Select(CUST_ID, CUSTNAME).From(CUSTOMERS);
  	while (SQL.Fetch())
  	{
- 		cbCustomers.Add(~SQL[CUST_ID], ~SQL[CUSTNAME]);
+ 		cbCustomers.Add(SQL[CUST_ID], SQL[CUSTNAME]);
  	}
 	
 	cbProducts.Add("Service");
@@ -35,8 +35,8 @@ CreateInvoiceWindow::CreateInvoiceWindow()
 
 	SQL.Execute("Select MAX(INVOICENUMBER) From INVOICES");
 	SQL.Fetch();
-	nextInvoice = stol(SQL[0].ToString().ToStd()) + 1;
-	txtInvoice.SetText(IntStr64(nextInvoice));
+	nextInvoice = (int)SQL[0] + 1; // stol(SQL[0].ToString().ToStd()) + 1;
+	txtInvoice = nextInvoice; // .SetText(IntStr64(nextInvoice));
 	cbCustomers.WhenAction << [=] { CustChanged(); };
 	cbProducts.WhenAction << [=] { ProdChanged(); };
 	dtpBillDate.SetConvert(DateIntConvert());
@@ -48,10 +48,12 @@ void CreateInvoiceWindow::CustChanged()
 	idNum += cbCustomers.GetIndex();
 	if (IsNull(idNum) || idNum < 1)
 		return;
-
+	/*
 	SQL * Select(TAXABLE).From(CUSTOMERS).Where(CUST_ID == idNum);
 	SQL.Fetch();
 	optCustTaxable.Set(SQL[0]);
+	*/
+	optCustTaxable.Set(SQL % Select(TAXABLE).From(CUSTOMERS).Where(CUST_ID == idNum));
 }
 
 void CreateInvoiceWindow::ProdChanged()
@@ -78,18 +80,17 @@ double CreateInvoiceWindow::round(double d, int n) {
 
 void CreateInvoiceWindow::AdjustPrice()
 {
-	if (txtPrice.GetData().IsNull()) return;
+	if (IsNull(txtPrice)) return; // txtPrice.GetData().IsNull()) return;
 	
-	double newPrice = round(StrDbl(txtPrice.GetData().ToString()) / 1.08, 2);
-	txtPrice.SetData(newPrice);
-	
+	double newPrice = round((double)txtPrice / 1.08, 2);
+	txtPrice = newPrice;
 }
 
 void CreateInvoiceWindow::SaveInvoice()
 {
 	int idNum = arrayLineItems.GetCount();
 
-	if (idNum < 1 || cbCustomers.GetData().IsNull() || dtpBillDate.GetData().IsNull())
+	if (idNum < 1 || IsNull(cbCustomers) || IsNull(dtpBillDate))
 	{
 		PromptOK("Are you missing something? (Customer, Date or items)");
 		return;
@@ -98,33 +99,33 @@ void CreateInvoiceWindow::SaveInvoice()
 
 	for (int i = 0; i < idNum; i++)
 	{
-		if (optCustTaxable.Get() == true && arrayLineItems.GetColumn(i, 4)  == 1) {
-			taxable = round(StrDbl(arrayLineItems.GetColumn(i, 2).ToString()) * StrDbl(arrayLineItems.GetColumn(i, 3).ToString()), 2);
+		if (optCustTaxable.Get() == true && arrayLineItems.Get(i, ISTAXABLE)  == 1) {
+			taxable = round((double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY), 2);
 		}
-		else 	nonTaxable = round(StrDbl(arrayLineItems.GetColumn(i, 2).ToString()) * StrDbl(arrayLineItems.GetColumn(i, 3).ToString()), 2);
-		salestax = round(taxable * StrDbl(txtTaxRate.GetData().ToString()), 2);
+		else 	nonTaxable = round((double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY), 2);
+		salestax = round(taxable * (double)txtTaxRate, 2);
 		
 		grandTotal += salestax + nonTaxable + taxable;
 		SQL * Insert(LINEITEMS)
-		(PRODUCTNAME, arrayLineItems.GetColumn(i,0).ToString())
-		(DESCRIPTION, arrayLineItems.GetColumn(i,1).ToString())
-		(PRICE, StrDbl(arrayLineItems.GetColumn(i,2).ToString()))
-		(QTY, StrInt(arrayLineItems.GetColumn(i,3).ToString()))
-		(TOTAL, StrDbl(arrayLineItems.GetColumn(i,5).ToString()))
-		(INVOICEIDNUMBER, StrInt64(txtInvoice.GetData().ToString()))
-		(ISTAXABLE, StrInt(arrayLineItems.GetColumn(i,4).ToString()));
+		(PRODUCTNAME, arrayLineItems.Get(i,PRODUCTNAME))
+		(DESCRIPTION, arrayLineItems.Get(i, DESCRIPTION))
+		(PRICE, (double)arrayLineItems.Get(i, PRICE))
+		(QTY, (int)arrayLineItems.Get(i, QTY))
+		(TOTAL, (double)arrayLineItems.Get(i, TOTAL))
+		(INVOICEIDNUMBER, (int64)txtInvoice)
+		(ISTAXABLE, (int)arrayLineItems.Get(i, ISTAXABLE));
 	}
 	int custId = cbCustomers.GetIndex();
 
 	SQL * Insert(INVOICES)
-		(INVOICENUMBER, StrInt64(txtInvoice.GetData().ToString()))
+		(INVOICENUMBER, (int64)txtInvoice)
 		(CUSTOMERID, custId)
 		(TRANSACTIONDATE, dtpBillDate.GetData())
-		(TERMS, txtTerms.GetData().ToString())
-		(NONTAXABLESUB, nonTaxable)
-		(TAXABLESUB, taxable)
-		(TAX, salestax)
-		(GRANDTOTAL, grandTotal)
+		(TERMS, ~txtTerms)
+		(NONTAXABLESUB, (double)nonTaxable)
+		(TAXABLESUB, (double)taxable)
+		(TAX, (double)salestax)
+		(GRANDTOTAL, (double)grandTotal)
 		(AMTPAID, 0.0)
 		(STATUS, 0);
 	// Invoices p = GetMainWindow();
@@ -167,10 +168,9 @@ void CreateInvoiceWindow::ClearItem()
 
 double CreateInvoiceWindow::CalcItemTotal(int itemnumber)
 {
-	if (arrayLineItems.GetColumn(itemnumber, 2).IsNull() || arrayLineItems.GetColumn(itemnumber, 3).IsNull())
+	if (IsNull(arrayLineItems.GetColumn(itemnumber, StrInt(~PRICE))) || IsNull(arrayLineItems.GetColumn(itemnumber, StrInt(~QTY))))
 		return 0.0;
-	double retval = StrDbl(arrayLineItems.GetColumn(itemnumber, 2).ToString()) * StrDbl(arrayLineItems.GetColumn(itemnumber, 3).ToString());
-	return retval;
+	return round((double)arrayLineItems.GetColumn(itemnumber, StrInt(~PRICE)) * (double)arrayLineItems.GetColumn(itemnumber, StrInt(~QTY)), 2);
 }
 
 void CreateInvoiceWindow::CalcInvoiceTotal()
@@ -186,11 +186,11 @@ void CreateInvoiceWindow::CalcInvoiceTotal()
 	double nonTaxable = 0.0, taxable = 0.0, salestax = 0.0, grandtotal = 0.0;
 	for (int i = 0; i < arrayLineItems.GetCount(); i++)
 	{
-		if (optCustTaxable.Get() == true && arrayLineItems.GetColumn(i, 4)  == 1) {
-			taxable += round(StrDbl(arrayLineItems.GetColumn(i, 2).ToString()) * StrDbl(arrayLineItems.GetColumn(i, 3).ToString()), 2);
+		if (optCustTaxable.Get() == true && arrayLineItems.Get(i, ISTAXABLE)  == 1) {
+			taxable += round((double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY), 2);
 		}
-		else 	nonTaxable += round(StrDbl(arrayLineItems.GetColumn(i, 2).ToString()) * StrDbl(arrayLineItems.GetColumn(i, 3).ToString()), 2);
-		salestax += round(taxable * StrDbl(txtTaxRate.GetData().ToString()), 2);
+		else 	nonTaxable += round((double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY), 2);
+		salestax += round(taxable * (double)txtTaxRate, 2);
 	}
 	grandtotal = nonTaxable + taxable + salestax;
 	txtNonTaxable.SetData(nonTaxable);

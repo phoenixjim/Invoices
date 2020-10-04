@@ -41,6 +41,7 @@ InvoicesWindow::InvoicesWindow()
 	// InvoicesArray.GoEndPostQuery();
 	
 }
+/*
 void InvoicesWindow::Open(Ctrl* owner)
 {
 	InvoicesArray.ReQuery();
@@ -48,6 +49,7 @@ void InvoicesWindow::Open(Ctrl* owner)
 	
 	TopWindow::Open(owner);
 }
+*/
 
 void InvoicesWindow::btnPrintClicked()
 {
