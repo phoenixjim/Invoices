@@ -57,7 +57,9 @@ Invoices::Invoices()
 	// UseHomeDirectoryConfig(false);
 	AddFrame(mainmenu);
 	mainmenu.Set(THISFN(MainMenu));
-	
+	Date min = Date(2010,1,1);
+	Date max = Date(2040,1,1);
+	ConvertDate::SetDefaultMinMax(min, max);
 	// from http://leonardoce.interfree.it/leowiki.html "simple configfile"
 }
 

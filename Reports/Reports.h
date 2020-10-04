@@ -16,6 +16,8 @@ struct TaxWindow : WithTaxWindowLayout<TopWindow> {
 	void okPressed();
 	void cancelPressed();
 	void anonChanged();
+	double GetPartsCost(int invId);
+	String GetCustomerName(int custId);
 	public:
 		typedef TaxWindow CLASSNAME;
 		TaxWindow();
