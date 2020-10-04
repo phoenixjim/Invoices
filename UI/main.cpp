@@ -1,11 +1,10 @@
-// #include "Invoices.h"
 #include "DBUI.h"
-#include <string>
+
+// #include <string>
 
 #define MODEL "Invoices/Tables/Invoices.sch"
 #include <Sql/sch_schema.h>
 #undef MODEL
-
 void Invoices::MainMenu(Bar& bar)
 {
 	bar.Add(t_("Customers"),  [=]{ if(!cwin.IsOpen()) cwin.Open(this); });
@@ -60,12 +59,6 @@ Invoices::Invoices()
 	mainmenu.Set(THISFN(MainMenu));
 	
 	// from http://leonardoce.interfree.it/leowiki.html "simple configfile"
-}
-
-void Invoices::UpdateTables()
-{
-	invoiceswin.InvoicesArray.ReQuery();
-	listlineitemswin.LineItemsArray.ReQuery();
 }
 
 GUI_APP_MAIN

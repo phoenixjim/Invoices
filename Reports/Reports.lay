@@ -1,0 +1,33 @@
+LAYOUT(TaxWindowLayout, 976, 168)
+	ITEM(Label, dv___0, SetLabel(t_("Start")).SetFont(SansSerifZ(12)).LeftPosZ(8, 40).TopPosZ(8, 19))
+	ITEM(Label, dv___1, SetLabel(t_("End")).SetFont(SansSerifZ(12)).LeftPosZ(168, 40).TopPosZ(8, 19))
+	ITEM(DropDate, dateStart, LeftPosZ(52, 104).TopPosZ(8, 19))
+	ITEM(DropDate, dateEnd, LeftPosZ(216, 104).TopPosZ(8, 19))
+	ITEM(Option, anon, SetLabel(t_("Anonymous?")).SetFont(SansSerifZ(12)).LeftPosZ(332, 92).TopPosZ(12, 16))
+	ITEM(Button, ok, SetLabel(t_("Create")).SetFont(SansSerifZ(12)).LeftPosZ(436, 56).TopPosZ(12, 15))
+	ITEM(Button, cancel, SetLabel(t_("Cancel")).SetFont(SansSerifZ(12)).LeftPosZ(504, 56).TopPosZ(12, 15))
+	ITEM(SqlArray, sqlTaxReport, LeftPosZ(8, 960).TopPosZ(40, 116))
+END_LAYOUT
+
+LAYOUT(ProfitLossWindowLayout, 216, 92)
+	ITEM(Label, dv___0, SetLabel(t_("Start")).SetFont(SansSerifZ(12)).LeftPosZ(8, 84).TopPosZ(8, 19))
+	ITEM(Label, dv___1, SetLabel(t_("End")).SetFont(SansSerifZ(12)).LeftPosZ(8, 84).TopPosZ(36, 19))
+	ITEM(DropDate, dateStart, LeftPosZ(104, 104).TopPosZ(4, 19))
+	ITEM(DropDate, dateEnd, LeftPosZ(104, 104).TopPosZ(32, 19))
+	ITEM(Button, ok, SetLabel(t_("Create")).SetFont(SansSerifZ(12)).LeftPosZ(20, 56).TopPosZ(68, 15))
+	ITEM(Button, cancel, SetLabel(t_("Cancel")).SetFont(SansSerifZ(12)).LeftPosZ(124, 56).TopPosZ(68, 15))
+END_LAYOUT
+
+LAYOUT(IncomeByCustomerLayout, 216, 148)
+	ITEM(Label, dv___0, SetLabel(t_("Start")).SetFont(SansSerifZ(12)).LeftPosZ(8, 84).TopPosZ(8, 19))
+	ITEM(Label, dv___1, SetLabel(t_("End")).SetFont(SansSerifZ(12)).LeftPosZ(8, 84).TopPosZ(32, 19))
+	ITEM(Label, dv___2, SetLabel(t_("Customer")).SetFont(SansSerifZ(12)).LeftPosZ(8, 60).TopPosZ(96, 19))
+	ITEM(DropDate, dateStart, LeftPosZ(104, 104).TopPosZ(4, 19))
+	ITEM(DropDate, dateEnd, LeftPosZ(104, 104).TopPosZ(32, 19))
+	ITEM(Option, anon, SetLabel(t_("Anonymous?")).SetFont(SansSerifZ(12)).LeftPosZ(56, 92).TopPosZ(68, 16))
+	ITEM(Button, ok, SetLabel(t_("Create")).SetFont(SansSerifZ(12)).LeftPosZ(20, 56).TopPosZ(128, 15))
+	ITEM(Button, cancel, SetLabel(t_("Cancel")).SetFont(SansSerifZ(12)).LeftPosZ(120, 56).TopPosZ(128, 15))
+	ITEM(DropList, dv___8, LeftPosZ(76, 132).TopPosZ(96, 19))
+END_LAYOUT
+
+

@@ -1,5 +1,5 @@
 #include "DBUI.h"
-#include "../configs.h"
+#include "../Utils/configs.h"
 #include <plugin/sqlite3/Sqlite3.h>
 
 class AddLineItem : public WithLineItemAddLayout<TopWindow> {

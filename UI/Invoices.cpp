@@ -1,5 +1,5 @@
 #include "DBUI.h"
-#include "../configs.h"
+#include "../Utils/configs.h"
 
 // ListInvoices:
 InvoicesWindow::InvoicesWindow()

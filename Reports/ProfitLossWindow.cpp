@@ -1,4 +1,4 @@
-#include "DBUI.h"
+#include "Reports.h"
 
 ProfitLossWindow::ProfitLossWindow()
 {

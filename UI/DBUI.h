@@ -1,16 +1,17 @@
-#ifndef _Invoices_customers_h_
-#define _Invoices_customers_h_
+#ifndef _Invoices_DBUI_h_
+#define _Invoices_DBUI_h_
 #include <CtrlLib/CtrlLib.h>
 #pragma foreign_keys = ON
 #include <SqlCtrl/SqlCtrl.h>
 using namespace Upp;
 
-#define LAYOUTFILE <Invoices/UI/Invoices.lay>
+#define LAYOUTFILE <Invoices/Invoices.lay>
 #include <CtrlCore/lay.h>
 
-#include <Invoices/UI/sqlincludes.h>
-#include "converts.h"
-#include "../configs.h"
+#include "Invoices/Tables/sqlincludes.h"
+#include "../Utils/converts.h"
+#include "../Utils/configs.h"
+
 enum pNames
         { 
         Service=1,
@@ -23,7 +24,6 @@ enum pNames
 struct CustomersWindow : WithCustomersWindowLayout<TopWindow> {
 	Configs	myConfig;
 	// EditString	name;
-	
 public:
     CustomersWindow();
 	virtual void Paint(Draw& w) {
@@ -118,36 +118,6 @@ public:
      }
 };
 
-struct TaxWindow : WithTaxWindowLayout<TopWindow> {
-	void okPressed();
-	void cancelPressed();
-	void anonChanged();
-	public:
-		typedef TaxWindow CLASSNAME;
-		TaxWindow();
-		void Paint(Draw& w) {
-        w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
-     }
-};
-
-struct IncomeWindow : WithIncomeByCustomerLayout<TopWindow> {
-	public:
-		typedef IncomeWindow CLASSNAME;
-		IncomeWindow();
-		void Paint(Draw& w) {
-        w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
-     }
-};
-
-struct ProfitLossWindow : WithProfitLossWindowLayout<TopWindow> {
-	public:
-		typedef ProfitLossWindow CLASSNAME;
-		ProfitLossWindow();
-		void Paint(Draw& w) {
-        w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
-     }
-};
-
 struct CompanyInfoWindow : WithCompanyInfoWindowLayout<TopWindow> {
 	Configs myConfig;
 	void Save();
@@ -160,6 +130,8 @@ struct CompanyInfoWindow : WithCompanyInfoWindowLayout<TopWindow> {
      }
 };
 
+#include "../Reports/Reports.h"
+
 class Invoices : public WithInvoicesLayout<TopWindow> {
 	CustomersWindow	cwin;
 	ProductsWindow prodwin;
@@ -167,14 +139,13 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 	TaxWindow taxreportwin;
 	IncomeWindow incomewin;
 	ProfitLossWindow profitwin;
-		
-	MenuBar		mainmenu;
-
-public:
 	CompanyInfoWindow setcompanywin;
 	InvoicesWindow invoiceswin;
 	LineItemsWindow listlineitemswin;
 	
+	MenuBar		mainmenu;
+
+public:
 	typedef Invoices CLASSNAME;
 	Configs myConfig;
 
@@ -186,8 +157,6 @@ public:
 	void		TransactionsMenu(Bar& bar);
 	void		ReportsMenu(Bar& bar);
 	void		ManagementMenu(Bar& bar);
-	
-	void		UpdateTables();
 };
 
 #endif
