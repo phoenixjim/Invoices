@@ -39,9 +39,15 @@ InvoicesWindow::InvoicesWindow()
 
 	// InvoicesArray.WhenLeftDouble = THISBACK(EditBorrow);
 	// InvoicesArray.GoEndPostQuery();
-
+	
 }
-
+void InvoicesWindow::Open(Ctrl* owner)
+{
+	InvoicesArray.ReQuery();
+	InvoicesArray.GoBegin();
+	
+	TopWindow::Open(owner);
+}
 
 void InvoicesWindow::btnPrintClicked()
 {

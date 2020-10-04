@@ -127,8 +127,8 @@ void CreateInvoiceWindow::SaveInvoice()
 		(GRANDTOTAL, grandTotal)
 		(AMTPAID, 0.0)
 		(STATUS, 0);
-	Invoices p = GetMainWindow();
-	//  UpdateTables();
+	// Invoices p = GetMainWindow();
+	// UpdateTables();
 
 	ClearItem();
 	Close();

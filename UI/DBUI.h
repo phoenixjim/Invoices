@@ -52,6 +52,7 @@ struct InvoicesWindow : WithInvoicesWindowLayout<TopWindow> {
 	void btnByDatesClicked();
 	void btnByCustomerClicked();
 	void btnByVoidedClicked();
+	void Open(Ctrl* owner);
 	
 public:
 	typedef InvoicesWindow CLASSNAME;
@@ -65,6 +66,7 @@ public:
 struct LineItemsWindow : public WithLineItemsWindowLayout<TopWindow> {
 	void EditRow();
 	void AddNewItem();
+	void Open(Ctrl* owner);
 public:
 	typedef LineItemsWindow CLASSNAME;
 	LineItemsWindow();

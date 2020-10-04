@@ -43,22 +43,11 @@ void Invoices::ManagementMenu(Bar& bar)
 Invoices::Invoices()
 {
 	CtrlLayout(*this, "Invoices");
-	UseHomeDirectoryConfig(false);
+	// UseHomeDirectoryConfig(false);
 	AddFrame(mainmenu);
 	mainmenu.Set(THISFN(MainMenu));
 	
 	// from http://leonardoce.interfree.it/leowiki.html "simple configfile"
-	
-	if(FileExists(myConfig.configfile))
-	{
-        VectorMap<String, String> cfg = LoadIniFile(myConfig.configfile);
-        myConfig.DBFile = cfg.Get("DBFile", Null);
-        myConfig.OutputDirectory = cfg.Get("OutputDirectory", Null);
-	}
-	else {
-		myConfig.GetOutputDirectory();
-		myConfig.DBFile = myConfig.SelectDB();
-	}
 }
 
 void Invoices::UpdateTables()
@@ -70,10 +59,9 @@ void Invoices::UpdateTables()
 GUI_APP_MAIN
 {
 	Configs myConfig;
-
+	// Invoices mainwin; // Crashes with invalid memory access
 	myConfig.Initialize();
-	// myConfig.OutputDirectory = myConfig.GetOutputDirectory();
-
+	
 	Sqlite3Session sqlite3;
 	if(!sqlite3.Open(myConfig.DBFile)) {
 		Exclamation("Can't create or open database file\n");

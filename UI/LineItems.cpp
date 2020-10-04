@@ -75,6 +75,14 @@ LineItemsWindow::LineItemsWindow() {
 
 // NOTE: For the following, after ok, should update numbers in associated Invoice.
 
+void LineItemsWindow::Open(Ctrl* owner)
+{
+	LineItemsArray.ReQuery();
+	LineItemsArray.GoBegin();
+	
+	TopWindow::Open(owner);
+}
+
 void LineItemsWindow::EditRow()
 {
 	int idNum;
