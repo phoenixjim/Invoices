@@ -7,4 +7,6 @@ using namespace Upp;
 Convert& DateIntConvert();
 Convert& ConvDouble();
 Convert& ConvLineItem();
+
+double round(double d, int n);
 #endif

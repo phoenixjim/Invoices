@@ -17,13 +17,16 @@ struct TaxWindow : WithTaxWindowLayout<TopWindow> {
 	void cancelPressed();
 	void anonChanged();
 	double GetPartsCost(int invId);
+	void CreateReport(String start, String end);
+	
+	String taxQTF;
 	String GetCustomerName(int custId);
-	public:
-		typedef TaxWindow CLASSNAME;
-		TaxWindow();
-		void Paint(Draw& w) {
-        w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
-     }
+public:
+	typedef TaxWindow CLASSNAME;
+	TaxWindow();
+	void Paint(Draw& w) {
+		w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
+    }
 };
 
 struct IncomeWindow : WithIncomeByCustomerLayout<TopWindow> {

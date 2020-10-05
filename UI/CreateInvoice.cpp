@@ -73,11 +73,11 @@ void CreateInvoiceWindow::ProdChanged()
 			break;
 	}
 }
-
+/*
 double CreateInvoiceWindow::round(double d, int n) {
 	return floor(d * ipow10(n) + 0.5) / ipow10(n);
 }
-
+*/
 void CreateInvoiceWindow::AdjustPrice()
 {
 	if (IsNull(txtPrice)) return; // txtPrice.GetData().IsNull()) return;

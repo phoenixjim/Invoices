@@ -109,7 +109,6 @@ struct CreateInvoiceWindow : WithCreateInvoiceWindowLayout<TopWindow> {
 	void CancelInvoice();
 	void AddItem();
 	void ClearItem();
-	double round(double d, int n);
 	void DeleteRow();
 public:
 	CreateInvoiceWindow();
