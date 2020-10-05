@@ -90,13 +90,28 @@ void IncomeWindow::CreateReport(String start, String end)
 	{
 		double sumTaxable = 0.0, sumNontaxable = 0.0, sumTax = 0.0, sumTotal = 0.0, sumParts = 0.0;
 		String headertext;
-		int strt, ending;
 		
 		String s = ::Format(Date( 1970, 1, 1) + StrInt(start));
 		String e = ::Format(Date( 1970, 1, 1) + StrInt(end));
-		headertext << "Tax Report " << s << " to " << e;
-		for ( int i = 0; i < sqlTaxReport.GetCount(); i++ )
+		headertext << "Tax Report " << s << " to " << e << " for " << sqlTaxReport.Get( 0, CUSTNAME );
+		
+		// {{153:153:0:215:123:122:123:123:123@L [* #Inv NO.#:: #Date Paid#:: #Cust. No.#:: #Customer Name#:: #Taxable#:: #Non-Taxable#:: #Sales Tax#:: #My Parts Cost#:: #Total#::@W ]
+		// {{170:171:111:0:136:137:136:137:137@L
+		taxQTF = "{{153:153:123:122:123:123:123@L [+50>* Inv NO.:: Date Paid:: Taxable:: Non-Taxable:: Sales Tax:: Total:: Parts Cost::@W ][+50> ";
+		int rowcount = sqlTaxReport.GetCount();
+		for ( int i = 0; i < rowcount; i++ )
 		{
+			taxQTF << sqlTaxReport.Get( i, INVOICENUMBER ) << ":: " << 
+			::Format(Date( 1970, 1, 1) + sqlTaxReport.Get( i, DATEPAID ))  << ":: " << 
+			Format("%2!nl", sqlTaxReport.Get ( i, TAXABLESUB )) << ":: " << 
+			Format("%2!nl", sqlTaxReport.Get ( i, NONTAXABLESUB )) << ":: " << 
+			Format("%2!nl", sqlTaxReport.Get ( i, TAX )) << ":: " << 
+			Format("%2!nl", sqlTaxReport.Get ( i, GRANDTOTAL )) << ":: " << 
+			Format("%2!nl", (IsNull(sqlTaxReport.Get ( i, COST ))) ? 0.0 : ( double ) sqlTaxReport.Get ( i, COST ));
+			if ((i % 2 == 0 )&& (i < rowcount - 1)) taxQTF << " ::@L ][+50> ";
+			else if (i < rowcount - 1) taxQTF << " ::@W ][+50> ";
+			else taxQTF << ":: ]";
+
 			sumTaxable += ( double ) sqlTaxReport.Get ( i, TAXABLESUB );
 			sumNontaxable += ( double ) sqlTaxReport.Get ( i, NONTAXABLESUB );
 			sumTax += ( double ) sqlTaxReport.Get ( i, TAX );
@@ -104,12 +119,12 @@ void IncomeWindow::CreateReport(String start, String end)
 			sumParts += (IsNull(sqlTaxReport.Get ( i, COST ))) ? 0.0 : ( double ) sqlTaxReport.Get ( i, COST );
 		}
 
-		taxQTF = "{{153:153:0:215:123:122:123:123:123 [C2>* :: :: :: :: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total:: :: Totals:: :: :: ";
-		taxQTF << Format("%2!nl", sumTaxable) << ":: " << Format("%2!nl", sumNontaxable) << ":: " << Format("%2!nl", sumTax) << ":: " << Format("%2!nl", sumParts) <<":: " << Format("%2!nl", sumTotal) << "}}";
+		taxQTF << "[+50>* :: :: Taxable:: Non-Taxable:: Sales Tax:: Grand Total:: Parts Cost:: Totals:: :: ";
+		taxQTF << Format("%2!nl", round(sumTaxable)) << ":: " << Format("%2!nl", round(sumNontaxable)) << ":: " << 
+			Format("%2!nl", round(sumTax)) << ":: " << Format("%2!nl", round(sumTotal)) <<":: " << Format("%2!nl", round(sumParts)) << "}}";
 		Report report;
-		report.SetStdFont ( SansSerif (12) );
-		report.Landscape().Header ( headertext ).Footer ( "Page $$P" );
-		report << sqlTaxReport.AsQtf() << taxQTF;
+		report.Header ( headertext ).Footer ( "Page $$P" );
+		report << taxQTF; // sqlTaxReport.AsQtf() << taxQTF;
 
 		Perform ( report );
 	}

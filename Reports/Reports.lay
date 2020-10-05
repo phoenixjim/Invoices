@@ -11,15 +11,6 @@ LAYOUT(TaxWindowLayout, 976, 168)
 	ITEM(Button, btnExport, SetLabel(t_("Export QTF")).LeftPosZ(660, 88).TopPosZ(12, 15))
 END_LAYOUT
 
-LAYOUT(ProfitLossWindowLayout, 216, 92)
-	ITEM(Label, dv___0, SetLabel(t_("Start")).SetFont(SansSerifZ(12)).LeftPosZ(8, 84).TopPosZ(8, 19))
-	ITEM(Label, dv___1, SetLabel(t_("End")).SetFont(SansSerifZ(12)).LeftPosZ(8, 84).TopPosZ(36, 19))
-	ITEM(DropDate, dateStart, NotNull(true).LeftPosZ(104, 104).TopPosZ(4, 19))
-	ITEM(DropDate, dateEnd, NotNull(true).LeftPosZ(104, 104).TopPosZ(32, 19))
-	ITEM(Button, ok, SetLabel(t_("Create")).SetFont(SansSerifZ(12)).LeftPosZ(20, 56).TopPosZ(68, 15))
-	ITEM(Button, cancel, SetLabel(t_("Cancel")).SetFont(SansSerifZ(12)).LeftPosZ(124, 56).TopPosZ(68, 15))
-END_LAYOUT
-
 LAYOUT(IncomeByCustomerLayout, 940, 168)
 	ITEM(Label, dv___0, SetLabel(t_("Start")).SetFont(SansSerifZ(12)).LeftPosZ(8, 40).TopPosZ(8, 19))
 	ITEM(Label, dv___1, SetLabel(t_("End")).SetFont(SansSerifZ(12)).LeftPosZ(168, 40).TopPosZ(8, 19))
@@ -32,5 +23,16 @@ LAYOUT(IncomeByCustomerLayout, 940, 168)
 	ITEM(Button, btnReport, SetLabel(t_("Create Report")).LeftPosZ(656, 80).TopPosZ(8, 15))
 	ITEM(SqlArray, sqlTaxReport, LeftPosZ(8, 924).TopPosZ(40, 116))
 	ITEM(Button, btnExport, SetLabel(t_("Export QTF")).LeftPosZ(740, 84).TopPosZ(8, 15))
+END_LAYOUT
+
+LAYOUT(ProfitLossWindowLayout, 968, 92)
+	ITEM(Label, dv___0, SetLabel(t_("Start")).SetFont(SansSerifZ(12)).LeftPosZ(8, 28).TopPosZ(8, 19))
+	ITEM(Label, dv___1, SetLabel(t_("End")).SetFont(SansSerifZ(12)).LeftPosZ(8, 28).TopPosZ(36, 19))
+	ITEM(EditDate, dateStart, NotNull(true).LeftPosZ(44, 104).TopPosZ(4, 19))
+	ITEM(EditDate, dateEnd, NotNull(true).LeftPosZ(44, 104).TopPosZ(32, 19))
+	ITEM(Button, ok, SetLabel(t_("Create")).SetFont(SansSerifZ(12)).LeftPosZ(12, 56).TopPosZ(68, 15))
+	ITEM(Button, cancel, SetLabel(t_("Cancel")).SetFont(SansSerifZ(12)).LeftPosZ(88, 56).TopPosZ(68, 15))
+	ITEM(SqlArray, sqlTaxReport, LeftPosZ(252, 708).TopPosZ(8, 76))
+	ITEM(Button, btnReport, SetLabel(t_("Create Report")).LeftPosZ(160, 80).TopPosZ(8, 76))
 END_LAYOUT
 
