@@ -90,8 +90,8 @@ void TaxWindow::CreateReport(String start, String end)
 		String e = ::Format(Date( 1970, 1, 1) + StrInt(end));
 		headertext << "Tax Report " << s << " to " << e;
 		if (anon.Get() == 1)
-			taxQTF = "{{170:171:111:0:136:137:136:137:137 [0>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+40> ";
-		else taxQTF = "{{153:153:0:215:123:122:123:123:123 [0>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+40> ";
+			taxQTF = "{{170:171:111:0:136:137:136:137:137@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+40> ";
+		else taxQTF = "{{153:153:0:215:123:122:123:123:123@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+40> ";
 		int rowcount = sqlTaxReport.GetCount();
 		int custID;
 		for ( int i = 0; i < rowcount; i++ )
@@ -117,11 +117,13 @@ void TaxWindow::CreateReport(String start, String end)
 		}
 
 		if (anon.Get() == 1)
-			taxQTF << "[+40>* :: :: :: :: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total:: :: Totals:: :: :: ";
-		else taxQTF << "[+40>* :: :: :: :: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total:: :: Totals:: :: :: ";
-		// taxQTF << ":: :: :: :: :: :: :: ::";
+			taxQTF << "[+40>* :: :: :: :: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total:: ][+60>* :: Totals:: :: :: ";
+		else taxQTF << "[+40>* :: :: :: :: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total:: ][+60>* :: Totals:: :: :: ";
+		double income1040 = sumTaxable + sumNontaxable;
 		taxQTF << Format("%2!nl", sumTaxable) << ":: " << Format("%2!nl", sumNontaxable) << ":: " << 
-			Format("%2!nl", sumTax) << ":: " << Format("%2!nl", sumParts) <<":: " << Format("%2!nl", sumTotal) << "}}";
+			Format( "%2!nl", sumTax ) << ":: " << Format("%2!nl", sumParts) << ":: " << Format("%2!nl", sumTotal) <<  "][+60>* :: Fed/State Income :: :: :: :: " << 
+			Format( "%2!nl", income1040 ) << ":: :: ] }}";
+		taxQTF << "[+80< &&Remember to deduct parts cost from income on Schedule C (Not done here) ]";
 		Report report;
 		// report.SetStdFont ( SansSerif (12) );
 		report.Header ( headertext ).Footer ( "Page $$P" );
