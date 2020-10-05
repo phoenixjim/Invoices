@@ -6,7 +6,7 @@ TaxWindow::TaxWindow()
 	CtrlLayoutOKCancel ( *this, "Select date range for report:" );
 
 	sqlTaxReport.AddColumn ( INVOICENUMBER, "Inv NO.", 100 );
-	sqlTaxReport.AddColumn ( DATEPAID, "Date Paid", 200 ).SetConvert ( DateIntConvert() );
+	sqlTaxReport.AddColumn ( DATEPAID, "Date Paid", 100 ).SetConvert ( DateIntConvert() );
 	sqlTaxReport.AddColumn ( CUSTOMERID, "Cust. No.", 65 ); // OR CUSTNAME, IF NOT ANON
 	sqlTaxReport.AddColumn ( CUSTNAME, "Customer Name", 140 ).HeaderTab().Show ( false );
 	sqlTaxReport.AddColumn ( TAXABLESUB, "Taxable", 80 ).SetConvert ( ConvDouble() ).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight();
@@ -27,6 +27,7 @@ TaxWindow::TaxWindow()
 				  };
 	btnReport << [=] { CreateReport(dateStart.GetData().ToString(), dateEnd.GetData().ToString());
 					 };
+	btnExport << [=] { ExportQTF(); };
 }
 
 double TaxWindow::GetPartsCost ( int invId )
@@ -73,6 +74,10 @@ void TaxWindow::okPressed()
 
 }
 
+void TaxWindow::ExportQTF()
+{
+	SaveFile("/home/james/Desktop/TaxReportAnon.qtf", sqlTaxReport.AsQtf());
+}
 void TaxWindow::CreateReport(String start, String end)
 {
 	if ( sqlTaxReport.GetCount() > 0 )
@@ -94,12 +99,12 @@ void TaxWindow::CreateReport(String start, String end)
 		}
 
 		if (anon.Get() == 1)
-			taxQTF = "{{148:297:96:0:119:118:119:119:119 [C2 :: Totals:: :: :: ";
-		else taxQTF = "{{135:270:0:189:108:108:108:108:109 [C2 :: Totals:: :: :: ";
-		taxQTF << DblStr(sumTaxable) << ":: " << DblStr(sumNontaxable) << ":: " << DblStr(sumTax) <<
-			 ":: " << DblStr(sumParts) <<":: " << DblStr(sumTotal) << "}}";
+			taxQTF = "{{170:171:111:0:136:137:136:137:137 [C2>* :: :: :: :: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total:: :: Totals:: :: :: ";
+		else taxQTF = "{{153:153:0:215:123:122:123:123:123 [C2>* :: :: :: :: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total:: :: Totals:: :: :: ";
+		// taxQTF << ":: :: :: :: :: :: :: ::";
+		taxQTF << Format("%2!nl", sumTaxable) << ":: " << Format("%2!nl", sumNontaxable) << ":: " << Format("%2!nl", sumTax) << ":: " << Format("%2!nl", sumParts) <<":: " << Format("%2!nl", sumTotal) << "}}";
 		Report report;
-		report.SetStdFont ( SansSerifZ ( 12 ) );
+		report.SetStdFont ( SansSerif (12) );
 		report.Landscape().Header ( headertext ).Footer ( "Page $$P" );
 		report << sqlTaxReport.AsQtf() << taxQTF;
 
