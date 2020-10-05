@@ -64,8 +64,8 @@ void IncomeWindow::okPressed()
 	Sql sql;
 	SqlBool where;
 	where = Between(DATEPAID, dateStart.GetData().ToString(), dateEnd.GetData().ToString());
-	where = where && CUST_ID == idNum;
-	sql * Select(All).From(INVOICES).Where(where);
+	where = where && CUSTOMERID == idNum;
+	sql * SelectAll().From(INVOICES).Where(where);
 
 	while ( sql.Fetch() )
 	{

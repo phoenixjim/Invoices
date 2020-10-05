@@ -55,9 +55,10 @@ void TaxWindow::okPressed()
 
 	sqlTaxReport.Clear();
 	Sql sql;
-	String commandstring = "Select * from INVOICES Where DATEPAID Between " + dateStart.GetData().ToString() + " AND " + dateEnd.GetData().ToString();
+	SqlBool where;
+	where = Between(DATEPAID,  dateStart.GetData().ToString(), dateEnd.GetData().ToString());
 
-	sql.Execute ( commandstring );
+	sql * SelectAll().From(INVOICES).Where(where);
 
 	while ( sql.Fetch() )
 	{
