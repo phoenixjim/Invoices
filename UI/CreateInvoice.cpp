@@ -11,7 +11,6 @@ CreateInvoiceWindow::CreateInvoiceWindow()
  	ok << [=] { SaveInvoice(); };
  	cancel << [=] { CancelInvoice(); };
  	btnSubtract << [=] { AdjustPrice(); };
- 	btnCalcTotals << [=] {CalcInvoiceTotal(); };
  	
  	arrayLineItems.AddColumn(PRODUCTNAME, "Name", 40);
  	arrayLineItems.AddColumn(DESCRIPTION, "Description", 80);
@@ -48,11 +47,6 @@ void CreateInvoiceWindow::CustChanged()
 	idNum += cbCustomers.GetIndex();
 	if (IsNull(idNum) || idNum < 1)
 		return;
-	/*
-	SQL * Select(TAXABLE).From(CUSTOMERS).Where(CUST_ID == idNum);
-	SQL.Fetch();
-	optCustTaxable.Set(SQL[0]);
-	*/
 	optCustTaxable.Set(SQL % Select(TAXABLE).From(CUSTOMERS).Where(CUST_ID == idNum));
 }
 
@@ -73,11 +67,7 @@ void CreateInvoiceWindow::ProdChanged()
 			break;
 	}
 }
-/*
-double CreateInvoiceWindow::round(double d, int n) {
-	return floor(d * ipow10(n) + 0.5) / ipow10(n);
-}
-*/
+
 void CreateInvoiceWindow::AdjustPrice()
 {
 	if (IsNull(txtPrice)) return; // txtPrice.GetData().IsNull()) return;
@@ -115,7 +105,8 @@ void CreateInvoiceWindow::SaveInvoice()
 		(INVOICEIDNUMBER, (int64)txtInvoice)
 		(ISTAXABLE, (int)arrayLineItems.Get(i, ISTAXABLE));
 	}
-	int custId = cbCustomers.GetIndex();
+	int custId = 1;
+	custId += cbCustomers.GetIndex();
 
 	SQL * Insert(INVOICES)
 		(INVOICENUMBER, (int64)txtInvoice)
@@ -132,7 +123,33 @@ void CreateInvoiceWindow::SaveInvoice()
 	// UpdateTables();
 
 	ClearItem();
-	Close();
+}
+
+void CreateInvoiceWindow::PrintInvoice()
+{
+	int thisInvoice;
+	String invoiceQTF;
+	Report myInvoice;
+	
+	String header = "[+60< " + myConfig.companyname + " ]"; // Add paid message right aligned if paid
+	
+	SaveInvoice();
+	
+	Sql custSQL;
+	Sql linesSQL;
+	Sql invoiceSQL;
+
+	invoiceSQL.Execute("Select MAX(INVOICENUMBER) From INVOICES");
+	invoiceSQL.Fetch();
+	thisInvoice = (int)invoiceSQL[0] + 1;
+	
+	invoiceSQL * SelectAll().From( INVOICES ).Where( INVOICENUMBER == thisInvoice );
+	if (invoiceSQL[STATUS] == 3)
+		header << "[+60>@R Paid in full, Thank you!]";
+	
+	custSQL * SelectAll().From( CUSTOMERS ).Where( CUST_ID == invoiceSQL[CUSTOMERID]);
+	linesSQL * SelectAll().From( LINEITEMS ).Where( INVOICEIDNUMBER == invoiceSQL[INVOICENUMBER]);
+	invoiceQTF = "{{100:100:100:100:100:100@W [+60< " << custSQL[CUSTNAME] << ":: :: :: ][+60> Invoice: :: " << invoiceSQL[INVOICENUMBER] << " ::] }}";
 }
 
 void CreateInvoiceWindow::CancelInvoice()

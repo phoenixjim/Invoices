@@ -111,3 +111,7 @@ Convert& ConvLineItem()
 double round(double d, int n) {
 	return floor(d * ipow10(n) + 0.5) / ipow10(n);
 }
+
+double PercentFormat(double d) {
+	return floor(d * ipow10(4) + 0.5) / ipow10(2);
+}

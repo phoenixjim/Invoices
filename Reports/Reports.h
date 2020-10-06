@@ -13,6 +13,7 @@ using namespace Upp;
 #include "../Utils/configs.h"
 
 struct TaxWindow : WithTaxWindowLayout<TopWindow> {
+	Configs myConfig;
 	void okPressed();
 	void cancelPressed();
 	void anonChanged();
@@ -31,6 +32,7 @@ public:
 };
 
 struct IncomeWindow : WithIncomeByCustomerLayout<TopWindow> {
+	Configs myConfig;
 	void okPressed();
 	void cancelPressed();
 	void CustChanged();
@@ -49,12 +51,17 @@ public:
 };
 
 struct ProfitLossWindow : WithProfitLossWindowLayout<TopWindow> {
-	public:
-		typedef ProfitLossWindow CLASSNAME;
-		ProfitLossWindow();
-		void Paint(Draw& w) {
-        w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
-     }
+	Configs myConfig;
+	void cancelPressed();
+	void okPressed();
+	void CreateReport(String start, String end);
+	double GetPartsCost(int invId);
+public:
+	typedef ProfitLossWindow CLASSNAME;
+	ProfitLossWindow();
+	void Paint(Draw& w) {
+		w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
+	}
 };
 
 #endif

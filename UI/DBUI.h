@@ -11,6 +11,7 @@ using namespace Upp;
 #include "Invoices/Tables/sqlincludes.h"
 #include "../Utils/converts.h"
 #include "../Utils/configs.h"
+#include <Report/Report.h>
 
 enum pNames
         { 
@@ -110,6 +111,7 @@ struct CreateInvoiceWindow : WithCreateInvoiceWindowLayout<TopWindow> {
 	void AddItem();
 	void ClearItem();
 	void DeleteRow();
+	void PrintInvoice();
 public:
 	CreateInvoiceWindow();
 	void Paint(Draw& w) {
@@ -149,7 +151,9 @@ public:
 	Configs myConfig;
 
 	Invoices();
-	
+	void Paint(Draw& w) {
+		w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
+	}
 	// Menu definition
 	void		MainMenu(Bar& bar);
 

@@ -9,4 +9,6 @@ Convert& ConvDouble();
 Convert& ConvLineItem();
 
 double round(double d, int n);
+double PercentFormat(double d);
+
 #endif

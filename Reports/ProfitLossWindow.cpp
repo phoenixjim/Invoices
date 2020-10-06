@@ -9,38 +9,102 @@ ProfitLossWindow::ProfitLossWindow()
 	sqlTaxReport.AddColumn("Previous", 50);
 	sqlTaxReport.AddColumn("Change", 50);
 	sqlTaxReport.AddColumn("Percent", 50);
+	
+	dateStart.SetConvert(DateIntConvert());
+	dateEnd.SetConvert(DateIntConvert());
+	
+	ok << [=] { okPressed(); };
+	cancel << [=] { cancelPressed(); };
+	btnReport << [=] { CreateReport ( dateStart.GetData().ToString(), dateEnd.GetData().ToString() ); };
 }
+
+void ProfitLossWindow::cancelPressed()
+{
+	Close();
+}
+
+void ProfitLossWindow::okPressed()
+{	// generate table
+	// get needed data:
+	if (IsNull(dateStart) || IsNull(dateEnd)) return;
+	Date prevDateStart, prevDateEnd;
+	
+	prevDateStart = Date(1969, 1, 1) + StrInt(~dateStart.GetData());
+	prevDateEnd = Date(1969, 1, 1) + StrInt(~dateEnd.GetData());
+
+	String prevStart, prevEnd;
+	prevStart = IntStr(prevDateStart.Get() - Date(1970, 1, 1).Get());
+	prevEnd   = IntStr(prevDateEnd.Get() - Date(1970, 1, 1).Get());
+	
+	// This years info:
+	Sql sql;
+	SqlBool where;
+	where = Between(DATEPAID, dateStart.GetData().ToString(), dateEnd.GetData().ToString());
+	
+	sqlTaxReport.Clear();
+
+	sql * SelectAll().From(INVOICES).Where(where);
+
+	double nowTaxable = 0.0, nowNontaxable = 0.0, nowParts = 0.0,
+		thenTaxable = 0.0, thenNontaxable = 0.0, thenParts = 0.0;
+	while ( sql.Fetch() )
+	{
+		nowTaxable += (double) sql[TAXABLESUB];
+		nowNontaxable += (double) sql[NONTAXABLESUB];
+		nowParts += GetPartsCost(sql[INVOICENUMBER]);
+	}
+
+	double nowGross = nowTaxable + nowNontaxable;
+	double nowNet = nowGross - nowParts;
+	
+	// Last Years info:
+	Sql oldsql;
+	SqlBool oldwhere;
+	oldwhere = Between(DATEPAID, prevStart, prevEnd );
+
+	oldsql * SelectAll().From(INVOICES).Where(oldwhere);
+
+	while ( oldsql.Fetch() )
+	{
+		thenTaxable += (double) oldsql[TAXABLESUB];
+		thenNontaxable += (double) oldsql[NONTAXABLESUB];
+		thenParts += GetPartsCost(oldsql[INVOICENUMBER]);
+	}
+	
+	double thenGross = thenTaxable + thenNontaxable;
+	double thenNet = thenGross - thenParts;
+	
+	double partsChange = nowParts - thenParts;
+	double partsPercent = PercentFormat(partsChange / thenParts);
+	
+	double grossChange = nowGross - thenGross;
+	double grossPercent = PercentFormat(grossChange / thenGross);
+	
+	double netChange = nowNet - thenNet;
+	double netPercent = PercentFormat(netChange / thenNet);
+	
+	sqlTaxReport.Add("Gross income:", nowGross, thenGross, grossChange, grossPercent);
+	sqlTaxReport.Add("Cost of Goods:", nowParts, thenParts, partsChange, partsPercent);
+	sqlTaxReport.Add("Net Profit:", nowNet, thenNet, netChange, netPercent);
+}
+
+void ProfitLossWindow::CreateReport( String start, String end)
+{	// generate report, customize header with date info
+
+}
+
+double ProfitLossWindow::GetPartsCost ( int invId )
+{
+	SQL * Select ( SqlSum ( COST ) ).From ( PRODUCTS ).Where ( INVOICEID == invId );
+	SQL.Fetch();
+	double parts = IsNull(SQL[0]) ? 0.00 : round(SQL[0], 2);
+	return parts;
+}
+
 
 /*
 class Profits
     {
-        #region Globals for Profits
-        static globalParams gParams = new globalParams();
-        public static transactionDAL tDAL = new transactionDAL();
-        public static DataTable tdata = new DataTable();
-        public static DataTable prevdata = new DataTable();
-        public static DateTime startdate, enddate, prevStart, prevEnd;
-        public static DataTable pdata = new DataTable(); // products
-        public static productsDAL pDAL = new productsDAL();
-
-        private static Document document; // adjust the following for landscape mode table report
-        static Table table;
-        readonly static Color TableBorder = new Color(81, 125, 192);
-        readonly static Color TableBlue = new Color(235, 240, 249);
-        readonly static Color TableGray = new Color(242, 242, 242);
-        #endregion
-        public static void Profit(long start, long finish)
-        {
-            if (finish <= start)
-            {
-                System.Windows.MessageBox.Show("Dates aren't right!");
-                return;
-            }
-            startdate = new DateTime(start);
-            enddate = new DateTime(finish);
-            prevStart = new DateTime(startdate.Year - 1, startdate.Month, startdate.Day);
-            prevEnd = new DateTime(enddate.Year - 1, enddate.Month, enddate.Day);
-
             #region Initialize date by Range
             tdata = tDAL.GetAllTransactionsByDateRange(startdate.Ticks, enddate.Ticks);
             prevdata = tDAL.GetAllTransactionsByDateRange(prevStart.Ticks, prevEnd.Ticks);
@@ -71,44 +135,6 @@ class Profits
             // ...and start a viewer.
             Process.Start(filename);
             #endregion
-        }
-        static Document CreateDocument()
-        {
-            // Create a new MigraDoc document.
-            document = new Document();
-
-            // document.Styles[StyleNames.Normal].Font.Name = "Lucida Sans";
-            DefineStyles();
-            CreatePage();
-            FillContent();
-            return document;
-        }
-        static void DefineStyles()
-        {
-            // Get the predefined style Normal.
-            Style style = document.Styles["Normal"];
-            // Because all styles are derived from Normal, the next line changes the 
-            // font of the whole document. Or, more exactly, it changes the font of
-            // all styles and paragraphs that do not redefine the font.
-            style.Font.Name = "Verdana";
-
-            style = document.Styles[StyleNames.Header];
-            style.ParagraphFormat.AddTabStop("16cm", TabAlignment.Right);
-
-            style = document.Styles[StyleNames.Footer];
-            style.ParagraphFormat.AddTabStop("8cm", TabAlignment.Center);
-
-            // Create a new style called Table based on style Normal
-            style = document.Styles.AddStyle("Table", "Normal");
-            style.Font.Name = "Verdana";
-            // style.Font.Name = "Times New Roman";
-            style.Font.Size = 8;
-
-            // Create a new style called Reference based on style Normal
-            style = document.Styles.AddStyle("Reference", "Normal");
-            style.ParagraphFormat.SpaceBefore = "5mm";
-            style.ParagraphFormat.SpaceAfter = "5mm";
-            style.ParagraphFormat.TabStops.AddTabStop("16cm", TabAlignment.Right);
         }
         static void CreatePage()
         {

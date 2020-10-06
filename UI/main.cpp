@@ -74,7 +74,6 @@ GUI_APP_MAIN
 		Exclamation("Can't create or open database file\n");
 		return;
 	}
-	
 
 	SQL = sqlite3;
 	

@@ -19,7 +19,7 @@ public:
 	String	configfile = ConfigFile();
 	String	cfg;
 
-	String	companyname, companyowner, companyaddress, companycity, companystate, companyzip,
+	String	companyname = "Company Name", companyowner, companyaddress, companycity, companystate, companyzip,
 	companyphone, companyemail;
 	
 	// long lastinvoice; // Discover when needed
