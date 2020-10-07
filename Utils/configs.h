@@ -4,14 +4,13 @@
 
 using namespace Upp;
 
-
 struct Configs {
 public:
 	//CompanyInfoWindow cwindow;
 	
 	String	GetOutputDirectory();
-	String	SelectDB();
-	void 	Initialize();
+	void	SelectDB();
+			Configs();
 	void	SaveSettings();
 	
 	String	DBFile;
@@ -19,7 +18,7 @@ public:
 	String	configfile;
 	String	cfg;
 
-	String	companyname = "Company Name", companyowner, companyaddress, companycity, companystate, companyzip,
+	String	companyname, companyowner, companyaddress, companycity, companystate, companyzip,
 	companyphone, companyemail;
 	
 	// long lastinvoice; // Discover when needed

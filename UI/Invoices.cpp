@@ -49,7 +49,9 @@ void InvoicesWindow::btnPrintClicked()
 	
 	// String header = "{{RW 100:100@W [+60< " + myConfig.companyname + ":: ]"; // Add paid message right aligned if paid
 	String header = "[ {{5000:5000f0;g0; [s0;%% " << myConfig.companyname << " ] :: [s0;>%% [@6 ";
-	String footer = "[ $$0,0#00000000000000000000000000000000:Default] [ [s0;= [@5;0 Thank you for your business!]&][s0;= [@5;0 Company Name Company Address City, State Zip Phone Email]]]";
+	String footer = "[ $$0,0#00000000000000000000000000000000:Default] [ [s0;= [@5;0 Thank you for your business!]&][s0;= [@5;0 " <<
+		myConfig.companyname << " " << myConfig.companyaddress << " " << myConfig.companycity << ", " << myConfig.companystate <<
+		" "  << myConfig.companyzip << " " << myConfig.companyphone << " " << myConfig.companyemail << "]]]";
 	
 	if(!InvoicesArray.IsCursor())
 		return;
@@ -70,7 +72,8 @@ void InvoicesWindow::btnPrintClicked()
 	custSQL * SelectAll().From( CUSTOMERS ).Where( CUST_ID == invoiceSQL[CUSTOMERID]);
 	linesSQL * SelectAll().From( LINEITEMS ).Where( INVOICEIDNUMBER == invoiceSQL[INVOICENUMBER]);
 	// Need date format!
-	invoiceQTF = "[ [ {{5000:5000f0;g0; [ ]:: [>@6 &][>@6 ]}}&][@6 &][ {{3621:495:882:1666:1666:1670f0;g0; [ " << 
+	// invoiceQTF = "[ [ {{5000:5000f0;g0; [ ]:: [>@6 &][>@6 ]}}&][@6 &][ {{3621:495:882:1666:1666:1670f0;g0; [ " << 
+	invoiceQTF = "[ [ &][@6 &][ {{4821:95:482:1266:1666:1670f0;g0; [ " << 
 		custSQL[CUSTNAME] << " ]:: [@6 ]:: [@6 ]:: [@6 ]:: [ Invoice No.:]:: [> " << invoiceSQL[INVOICENUMBER] << " ]:: [ " << 
 		custSQL[ADDRESS] << " ]:: [@6 ]:: [@6 ]:: [@6 ]:: [ Date:]:: [> " << 
 		::Format(Date( 1970, 1, 1) + (int)invoiceSQL[TRANSACTIONDATE]) << " ]:: 	[ " << 

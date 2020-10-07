@@ -10,6 +10,7 @@ CompanyInfoWindow::CompanyInfoWindow()
 
 void CompanyInfoWindow::Save()
 {
+	Exclamation("Not yet implemented, please hand edit config.");
 	Close();
 }
 

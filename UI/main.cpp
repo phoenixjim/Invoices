@@ -1,7 +1,5 @@
 #include "DBUI.h"
 
-// #include <string>
-
 #define MODEL "Invoices/Tables/Invoices.sch"
 #include <Sql/sch_schema.h>
 #undef MODEL
@@ -45,9 +43,9 @@ void Invoices::ReportsMenu(Bar& bar)
 
 void Invoices::ManagementMenu(Bar& bar)
 {
-	bar.Add(t_("Select Database File"), [=]{myConfig.DBFile = myConfig.SelectDB(); });
-	bar.Add(t_("Show Current Database File"), [=]{PromptOK(DeQtf("Current Database file is: \n" + myConfig.DBFile));});
-	bar.Add(t_("Set Company Info"), [=]{if(!setcompanywin.IsOpen()) setcompanywin.Open(this); });
+	bar.Add(t_("Select Database File"), [=]{ myConfig.SelectDB(); });
+	bar.Add(t_("Show Current Database File"), [=]{ PromptOK(DeQtf("Current Database file is: \n" + myConfig.DBFile));});
+	bar.Add(t_("Set Company Info"), [=]{if( !setcompanywin.IsOpen()) setcompanywin.Open(this); });
 	bar.Add(t_("Select Output Directory"), [=]{ myConfig.OutputDirectory = myConfig.GetOutputDirectory(); });
 }
 
@@ -65,12 +63,8 @@ Invoices::Invoices()
 
 GUI_APP_MAIN
 {
-	// String exeTitle = GetExeTitle();
-	// SetConfigDirectory("~/.config/" + exeTitle);
-	
 	Configs myConfig;
-	myConfig.Initialize();
-	
+	PromptOK(myConfig.DBFile);
 	Sqlite3Session sqlite3;
 	if(!sqlite3.Open(myConfig.DBFile)) {
 		Exclamation("Can't create or open database file\n");
