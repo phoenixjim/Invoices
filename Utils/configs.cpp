@@ -11,6 +11,16 @@ void Configs::SelectDB()
 	from http://leonardoce.interfree.it/leowiki.html "simple configfile"
 	*/
 	String notice = selectdbwin.Get();
+	Sqlite3Session sqlite3;
+	
+	if(!sqlite3.Open(notice)) {
+		Exclamation("Can't create or open database file\n");
+		return;
+	}
+
+	SQL = sqlite3;
+	
+
 	notice << " not yet implemented though, please hand edit config.";
 	Exclamation(notice);
 	return;

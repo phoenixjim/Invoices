@@ -3,6 +3,7 @@
 #include <CtrlLib/CtrlLib.h>
 
 using namespace Upp;
+#include "../Tables/sqlincludes.h"
 
 struct Configs {
 public:

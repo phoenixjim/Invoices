@@ -5,9 +5,19 @@
 #undef MODEL
 void Invoices::MainMenu(Bar& bar)
 {
-	bar.Add(t_("Customers"),  [=]{ if(!cwin.IsOpen()) cwin.Open(this); });
+	bar.Add(t_("Customers"),  [=]{
+		if(!cwin.IsOpen()) {
+			cwin.CustArray.ReQuery();
+		 	cwin.Open(this); 
+			}
+		});
 
-    bar.Add(t_("Products"), [=]{ if(!prodwin.IsOpen()) prodwin.Open(this); });
+    bar.Add(t_("Products"), [=]{ 
+    	if(!prodwin.IsOpen()) {
+    		prodwin.ProductArray.ReQuery();
+    		prodwin.Open(this); 
+    		}
+    	});
 	
 	bar.Sub(t_("Transactions"), THISFN(TransactionsMenu));
 	bar.Sub(t_("Reports"), THISFN(ReportsMenu));
