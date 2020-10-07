@@ -64,7 +64,7 @@ Invoices::Invoices()
 GUI_APP_MAIN
 {
 	Configs myConfig;
-	PromptOK(myConfig.DBFile);
+
 	Sqlite3Session sqlite3;
 	if(!sqlite3.Open(myConfig.DBFile)) {
 		Exclamation("Can't create or open database file\n");
