@@ -100,7 +100,8 @@ public:
 struct CreateInvoiceWindow : WithCreateInvoiceWindowLayout<TopWindow> {
 	Configs myConfig;
 	long nextInvoice;
-
+	int printInvoice;
+	
 	double CalcItemTotal(int itemnumber);
 	void CalcInvoiceTotal();
 	void CustChanged();

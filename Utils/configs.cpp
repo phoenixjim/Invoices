@@ -34,20 +34,48 @@ String Configs::GetOutputDirectory()
 
 void Configs::Initialize()
 {
-	// #ifdef _debug
-	DBFile = "/home/james/upp/MyApps/Invoices/sample.db";
-	// #else
+	configfile = ConfigFile();
+	if (!FileExists(configfile))
+	{
+		DBFile = cfg = "DBFile=/home/james/upp/MyApps/Invoices/sample.db";
+		cfg << "\n";
+		OutputDirectory = cfg << "OutputDirectory=/home/james/Desktop/";
+		cfg << "\n";
+		companyname = cfg << "companyname=Company Name";
+		cfg << "\n";
+		companyowner = cfg << "companyowner=James Lefavour";
+		cfg << "\n";
+		companyaddress = cfg << "companyaddress=Home";
+		cfg << "\n";
+		companycity = cfg << "companycity=My City";
+		cfg << "\n";
+		companystate = cfg << "companystate=My State";
+		cfg << "\n";
+		companyzip = cfg << "companyzip=MyZip";
+		cfg << "\n";
+		companyphone = cfg << "companyphone=(555) 555 - 1212";
+		cfg << "\n";
+		companyemail = cfg << "companyemail=jim@myemail.com";
+		cfg << "\n";
+		
+		SaveSettings();
+	}
+	else
+	{
+		VectorMap<String, String> cfg = LoadIniFile(configfile);
+		DBFile = cfg.Get("DBFile", Null);
+		OutputDirectory = cfg.Get("OutputDirectory", Null);
+		companyname = cfg.Get("companyname", Null);
+		companyowner = cfg.Get("companyowne", Null);
+		companyaddress = cfg.Get("companyaddress", Null);
+		companycity = cfg.Get("companycity", Null);;
+		companystate = cfg.Get("companystate", Null);
+		companyzip = cfg.Get("companyzip", Null);
+		companyphone = cfg.Get("companyphone", Null);
+		companyemail = cfg.Get("companyemail", Null);
+	}
 	// DBFile = "/home/james/OneDrive/JTS/Jim's Tech Services/invoices.db";
-	// #endif
-	OutputDirectory = "/home/james/Desktop/";
-	companyname = "Company Name";
-	companyowner = "James Lefavour";
-	companyaddress = "Home";
-	companycity = "My City";
-	companystate = "My State";
-	companyzip = "MyZip";
-	companyphone = "(555) 555 - 1212";
-	companyemail = "jim@myemail.com";
+
 	/*
 	if (DBFile.IsEmpty()) DBFile = SelectDB();
 	
@@ -66,7 +94,6 @@ void Configs::Initialize()
 	}
 	SaveSettings();
 */
-	// more configs here
 }
 
 void Configs::SaveSettings()

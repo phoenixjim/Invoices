@@ -16,7 +16,7 @@ public:
 	
 	String	DBFile;
 	String	OutputDirectory;
-	String	configfile = ConfigFile();
+	String	configfile;
 	String	cfg;
 
 	String	companyname = "Company Name", companyowner, companyaddress, companycity, companystate, companyzip,

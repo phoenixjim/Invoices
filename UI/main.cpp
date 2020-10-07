@@ -65,8 +65,10 @@ Invoices::Invoices()
 
 GUI_APP_MAIN
 {
+	// String exeTitle = GetExeTitle();
+	// SetConfigDirectory("~/.config/" + exeTitle);
+	
 	Configs myConfig;
-	// Invoices mainwin; // Crashes with invalid memory access
 	myConfig.Initialize();
 	
 	Sqlite3Session sqlite3;
