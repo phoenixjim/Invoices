@@ -62,6 +62,7 @@ void InvoicesWindow::btnPrintClicked()
 	Sql invoiceSQL;
 
 	invoiceSQL * SelectAll().From( INVOICES ).Where( INVOICE_ID == thisInvoice );
+	
 	if ((int)invoiceSQL[STATUS] < 3)
 		header <<  "]]}}]";
 	else header << "Paid in Full, Thank you!]]}}]";
@@ -78,27 +79,27 @@ void InvoicesWindow::btnPrintClicked()
 		custSQL[EMAIL] << " ]:: [@6 ]:: [@6 ]:: [@6 ]:: [ Terms:]:: [> [+75 " << invoiceSQL[TERMS] << " ]]}}&][> &][> &]";
 		
 	// Line items:
-	invoiceQTF << "[ [ {{785:1231:4093:1092:620:747:1432@L [= [2 Item]]:: [ [2 Name]]:: [ [2 Description]]:: [> [2 Price]]:: [> [2 Qty]]:: [ [2 Tax?]]:: [> [2 Subtotal]]";
+	invoiceQTF << "[ [ {{729:2603:1666:1666:1666:1670@L|1 [ Item]:: [ Name]:: [> Price]:: [> Quantity]:: [> Taxable]::|1 [> Subtotal]:: [ ]::-3 [ Description]::-2 [ ]::-1 [ ]:: [ ]:: [ ]}}]]&";
 	int linenumber = 0;
 
 	while (linesSQL.Fetch())
 	{
-		if (linenumber % 2) invoiceQTF << "::@L ";
-		else invoiceQTF << "::@W ";
-		invoiceQTF << "[= [2 " << ++linenumber << "]]:: [ [2 " << linesSQL[PRODUCTNAME] << "]]:: [ [2 " << linesSQL[DESCRIPTION] << "]]:: [> [2 " << Format("$%2!nl",linesSQL[PRICE]) <<
-			"]]:: [> [2 " << linesSQL[QTY] << "]]:: [ [2 "<< ( linesSQL[ISTAXABLE] ? "T" : "" ) << "]]:: [> [2 " << Format("$%2!nl",linesSQL[TOTAL]) << "]]";
+		if (linenumber % 2) invoiceQTF << "[ [ {{729:2603:1666:1666:1666:1670@L|1 [ ";
+		else invoiceQTF << "[ [ {{729:2603:1666:1666:1666:1670@W|1 [ ";
+		invoiceQTF << ++linenumber << "]:: [ " << linesSQL[PRODUCTNAME] << "]:: [> " << Format("$%2!nl",linesSQL[PRICE]) <<
+			"]:: [> " << linesSQL[QTY] << "]:: [> "<< ( linesSQL[ISTAXABLE] ? "T" : "" ) << "]::|1 [> " << 
+			Format("$%2!nl",linesSQL[TOTAL]) << "]:: [ ]::-3 [ " << linesSQL[DESCRIPTION] << "]::-2 [ ]::-1 [ ]:: [ ]:: [ ]}}]]&";
 	}
 	
-	invoiceQTF << "}}]]&";
 	// Minor adjustment needed to align dollar column
-	invoiceQTF << "[ [ {{2568:3000:3000:1450f0;g0; [ ]:: [ ]:: [> Taxable Sub:]::a3/15 [> " << 
-		Format("$%2!nl",invoiceSQL[TAXABLESUB]) << "]::a0/15 [ ]:: [ ]:: [> NonTaxable Sub:]::a3/15 [> " << 
-		Format("$%2!nl",invoiceSQL[NONTAXABLESUB]) << "]::a0/15 [ ]:: [ ]:: [> Sales Tax:]::a3/15 [> " << 
-		Format("$%2!nl",invoiceSQL[TAX]) << "]::a0/15 [ ]:: [ ]:: [> Invoice Total:]::a3/15 [> " << 
-		Format("$%2!nl",invoiceSQL[GRANDTOTAL]) << "]::a0/15 [ ]:: [ ]:: [> Amount Paid:]::a3/15 [> " << 
-		Format("$%2!nl",invoiceSQL[AMTPAID]) << "]::a0/15 [ ]:: [ ]:: [> Balance Due:]::a3/15 [> " << 
-		Format("$%2!nl",(double)invoiceSQL[GRANDTOTAL] - (double)invoiceSQL[AMTPAID]) << "]}}]]";
-		
+	double amtPaid = (IsNull(invoiceSQL[AMTPAID]) ?  (double)0.00 : (double)invoiceSQL[AMTPAID]);
+	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1670f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Taxable Sub:]::a4/15 [> " << Format("$%2!nl",invoiceSQL[TAXABLESUB]) << "]}}]]&";
+	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1670f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ NonTaxable Sub:]::a4/15 [> " << Format("$%2!nl",invoiceSQL[NONTAXABLESUB]) << "]}}]]&";
+	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1670f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Tax:]::a4/15 [> " << Format("$%2!nl",invoiceSQL[TAX]) << "]}}]]&";
+	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1670f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Total:]::a4/15 [> " << Format("$%2!nl",invoiceSQL[GRANDTOTAL]) << "]}}]]&";
+	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1670f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Amount Paid:]::a4/15 [> " << Format("$%2!nl", amtPaid) << "]}}]]&";
+	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1670f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Balance Due:]::a4/15 [> " << Format("$%2!nl",(double)invoiceSQL[GRANDTOTAL] - amtPaid) << "]}}]]&";
+
 	myInvoice.Header(header).Footer(footer);
 	
 	myInvoice << invoiceQTF;
