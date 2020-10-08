@@ -8,14 +8,12 @@ file
 	Tables/Invoices.sch,
 	Tables/sqlincludes.h,
 	UI/Products.cpp,
-	UI/Company.h,
 	UI/Company.cpp,
 	UI/CreateInvoice.cpp,
 	UI/Customers.cpp,
 	UI/DBUI.h,
 	UI/Invoices.cpp,
 	UI/LineItems.cpp,
-	UI/Company.lay,
 	Invoices.lay,
 	Utils/configs.cpp,
 	Utils/configs.h,
@@ -26,8 +24,6 @@ file
 	Reports/Reports.h,
 	Reports/Reports.lay,
 	Reports/TaxWindow.cpp,
-	Utils/conf.cpp,
-	Utils/conf.h,
 	UI/main.cpp;
 
 mainconfig

@@ -1,7 +1,6 @@
 #ifndef _Invoices_configs_h_
 #define _Invoices_configs_h_
 #include <CtrlLib/CtrlLib.h>
-#include "conf.h"
 
 using namespace Upp;
 #include "../Tables/sqlincludes.h"
@@ -20,10 +19,6 @@ struct Configs {
 	
 public:
 	MyData	data;
-	CompanyInfoWindow companywin;
-	
-	String	companyname, companyowner, companyaddress, companycity, 
-		companystate, companyzip, companyphone, companyemail;
 	
 			Configs();
 			~Configs();

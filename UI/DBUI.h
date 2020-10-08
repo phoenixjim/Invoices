@@ -10,7 +10,6 @@ using namespace Upp;
 
 #include "Invoices/Tables/sqlincludes.h"
 #include "../Utils/converts.h"
-#include "Company.h"
 #include "../Utils/configs.h"
 #include <Report/Report.h>
 
@@ -117,6 +116,18 @@ struct CreateInvoiceWindow : WithCreateInvoiceWindowLayout<TopWindow> {
 public:
 	CreateInvoiceWindow();
 	void Paint(Draw& w) {
+        w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
+     }
+};
+
+struct CompanyInfoWindow : WithCompanyInfoWindowLayout<TopWindow> {
+	Configs myConfig;
+	void Save();
+	void Cancel();
+	public:
+		typedef CompanyInfoWindow CLASSNAME;
+		CompanyInfoWindow();
+		void Paint(Draw& w) {
         w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
      }
 };

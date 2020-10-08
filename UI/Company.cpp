@@ -1,29 +1,39 @@
-#include "Company.h"
+#include "DBUI.h"
 #include "../Utils/configs.h"
 
 CompanyInfoWindow::CompanyInfoWindow()
 {
 	CtrlLayoutOKCancel(*this, "Create Invoice");
-	ok << [=] { Save(); };
+	ok << [=] { Save(); Close();};
 	cancel << [=] { Cancel(); };
 	
-	if ( !FileExists ( ConfigFile(GetExeTitle() + ".json") ) )
-	{
-		myConfig.data.taxrate = 0.08;
-		myConfig.data.companyname = "Company Name";
-		myConfig.data.companyowner = "James Lefavour";
-		myConfig.data.companyaddress = "0 Main Way";
-		myConfig.data.companycity = "City";
-		myConfig.data.companystate = "State";
-		myConfig.data.companyzip = "00000";
-		myConfig.data.companyphone = "(555) 555 - 1212";
-		myConfig.data.companyemail = "jim@myemail.com";
-		Save();
-	}
-
+	LoadFromJsonFile(myConfig.data);
+	txtBusName.SetData(myConfig.data.companyname);
+	txtBusOwner.SetData(myConfig.data.companyowner);
+	txtBusAddress.SetData(myConfig.data.companyaddress);
+	txtBusCity.SetData(myConfig.data.companycity);
+	txtBusState.SetData(myConfig.data.companystate);
+	txtBusZip.SetData(myConfig.data.companyzip);
+	txtBusPhone.SetData(myConfig.data.companyphone);
+	txtBusEmail.SetData(myConfig.data.companyemail);
+	txtTaxrate.SetData(myConfig.data.taxrate);
 }
 
 void CompanyInfoWindow::Cancel()
 {
 	Close();
+}
+
+void CompanyInfoWindow::Save()
+{
+	myConfig.data.taxrate = txtTaxrate.GetData();
+	myConfig.data.companyname = ~txtBusName.GetData();
+	myConfig.data.companyowner = ~txtBusOwner.GetData();
+	myConfig.data.companyaddress = ~txtBusAddress.GetData();
+	myConfig.data.companycity = ~txtBusCity.GetData();
+	myConfig.data.companystate = ~txtBusState.GetData();
+	myConfig.data.companyzip = ~txtBusZip.GetData();
+	myConfig.data.companyphone = ~txtBusPhone.GetData();
+	myConfig.data.companyemail = ~txtBusEmail.GetData();
+	StoreAsJsonFile(myConfig.data); 
 }

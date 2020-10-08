@@ -26,18 +26,13 @@ void Configs::SelectDB()
 	data.dbfile = selectdbwin.Get();
 	SaveSettings();
 }
-
-
-
 void Configs::CreateSample()
 {
 	// Sql sql;
-
 }
 
 void Configs::Populate()
 {
-
 	if ( !FileExists ( ConfigFile(GetExeTitle() + ".json") ) )
 	{
 		data.taxrate = 0.08;
@@ -49,7 +44,6 @@ void Configs::Populate()
 		data.companyzip = "00000";
 		data.companyphone = "(555) 555 - 1212";
 		data.companyemail = "jim@myemail.com";
-		if( !companywin.IsOpen()) companywin.Open(this);
 		SelectDB();
 	}
 }

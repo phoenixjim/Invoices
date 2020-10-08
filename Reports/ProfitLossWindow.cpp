@@ -94,7 +94,7 @@ void ProfitLossWindow::CreateReport( String start, String end)
 	prevDateStart = Date(1969, 1, 1) + StrInt(~dateStart.GetData());
 	prevDateEnd = Date(1969, 1, 1) + StrInt(~dateEnd.GetData());
 	
-	String header = "[+40< Profit / Loss between " << s << " to " << e << " and " << prevDateStart << " to " << prevDateEnd << " for " << myConfig.companyname << "]";
+	String header = "[+40< Profit / Loss between " << s << " to " << e << " and " << prevDateStart << " to " << prevDateEnd << " for " << myConfig.data.companyname << "]";
 
 	// "[ [ {{2000:2000:2000:2000:2000@L [= ]:: [= ]:: [= ]:: [= ]:: [= ]}}]]"
 	plQTF = "[ [+60* {{2000:2000:2000:2000:2000@L  [< Categories:]:: [= ";
