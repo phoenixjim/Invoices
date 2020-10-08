@@ -86,14 +86,3 @@ void CustomersWindow::AddNewCustomer()
     CustArray.ReQuery();
     CustArray.FindSetCursor(id);
 }
-/*
-void CustomersWindow::btnUpdateCustomerClick()
-{
-	PromptOK(__func__);
-}
-
-void CustomersWindow::btnSearchCustomerClick()
-{
-	PromptOK(__func__);
-}
-*/

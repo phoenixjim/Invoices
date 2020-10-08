@@ -25,18 +25,13 @@ enum pNames
 //Customers
 struct CustomersWindow : WithCustomersWindowLayout<TopWindow> {
 	Configs	myConfig;
-	// EditString	name;
 public:
     CustomersWindow();
 	virtual void Paint(Draw& w) {
         w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
     }
 	void AddNewCustomer();
-	// void btnUpdateCustomerClick();
-	// void btnSearchCustomerClick();
 	void EditRow();
-
-	// void FakeStub();
 };
 	
 // ListInvoices
@@ -47,14 +42,12 @@ struct InvoicesWindow : WithInvoicesWindowLayout<TopWindow> {
 	void btnApplyPaymentClicked();
 	void btnEditClicked();
 	void btnVoidClicked();
-	void btnPaidInFullClicked();
 	void btnFixDateClicked();
 	void btnByPaidClicked();
 	void btnByBalanceDueClicked();
 	void btnByDatesClicked();
 	void btnByCustomerClicked();
 	void btnByVoidedClicked();
-	// void Open(Ctrl* owner);
 	
 public:
 	typedef InvoicesWindow CLASSNAME;
@@ -68,7 +61,6 @@ public:
 struct LineItemsWindow : public WithLineItemsWindowLayout<TopWindow> {
 	void EditRow();
 	void AddNewItem();
-	// void Open(Ctrl* owner);
 public:
 	typedef LineItemsWindow CLASSNAME;
 	LineItemsWindow();
@@ -88,13 +80,7 @@ public:
         w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
     }
     void AddNewProduct();
-	// void btnUpdateProductClick();
-	// void btnShowAllProductClick();
-	// void btnProductRangeClick();
 	void EditRow();
-	
-	// String GetOutputDirectory();
-	String SelectDB();
 };
 
 // CreateInvoice

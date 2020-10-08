@@ -77,19 +77,3 @@ void ProductsWindow::AddNewProduct()
     ProductArray.ReQuery();
     ProductArray.FindSetCursor(id);
 }
-/*
-void ProductsWindow::btnUpdateProductClick()
-{
-	PromptOK(__func__);
-}
-
-void ProductsWindow::btnShowAllProductClick()
-{
-	PromptOK(__func__);
-}
-
-void ProductsWindow::btnProductRangeClick()
-{
-	PromptOK(__func__);
-}
-*/

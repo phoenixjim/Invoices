@@ -1,7 +1,6 @@
 #include "DBUI.h"
 #include "../Utils/configs.h"
 
-// ListInvoices:
 InvoicesWindow::InvoicesWindow()
 {
 	CtrlLayout ( *this, "List Invoices" );
@@ -10,7 +9,6 @@ InvoicesWindow::InvoicesWindow()
 	btnPrint << [=] { btnPrintClicked(); };
 	btnApplyPayment << [=] { btnApplyPaymentClicked(); };
 	btnVoid << [=] { btnVoidClicked() ; };
-	btnPaidInFull << [=] { btnPaidInFullClicked(); };
 	btnFixDate << [=] { btnFixDateClicked(); };
 	btnByPaid << [=] { btnByPaidClicked(); };
 	btnByBalanceDue << [=] { btnByBalanceDueClicked(); };
@@ -33,6 +31,9 @@ InvoicesWindow::InvoicesWindow()
 	InvoicesArray.AddColumn ( STATUS, "Status" );
 	// InvoicesArray.ColumnWidths("5 5 10 12 5 5 5 5 5 5");
 	InvoicesArray.SetOrderBy ( Descending(INVOICENUMBER) );
+	ddFixDate.SetConvert ( DateIntConvert() );
+	ddRange1.SetConvert ( DateIntConvert() );
+	ddRange2.SetConvert ( DateIntConvert() );
 
 	// InvoicesArray.WhenLeftClick << [=] { selectedRow = InvoicesArray.GetClickRow(); } ;
 	InvoicesArray.Query();
@@ -134,11 +135,6 @@ void InvoicesWindow::btnEditClicked()
 }
 
 void InvoicesWindow::btnVoidClicked()
-{
-	PromptOK ( __func__ );
-}
-
-void InvoicesWindow::btnPaidInFullClicked()
 {
 	PromptOK ( __func__ );
 }
