@@ -1,7 +1,6 @@
 #ifndef _Invoices_configs_h_
 #define _Invoices_configs_h_
 #include <CtrlLib/CtrlLib.h>
-#include "conf.h"
 
 using namespace Upp;
 #include "../Tables/sqlincludes.h"
