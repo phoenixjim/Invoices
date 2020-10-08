@@ -49,7 +49,7 @@ void Configs::Populate()
 		data.companyzip = "00000";
 		data.companyphone = "(555) 555 - 1212";
 		data.companyemail = "jim@myemail.com";
-		
+		if( !companywin.IsOpen()) companywin.Open(this);
 		SelectDB();
 	}
 }

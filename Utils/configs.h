@@ -19,6 +19,7 @@ struct Configs {
 	
 public:
 	MyData	data;
+	CompanyInfoWindow companywin;
 	
 	String	companyname, companyowner, companyaddress, companycity, 
 		companystate, companyzip, companyphone, companyemail;
