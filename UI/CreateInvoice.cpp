@@ -145,9 +145,8 @@ void CreateInvoiceWindow::PrintInvoice()
 
 	String header = "[ {{5000:5000f0;g0; [s0;%% " + myConfig.companyname + " ] :: [s0;>%% [@6 "; // Add paid message right aligned if paid
 	String footer = "[ $$0,0#00000000000000000000000000000000:Default] [ [s0;= [@5;0 Thank you for your business!]&][s0;= [@5;0 " <<
-		myConfig.companyname << " " << myConfig.companyaddress << " " << myConfig.companycity << ", " << myConfig.companystate <<
-		" "  << myConfig.companyzip << " " << myConfig.companyphone << " " << myConfig.companyemail << "]]]";
-	
+		myConfig.companyname << " @$2022; " << myConfig.companyaddress << " @$2022; " << myConfig.companycity << ", " << myConfig.companystate <<
+		" "  << myConfig.companyzip << " @$2022; " << myConfig.companyphone << " @$2022; " << myConfig.companyemail << "]]]";
 	
 	invoiceSQL * SelectAll().From( INVOICES ).Where( INVOICE_ID == printInvoice );
 	

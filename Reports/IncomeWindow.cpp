@@ -126,7 +126,7 @@ void IncomeWindow::CreateReport(String start, String end)
 		taxQTF << "[+80< &&Remember parts cost was not deducted from income on last line.]";
 		Report report;
 		report.Header ( headertext ).Footer ( "Page $$P" );
-		report << taxQTF; // sqlTaxReport.AsQtf() << taxQTF;
+		report << taxQTF;
 
 		Perform ( report );
 	}

@@ -32,7 +32,7 @@ LAYOUT(ProfitLossWindowLayout, 968, 92)
 	ITEM(EditDate, dateEnd, NotNull(true).LeftPosZ(44, 104).TopPosZ(32, 19))
 	ITEM(Button, ok, SetLabel(t_("Create")).SetFont(SansSerifZ(12)).LeftPosZ(12, 56).TopPosZ(68, 15))
 	ITEM(Button, cancel, SetLabel(t_("Cancel")).SetFont(SansSerifZ(12)).LeftPosZ(88, 56).TopPosZ(68, 15))
-	ITEM(ArrayCtrl, sqlTaxReport, LeftPosZ(252, 708).TopPosZ(8, 76))
+	ITEM(SqlArray, sqlTaxReport, LeftPosZ(252, 708).TopPosZ(8, 76))
 	ITEM(Button, btnReport, SetLabel(t_("Create Report")).LeftPosZ(160, 80).TopPosZ(8, 76))
 END_LAYOUT
 

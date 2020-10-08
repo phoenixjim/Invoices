@@ -1,10 +1,11 @@
 #include "Reports.h"
+#include <Report/Report.h>
 
 ProfitLossWindow::ProfitLossWindow()
 {
 	CtrlLayoutOKCancel(*this, "Profit / Loss Report"); 
 	
-	sqlTaxReport.AddColumn("Accounts", 100);
+	sqlTaxReport.AddColumn("Accounts", 50);
 	sqlTaxReport.AddColumn("Current", 50);
 	sqlTaxReport.AddColumn("Previous", 50);
 	sqlTaxReport.AddColumn("Change", 50);
@@ -27,12 +28,10 @@ void ProfitLossWindow::okPressed()
 {	// generate table
 	// get needed data:
 	if (IsNull(dateStart) || IsNull(dateEnd)) return;
-	Date prevDateStart, prevDateEnd;
 	
 	prevDateStart = Date(1969, 1, 1) + StrInt(~dateStart.GetData());
 	prevDateEnd = Date(1969, 1, 1) + StrInt(~dateEnd.GetData());
 
-	String prevStart, prevEnd;
 	prevStart = IntStr(prevDateStart.Get() - Date(1970, 1, 1).Get());
 	prevEnd   = IntStr(prevDateEnd.Get() - Date(1970, 1, 1).Get());
 	
@@ -45,13 +44,11 @@ void ProfitLossWindow::okPressed()
 
 	sql * SelectAll().From(INVOICES).Where(where);
 
-	double nowTaxable = 0.0, nowNontaxable = 0.0, nowParts = 0.0,
-		thenTaxable = 0.0, thenNontaxable = 0.0, thenParts = 0.0;
 	while ( sql.Fetch() )
 	{
 		nowTaxable += (double) sql[TAXABLESUB];
 		nowNontaxable += (double) sql[NONTAXABLESUB];
-		nowParts += GetPartsCost(sql[INVOICENUMBER]);
+		nowParts += round((double)GetPartsCost(sql[INVOICENUMBER]), 2);
 	}
 
 	double nowGross = nowTaxable + nowNontaxable;
@@ -68,13 +65,13 @@ void ProfitLossWindow::okPressed()
 	{
 		thenTaxable += (double) oldsql[TAXABLESUB];
 		thenNontaxable += (double) oldsql[NONTAXABLESUB];
-		thenParts += GetPartsCost(oldsql[INVOICENUMBER]);
+		thenParts += round((double)GetPartsCost(oldsql[INVOICENUMBER]), 2);
 	}
 	
 	double thenGross = thenTaxable + thenNontaxable;
 	double thenNet = thenGross - thenParts;
 	
-	double partsChange = nowParts - thenParts;
+	double partsChange = -(round(nowParts - thenParts, 2));
 	double partsPercent = PercentFormat(partsChange / thenParts);
 	
 	double grossChange = nowGross - thenGross;
@@ -90,7 +87,29 @@ void ProfitLossWindow::okPressed()
 
 void ProfitLossWindow::CreateReport( String start, String end)
 {	// generate report, customize header with date info
+	if (sqlTaxReport.GetCount() < 1) return;
+	String plQTF;
+	String s = ::Format(Date( 1970, 1, 1) + StrInt(start));
+	String e = ::Format(Date( 1970, 1, 1) + StrInt(end));
+	prevDateStart = Date(1969, 1, 1) + StrInt(~dateStart.GetData());
+	prevDateEnd = Date(1969, 1, 1) + StrInt(~dateEnd.GetData());
+	
+	String header = "[+40< Profit / Loss between " << s << " to " << e << " and " << prevDateStart << " to " << prevDateEnd << " for " << myConfig.companyname << "]";
 
+	// "[ [ {{2000:2000:2000:2000:2000@L [= ]:: [= ]:: [= ]:: [= ]:: [= ]}}]]"
+	plQTF = "[ [+60* {{2000:2000:2000:2000:2000@L  [< Categories:]:: [= ";
+	plQTF << s << " to " << e << "]:: [= " << prevDateStart << " to " << prevDateEnd << "]:: [= Change:]:: [= Percent:]}}]&";
+	for (int i = 0; i < sqlTaxReport.GetCount(); i++)
+	{
+		plQTF << "&[ [+60 {{2000:2000:2000:2000:2000@L [< " << sqlTaxReport.Get(i, 0) << "]:: [> ";
+			plQTF << sqlTaxReport.Get(i, 1) << "]:: [> " << sqlTaxReport.Get(i, 2) << "]:: [> " << sqlTaxReport.Get(i, 3) <<
+			"]:: [> " << sqlTaxReport.Get(i, 4) << "]}}]";
+	}
+
+	Report profit;
+	profit.Header(header);
+	profit << plQTF;
+	Perform( profit );
 }
 
 double ProfitLossWindow::GetPartsCost ( int invId )
