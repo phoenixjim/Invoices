@@ -6,19 +6,26 @@
 using namespace Upp;
 #include "../Tables/sqlincludes.h"
 
-struct Configs {
-public:
-	String	DBFile;
-	String	OutputDirectory;
-	String	configfile;
-	config	cfg;
+struct MyData {
+	double	taxrate;
+	String	dbfile;
+	String	companyname, companyowner, companyaddress, companycity, 
+		companystate, companyzip, companyphone, companyemail;
+	
+	void	Jsonize(JsonIO& json);
+    void	Xmlize(XmlIO& xio)           { XmlizeByJsonize(xio, *this); }
+};
 
+struct Configs {
+	
+public:
+	MyData	data;
+	
 	String	companyname, companyowner, companyaddress, companycity, 
 		companystate, companyzip, companyphone, companyemail;
 	
 			Configs();
 			~Configs();
-	void	GetOutputDirectory();
 	void 	Populate();
 	void	SelectDB();
 	void	SaveSettings();

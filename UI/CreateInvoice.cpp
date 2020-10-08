@@ -4,7 +4,7 @@ CreateInvoiceWindow::CreateInvoiceWindow()
  { 
  	CtrlLayout(*this, "Create Invoice");
  	txtTerms.SetText("Due On Receipt");
- 	txtTaxRate.SetData(0.08);
+ 	txtTaxRate.SetData(myConfig.data.taxrate);
  	printInvoice = 0;
  	
  	btnAdd << [=] { AddItem(); };
