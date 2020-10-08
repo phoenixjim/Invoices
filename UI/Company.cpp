@@ -6,7 +6,7 @@ CompanyInfoWindow::CompanyInfoWindow()
 	CtrlLayoutOKCancel(*this, "Create Invoice");
 	ok << [=] { Save(); Close();};
 	cancel << [=] { Cancel(); };
-	
+
 	LoadFromJsonFile(myConfig.data);
 	txtBusName.SetData(myConfig.data.companyname);
 	txtBusOwner.SetData(myConfig.data.companyowner);
@@ -35,5 +35,6 @@ void CompanyInfoWindow::Save()
 	myConfig.data.companyzip = ~txtBusZip.GetData();
 	myConfig.data.companyphone = ~txtBusPhone.GetData();
 	myConfig.data.companyemail = ~txtBusEmail.GetData();
-	StoreAsJsonFile(myConfig.data); 
+	
+	myConfig.SaveSettings();
 }

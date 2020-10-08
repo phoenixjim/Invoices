@@ -1,4 +1,5 @@
 #include "configs.h"
+
 void MyData::Jsonize ( JsonIO& json )
 
 {
@@ -51,12 +52,7 @@ void Configs::Populate()
 Configs::Configs()
 {
 	Populate();
-	LoadFromJsonFile (data );
-}
-
-Configs::~Configs()
-{
-	SaveSettings();
+	LoadFromJsonFile ( data );
 }
 
 void Configs::SaveSettings()

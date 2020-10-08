@@ -3,6 +3,8 @@
 #include <CtrlLib/CtrlLib.h>
 #pragma foreign_keys = ON
 #include <SqlCtrl/SqlCtrl.h>
+
+#include "../Utils/configs.h"
 using namespace Upp;
 
 #define LAYOUTFILE <Invoices/Invoices.lay>
@@ -10,7 +12,6 @@ using namespace Upp;
 
 #include "Invoices/Tables/sqlincludes.h"
 #include "../Utils/converts.h"
-#include "../Utils/configs.h"
 #include <Report/Report.h>
 
 enum pNames
@@ -121,20 +122,23 @@ public:
 };
 
 struct CompanyInfoWindow : WithCompanyInfoWindowLayout<TopWindow> {
-	Configs myConfig;
 	void Save();
 	void Cancel();
-	public:
-		typedef CompanyInfoWindow CLASSNAME;
-		CompanyInfoWindow();
-		void Paint(Draw& w) {
+public:
+	IdCtrls ctrls;
+	
+	Configs myConfig;
+	typedef CompanyInfoWindow CLASSNAME;
+	CompanyInfoWindow();
+	void Paint(Draw& w) {
         w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
-     }
+    }
 };
 
 #include "../Reports/Reports.h"
 
 class Invoices : public WithInvoicesLayout<TopWindow> {
+	Configs myConfig;
 	CustomersWindow	cwin;
 	ProductsWindow prodwin;
 	CreateInvoiceWindow createinvoicewin;
@@ -149,8 +153,7 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 
 public:
 	typedef Invoices CLASSNAME;
-	Configs myConfig;
-
+	
 	Invoices();
 	void Paint(Draw& w) {
 		w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here

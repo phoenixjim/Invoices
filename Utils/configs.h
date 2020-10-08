@@ -12,23 +12,21 @@ struct MyData {
 		companystate, companyzip, companyphone, companyemail;
 	
 	void	Jsonize(JsonIO& json);
-    void	Xmlize(XmlIO& xio)           { XmlizeByJsonize(xio, *this); }
+    // void	Xmlize(XmlIO& xio)           { XmlizeByJsonize(xio, *this); }
 };
 
 struct Configs {
 	
 public:
 	MyData	data;
-	
 			Configs();
-			~Configs();
+//			~Configs();
 	void 	Populate();
 	void	SelectDB();
 	void	SaveSettings();
 	void	CreateSample();
 	
 	FileSel	selectdbwin;
-	FileSel	selectodirwin;
 
 };
 
