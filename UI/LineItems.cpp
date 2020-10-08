@@ -92,6 +92,15 @@ void LineItemsWindow::EditRow()
 	idNum = LineItemsArray.GetKey();
 	if (IsNull(idNum))
 		return;
+	/*
+	Sql invoicesql;
+	invoicesql * SelectAll().From(INVOICES).Where(INVOICEIDNUMBER == INVOICENUMBER);
+	invoicesql.Fetch();
+	
+	if (invoicesql.GetRowsProcessed() < 1 || (double)invoicesql[0][AMTPAID] > 0.0) {
+		Exclamation("Payment already received, no changes allowed.");
+		return; // if payment received, set in stone
+	} */
 	AddLineItem dlg;
 	dlg.Title("Edit Item");
 
@@ -103,6 +112,7 @@ void LineItemsWindow::EditRow()
 		return;
 	
 	SQL * dlg.ctrls.Update(LINEITEMS).Where(LINEITEM_ID == idNum);
+	// Update invoice totals, querying for all lineitems for this invoice
 	
 	LineItemsArray.ReQuery();
 	LineItemsArray.FindSetCursor(idNum);
