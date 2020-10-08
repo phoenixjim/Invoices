@@ -24,6 +24,8 @@ file
 	Reports/Reports.h,
 	Reports/Reports.lay,
 	Reports/TaxWindow.cpp,
+	Utils/conf.cpp,
+	Utils/conf.h,
 	UI/main.cpp;
 
 mainconfig

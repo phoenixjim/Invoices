@@ -56,7 +56,7 @@ void Invoices::ManagementMenu(Bar& bar)
 	bar.Add(t_("Select Database File"), [=]{ myConfig.SelectDB(); });
 	bar.Add(t_("Show Current Database File"), [=]{ PromptOK(DeQtf("Current Database file is: \n" + myConfig.DBFile));});
 	bar.Add(t_("Set Company Info"), [=]{if( !setcompanywin.IsOpen()) setcompanywin.Open(this); });
-	bar.Add(t_("Select Output Directory"), [=]{ myConfig.OutputDirectory = myConfig.GetOutputDirectory(); });
+	bar.Add(t_("Select Output Directory"), [=]{ myConfig.GetOutputDirectory(); });
 }
 
 Invoices::Invoices()

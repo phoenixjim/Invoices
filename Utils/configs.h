@@ -1,28 +1,28 @@
 #ifndef _Invoices_configs_h_
 #define _Invoices_configs_h_
 #include <CtrlLib/CtrlLib.h>
+#include "conf.h"
 
 using namespace Upp;
 #include "../Tables/sqlincludes.h"
 
 struct Configs {
 public:
-	//CompanyInfoWindow cwindow;
-	
-	String	GetOutputDirectory();
-	void	SelectDB();
-			Configs();
-	void	SaveSettings();
-	
 	String	DBFile;
 	String	OutputDirectory;
 	String	configfile;
-	String	cfg;
+	config	cfg;
 
-	String	companyname, companyowner, companyaddress, companycity, companystate, companyzip,
-	companyphone, companyemail;
+	String	companyname, companyowner, companyaddress, companycity, 
+		companystate, companyzip, companyphone, companyemail;
 	
-	// long lastinvoice; // Discover when needed
+			Configs();
+			~Configs();
+	void	GetOutputDirectory();
+	void 	Populate();
+	void	SelectDB();
+	void	SaveSettings();
+	void	CreateSample();
 	
 	FileSel	selectdbwin;
 	FileSel	selectodirwin;
