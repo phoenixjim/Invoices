@@ -136,7 +136,7 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 	LineItemsWindow listlineitemswin;
 	
 	MenuBar		mainmenu;
-
+	String version = "1.0.0.0";
 public:
 	typedef Invoices CLASSNAME;
 	
