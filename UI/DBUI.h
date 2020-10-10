@@ -34,6 +34,31 @@ public:
 	void EditRow();
 };
 	
+// CreateInvoice
+struct CreateInvoiceWindow : WithCreateInvoiceWindowLayout<TopWindow> {
+	Configs myConfig;
+	long nextInvoice;
+	int printInvoice;
+	
+	double CalcItemTotal(int itemnumber);
+	void CalcInvoiceTotal();
+	void CustChanged();
+	void ProdChanged();
+	void AdjustPrice();
+	void SaveInvoice();
+	void CancelInvoice();
+	void AddItem();
+	void ClearItem();
+	void DeleteRow();
+	void PrintInvoice();
+public:
+	CreateInvoiceWindow();
+	CreateInvoiceWindow(int invoice);
+	void Paint(Draw& w) {
+        w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
+     }
+};
+
 // ListInvoices
 struct InvoicesWindow : WithInvoicesWindowLayout<TopWindow> {
 	Configs myConfig;
@@ -83,30 +108,6 @@ public:
 	void EditRow();
 };
 
-// CreateInvoice
-struct CreateInvoiceWindow : WithCreateInvoiceWindowLayout<TopWindow> {
-	Configs myConfig;
-	long nextInvoice;
-	int printInvoice;
-	
-	double CalcItemTotal(int itemnumber);
-	void CalcInvoiceTotal();
-	void CustChanged();
-	void ProdChanged();
-	void AdjustPrice();
-	void SaveInvoice();
-	void CancelInvoice();
-	void AddItem();
-	void ClearItem();
-	void DeleteRow();
-	void PrintInvoice();
-public:
-	CreateInvoiceWindow();
-	void Paint(Draw& w) {
-        w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
-     }
-};
-
 struct CompanyInfoWindow : WithCompanyInfoWindowLayout<TopWindow> {
 	void Save();
 	void Cancel();
@@ -136,7 +137,7 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 	LineItemsWindow listlineitemswin;
 	
 	MenuBar		mainmenu;
-	String version = "1.0.0.0";
+	String version = "1.0.0.1";
 public:
 	typedef Invoices CLASSNAME;
 	

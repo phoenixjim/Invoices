@@ -43,6 +43,46 @@ CreateInvoiceWindow::CreateInvoiceWindow()
 	dtpBillDate.SetConvert(DateIntConvert());
  }
  
+CreateInvoiceWindow::CreateInvoiceWindow(int invoice)
+{
+	CtrlLayout(*this, "Edit Invoice");
+	txtTerms.SetText("Due On Receipt");
+	txtTaxRate.SetData(myConfig.data.taxrate);
+	printInvoice = 0;
+	
+	btnAdd << [=] { AddItem(); };
+	btnDelete << [=] { ClearItem(); };
+	ok << [=] { SaveInvoice(); };
+	cancel << [=] { CancelInvoice(); };
+	btnSubtract << [=] { AdjustPrice(); };
+	btnPrintSave << [=] { PrintInvoice(); };
+	
+	arrayLineItems.AddColumn(PRODUCTNAME, "Name", 40);
+	arrayLineItems.AddColumn(DESCRIPTION, "Description", 80);
+	arrayLineItems.AddColumn(PRICE, "Price", 20).SetConvert(ConvDouble());
+	arrayLineItems.AddColumn(QTY, "Qty", 15);
+	arrayLineItems.AddColumn(ISTAXABLE, "Tax?", 15);
+	arrayLineItems.AddColumn(TOTAL, "Total", 20).SetConvert(ConvDouble());
+	arrayLineItems.Appending() .Removing();
+
+	SQL * Select(CUST_ID, CUSTNAME).From(CUSTOMERS);
+	while (SQL.Fetch())
+	{
+		cbCustomers.Add(SQL[CUST_ID], SQL[CUSTNAME]);
+	}
+	
+	cbProducts.Add("Service");
+	cbProducts.Add("Part");
+	cbProducts.Add("Tip");
+	cbProducts.Add("Refund");
+	cbProducts.Add("Note");
+	SQL * SelectAll().From(INVOICES).Where(INVOICE_ID == invoice);
+	txtInvoice = SQL[INVOICENUMBER]; // .SetText(IntStr64(nextInvoice));
+	cbCustomers.WhenAction << [=] { CustChanged(); };
+	cbProducts.WhenAction << [=] { ProdChanged(); };
+	dtpBillDate.SetConvert(DateIntConvert());
+}
+
 void CreateInvoiceWindow::CustChanged()
 {
 	int idNum = 1;

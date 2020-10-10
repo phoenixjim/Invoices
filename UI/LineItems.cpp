@@ -86,6 +86,7 @@ void LineItemsWindow::Open(Ctrl* owner)
 
 void LineItemsWindow::EditRow()
 {
+	// should only edit full invoices, make editinvoicewindow
 	int idNum;
 	if(!LineItemsArray.IsCursor())
 		return;

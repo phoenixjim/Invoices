@@ -31,6 +31,8 @@ InvoicesWindow::InvoicesWindow()
 	InvoicesArray.AddColumn ( STATUS, "Status" );
 	// InvoicesArray.ColumnWidths("5 5 10 12 5 5 5 5 5 5");
 	InvoicesArray.SetOrderBy ( Descending(INVOICENUMBER) );
+	InvoicesArray.WhenLeftDouble << [=] { btnEditClicked(); };
+	
 	ddFixDate.SetConvert ( DateIntConvert() );
 	ddRange1.SetConvert ( DateIntConvert() );
 	ddRange2.SetConvert ( DateIntConvert() );
@@ -131,7 +133,13 @@ void InvoicesWindow::btnApplyPaymentClicked()
 void InvoicesWindow::btnEditClicked()
 
 {
-	PromptOK ( __func__ );
+	if(!InvoicesArray.IsCursor())
+		return;
+	int thisInvoice = InvoicesArray.GetKey();
+	if (IsNull(thisInvoice))
+		return;
+	CreateInvoiceWindow editInvoice(thisInvoice);
+	editInvoice.Run(true);
 }
 
 void InvoicesWindow::btnVoidClicked()
