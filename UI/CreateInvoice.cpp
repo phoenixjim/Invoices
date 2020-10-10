@@ -45,18 +45,10 @@ CreateInvoiceWindow::CreateInvoiceWindow()
  
 CreateInvoiceWindow::CreateInvoiceWindow(int invoice)
 {
+	int custID;
+	Sql iSql, linesSql;
 	CtrlLayout(*this, "Edit Invoice");
-	txtTerms.SetText("Due On Receipt");
-	txtTaxRate.SetData(myConfig.data.taxrate);
-	printInvoice = 0;
-	
-	btnAdd << [=] { AddItem(); };
-	btnDelete << [=] { ClearItem(); };
-	ok << [=] { SaveInvoice(); };
-	cancel << [=] { CancelInvoice(); };
-	btnSubtract << [=] { AdjustPrice(); };
-	btnPrintSave << [=] { PrintInvoice(); };
-	
+
 	arrayLineItems.AddColumn(PRODUCTNAME, "Name", 40);
 	arrayLineItems.AddColumn(DESCRIPTION, "Description", 80);
 	arrayLineItems.AddColumn(PRICE, "Price", 20).SetConvert(ConvDouble());
@@ -65,10 +57,22 @@ CreateInvoiceWindow::CreateInvoiceWindow(int invoice)
 	arrayLineItems.AddColumn(TOTAL, "Total", 20).SetConvert(ConvDouble());
 	arrayLineItems.Appending() .Removing();
 
-	SQL * Select(CUST_ID, CUSTNAME).From(CUSTOMERS);
-	while (SQL.Fetch())
+
+	txtTerms.SetText("Due On Receipt");
+	txtTaxRate.SetData(myConfig.data.taxrate);
+	printInvoice = 0;
+	
+	btnAdd << [=] { AddItem(); };
+	btnDelete << [=] { ClearItem(); };
+	ok << [=] { SaveInvoice(); };
+	btnSubtract << [=] { AdjustPrice(); };
+	btnPrintSave << [=] { PrintInvoice(); };
+ 	cancel << [=] { CancelInvoice(); };
+	
+	iSql * Select(CUST_ID, CUSTNAME).From(CUSTOMERS);
+	while (iSql.Fetch())
 	{
-		cbCustomers.Add(SQL[CUST_ID], SQL[CUSTNAME]);
+		cbCustomers.Add(iSql[CUST_ID], iSql[CUSTNAME]);
 	}
 	
 	cbProducts.Add("Service");
@@ -76,11 +80,27 @@ CreateInvoiceWindow::CreateInvoiceWindow(int invoice)
 	cbProducts.Add("Tip");
 	cbProducts.Add("Refund");
 	cbProducts.Add("Note");
-	SQL * SelectAll().From(INVOICES).Where(INVOICE_ID == invoice);
-	txtInvoice = SQL[INVOICENUMBER]; // .SetText(IntStr64(nextInvoice));
+	iSql * SelectAll().From(INVOICES).Where(INVOICE_ID == invoice);
+	txtInvoice = iSql[INVOICENUMBER]; // .SetText(IntStr64(nextInvoice));
+	custID = (int)iSql[CUSTOMERID] - 1;
 	cbCustomers.WhenAction << [=] { CustChanged(); };
 	cbProducts.WhenAction << [=] { ProdChanged(); };
+	
+	cbCustomers.SetIndex(custID);
+	CustChanged();
 	dtpBillDate.SetConvert(DateIntConvert());
+	
+	linesSql * SelectAll().From(LINEITEMS).Where(iSql[INVOICENUMBER] == INVOICEIDNUMBER);
+	while (linesSql.Fetch())
+	{
+		arrayLineItems.Add(linesSql[PRODUCTNAME],
+			linesSql[DESCRIPTION],
+			linesSql[PRICE],
+			linesSql[QTY], 
+			linesSql[ISTAXABLE],
+			linesSql[TOTAL]);
+	}
+	CalcInvoiceTotal();
 }
 
 void CreateInvoiceWindow::CustChanged()
@@ -112,9 +132,9 @@ void CreateInvoiceWindow::ProdChanged()
 
 void CreateInvoiceWindow::AdjustPrice()
 {
-	if (IsNull(txtPrice)) return; // txtPrice.GetData().IsNull()) return;
+	if (IsNull(txtPrice)) return;
 	
-	double newPrice = round((double)txtPrice / 1.08, 2);
+	double newPrice = round((double)txtPrice / ( 1 + myConfig.data.taxrate ), 2);
 	txtPrice = newPrice;
 }
 
@@ -135,7 +155,7 @@ void CreateInvoiceWindow::SaveInvoice()
 			taxable = round((double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY), 2);
 		}
 		else 	nonTaxable = round((double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY), 2);
-		salestax = round(taxable * (double)txtTaxRate, 2);
+		if (optCustTaxable.Get() == true) salestax = round(taxable * (double)txtTaxRate, 2);
 		
 		grandTotal += salestax + nonTaxable + taxable;
 		SQL * Insert(LINEITEMS)
@@ -282,13 +302,14 @@ void CreateInvoiceWindow::CalcInvoiceTotal()
 		return;
 	}
 	double nonTaxable = 0.0, taxable = 0.0, salestax = 0.0, grandtotal = 0.0;
+	// ERROR in SalesTax Calculation!!!!
 	for (int i = 0; i < arrayLineItems.GetCount(); i++)
 	{
 		if (optCustTaxable.Get() == true && arrayLineItems.Get(i, ISTAXABLE)  == 1) {
 			taxable += round((double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY), 2);
 		}
 		else 	nonTaxable += round((double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY), 2);
-		salestax += round(taxable * (double)txtTaxRate, 2);
+		if (optCustTaxable.Get() == true) salestax += round((double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY) * (double)txtTaxRate, 2);
 	}
 	grandtotal = nonTaxable + taxable + salestax;
 	txtNonTaxable.SetText(Format("%2!nl",nonTaxable)); // .SetData

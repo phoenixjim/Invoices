@@ -138,8 +138,12 @@ void InvoicesWindow::btnEditClicked()
 	int thisInvoice = InvoicesArray.GetKey();
 	if (IsNull(thisInvoice))
 		return;
-	CreateInvoiceWindow editInvoice(thisInvoice);
-	editInvoice.Run(true);
+	Sql iSql;
+	iSql * Select(STATUS).From(INVOICES).Where(INVOICE_ID == thisInvoice);
+	if (true) { // (int)iSql[STATUS] < 3) { // Change when testing complete!
+		CreateInvoiceWindow editInvoice(thisInvoice);
+		editInvoice.Run(true);
+	}
 }
 
 void InvoicesWindow::btnVoidClicked()
