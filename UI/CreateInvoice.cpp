@@ -1,49 +1,6 @@
 #include "DBUI.h"
 
-CreateInvoiceWindow::CreateInvoiceWindow()
- { 
- 	CtrlLayout(*this, "Create Invoice");
- 	txtTerms.SetText("Due On Receipt");
- 	txtTaxRate.SetData(myConfig.data.taxrate);
- 	printInvoice = 0;
- 	
- 	btnAdd << [=] { AddItem(); };
- 	btnDelete << [=] { ClearItem(); };
- 	ok << [=] { SaveInvoice(); };
- 	cancel << [=] { CancelInvoice(); };
- 	btnSubtract << [=] { AdjustPrice(); };
- 	btnPrintSave << [=] { PrintInvoice(); };
- 	
- 	arrayLineItems.AddColumn(PRODUCTNAME, "Name", 40);
- 	arrayLineItems.AddColumn(DESCRIPTION, "Description", 80);
- 	arrayLineItems.AddColumn(PRICE, "Price", 20).SetConvert(ConvDouble());
- 	arrayLineItems.AddColumn(QTY, "Qty", 15);
- 	arrayLineItems.AddColumn(ISTAXABLE, "Tax?", 15);
- 	arrayLineItems.AddColumn(TOTAL, "Total", 20).SetConvert(ConvDouble());
- 	arrayLineItems.Appending() .Removing();
- 
- 	SQL * Select(CUST_ID, CUSTNAME).From(CUSTOMERS);
- 	while (SQL.Fetch())
- 	{
- 		cbCustomers.Add(SQL[CUST_ID], SQL[CUSTNAME]);
- 	}
-	
-	cbProducts.Add("Service");
-	cbProducts.Add("Part");
-	cbProducts.Add("Tip");
-	cbProducts.Add("Refund");
-	cbProducts.Add("Note");
-
-	SQL.Execute("Select MAX(INVOICENUMBER) From INVOICES");
-	SQL.Fetch();
-	nextInvoice = (int)SQL[0] + 1; // stol(SQL[0].ToString().ToStd()) + 1;
-	txtInvoice = nextInvoice; // .SetText(IntStr64(nextInvoice));
-	cbCustomers.WhenAction << [=] { CustChanged(); };
-	cbProducts.WhenAction << [=] { ProdChanged(); };
-	dtpBillDate.SetConvert(DateIntConvert());
- }
- 
-CreateInvoiceWindow::CreateInvoiceWindow(int invoice)
+CreateInvoiceWindow::CreateInvoiceWindow(int invoice) // Edit Existing
 {
 	int custID;
 	Sql iSql, linesSql;
@@ -56,18 +13,20 @@ CreateInvoiceWindow::CreateInvoiceWindow(int invoice)
 	arrayLineItems.AddColumn(ISTAXABLE, "Tax?", 15);
 	arrayLineItems.AddColumn(TOTAL, "Total", 20).SetConvert(ConvDouble());
 	arrayLineItems.Appending() .Removing();
-
+	arrayLineItems.WhenLeftDouble = [=] { EditUpdateItem(); };
 
 	txtTerms.SetText("Due On Receipt");
 	txtTaxRate.SetData(myConfig.data.taxrate);
 	printInvoice = 0;
 	
-	btnAdd << [=] { AddItem(); };
-	btnDelete << [=] { ClearItem(); };
-	ok << [=] { SaveInvoice(); };
+	btnAdd << [=] { EditAddItem(); };
+	btnDelete << [=] { EditDeleteItem(); };
+	ok << [=] { EditSaveInvoice(); };
+	cancel << [=] { CancelInvoice(); };
 	btnSubtract << [=] { AdjustPrice(); };
-	btnPrintSave << [=] { PrintInvoice(); };
- 	cancel << [=] { CancelInvoice(); };
+	btnPrintSave << [=] { EditPrintInvoice(); };
+	btnUpdate.Show();
+	btnUpdate << [=] { EditUpdateItem(); };
 	
 	iSql * Select(CUST_ID, CUSTNAME).From(CUSTOMERS);
 	while (iSql.Fetch())
@@ -103,6 +62,76 @@ CreateInvoiceWindow::CreateInvoiceWindow(int invoice)
 	CalcInvoiceTotal();
 }
 
+void CreateInvoiceWindow::EditAddItem()
+{
+	PromptOK(__func__);
+}
+
+void CreateInvoiceWindow::EditDeleteItem()
+{
+	PromptOK(__func__);
+}
+
+void CreateInvoiceWindow::EditSaveInvoice()
+{
+	PromptOK(__func__);
+}
+
+void CreateInvoiceWindow::EditPrintInvoice()
+{
+	PromptOK(__func__);
+}
+
+void CreateInvoiceWindow::EditUpdateItem()
+{
+	PromptOK(__func__);
+}
+
+
+CreateInvoiceWindow::CreateInvoiceWindow()
+ { 
+ 	CtrlLayout(*this, "Create Invoice");
+ 	txtTerms.SetText("Due On Receipt");
+ 	txtTaxRate.SetData(myConfig.data.taxrate);
+ 	printInvoice = 0;
+	
+	btnAdd << [=] { AddItem(); };
+	btnDelete << [=] { ClearItem(); };
+	ok << [=] { SaveInvoice(); };
+	btnSubtract << [=] { AdjustPrice(); };
+	btnPrintSave << [=] { PrintInvoice(); };
+ 	cancel << [=] { CancelInvoice(); };
+ 	btnUpdate.Hide();
+	
+ 	arrayLineItems.AddColumn(PRODUCTNAME, "Name", 40);
+ 	arrayLineItems.AddColumn(DESCRIPTION, "Description", 80);
+ 	arrayLineItems.AddColumn(PRICE, "Price", 20).SetConvert(ConvDouble());
+ 	arrayLineItems.AddColumn(QTY, "Qty", 15);
+ 	arrayLineItems.AddColumn(ISTAXABLE, "Tax?", 15);
+ 	arrayLineItems.AddColumn(TOTAL, "Total", 20).SetConvert(ConvDouble());
+ 	arrayLineItems.Appending() .Removing();
+ 
+ 	SQL * Select(CUST_ID, CUSTNAME).From(CUSTOMERS);
+ 	while (SQL.Fetch())
+ 	{
+ 		cbCustomers.Add(SQL[CUST_ID], SQL[CUSTNAME]);
+ 	}
+	
+	cbProducts.Add("Service");
+	cbProducts.Add("Part");
+	cbProducts.Add("Tip");
+	cbProducts.Add("Refund");
+	cbProducts.Add("Note");
+
+	SQL.Execute("Select MAX(INVOICENUMBER) From INVOICES");
+	SQL.Fetch();
+	nextInvoice = (int)SQL[0] + 1; // stol(SQL[0].ToString().ToStd()) + 1;
+	txtInvoice = nextInvoice; // .SetText(IntStr64(nextInvoice));
+	cbCustomers.WhenAction << [=] { CustChanged(); };
+	cbProducts.WhenAction << [=] { ProdChanged(); };
+	dtpBillDate.SetConvert(DateIntConvert());
+ }
+ 
 void CreateInvoiceWindow::CustChanged()
 {
 	int idNum = 1;
@@ -180,7 +209,7 @@ void CreateInvoiceWindow::SaveInvoice()
 		(TAX, (double)salestax)
 		(GRANDTOTAL, (double)grandTotal)
 		(AMTPAID, 0.0)
-		(STATUS, 0);
+		(STATUS, 1);
 	printInvoice = SQL.GetInsertedId();
 	ClearItem();
 }
@@ -210,7 +239,7 @@ void CreateInvoiceWindow::PrintInvoice()
 	
 	invoiceSQL * SelectAll().From( INVOICES ).Where( INVOICE_ID == printInvoice );
 	
-	if ((int)invoiceSQL[STATUS] < 3)
+	if ((int)invoiceSQL[STATUS] < 2)
 		header <<  "]]}}]";
 	else header << "Paid in Full, Thank you!]]}}]";
 	custSQL * SelectAll().From( CUSTOMERS ).Where( CUST_ID == invoiceSQL[CUSTOMERID]);

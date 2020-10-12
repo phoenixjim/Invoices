@@ -29,7 +29,7 @@ InvoicesWindow::InvoicesWindow()
 	InvoicesArray.AddColumn ( AMTPAID, "Amount Paid" ).SetConvert ( ConvDouble() );
 	InvoicesArray.AddColumn ( DATEPAID, "Date Paid" ).SetConvert ( DateIntConvert() );
 	InvoicesArray.AddColumn ( STATUS, "Status" );
-	// InvoicesArray.ColumnWidths("5 5 10 12 5 5 5 5 5 5");
+
 	InvoicesArray.SetOrderBy ( Descending(INVOICENUMBER) );
 	InvoicesArray.WhenLeftDouble << [=] { btnEditClicked(); };
 	
@@ -37,11 +37,8 @@ InvoicesWindow::InvoicesWindow()
 	ddRange1.SetConvert ( DateIntConvert() );
 	ddRange2.SetConvert ( DateIntConvert() );
 
-	// InvoicesArray.WhenLeftClick << [=] { selectedRow = InvoicesArray.GetClickRow(); } ;
 	InvoicesArray.Query();
 
-	// InvoicesArray.WhenLeftDouble = THISBACK(EditBorrow);
-	// InvoicesArray.GoEndPostQuery();
 	
 }
 void InvoicesWindow::btnPrintClicked()
@@ -68,7 +65,7 @@ void InvoicesWindow::btnPrintClicked()
 
 	invoiceSQL * SelectAll().From( INVOICES ).Where( INVOICE_ID == thisInvoice );
 	
-	if ((int)invoiceSQL[STATUS] < 3)
+	if ((int)invoiceSQL[STATUS] < 2) // if not Paid In Full
 		header <<  "]]}}]";
 	else header << "Paid in Full, Thank you!]]}}]";
 
@@ -119,13 +116,16 @@ void InvoicesWindow::btnApplyPaymentClicked()
 	int thisInvoice = InvoicesArray.GetKey();
 	if (IsNull(thisInvoice))
 		return;
-	if (IsNull(edbPayment)) {
-		Exclamation("Must enter amount!");
-		return;
-	}
+	int status;
 	SQL * SelectAll().From(INVOICES).Where(INVOICE_ID == thisInvoice);
 	SQL.Fetch();
-	int status = (round(SQL[GRANDTOTAL], 2) >= round((double)edbPayment.GetData(), 2)) ? 3 : 2;
+	if (IsNull(edbPayment)) {
+		edbPayment.SetData(SQL[GRANDTOTAL]);
+		status = 2;
+	}
+	else {
+		status = (round(SQL[GRANDTOTAL], 2) <= round((double)edbPayment.GetData(), 2)) ? 2 : 1;
+	}
 	SQL*SqlUpdate(INVOICES)(AMTPAID,round((double)edbPayment.GetData(), 2))(DATEPAID,SQL[TRANSACTIONDATE])(STATUS, status).Where(INVOICE_ID == thisInvoice);
 	InvoicesArray.ReQuery();   
 }
@@ -140,7 +140,7 @@ void InvoicesWindow::btnEditClicked()
 		return;
 	Sql iSql;
 	iSql * Select(STATUS).From(INVOICES).Where(INVOICE_ID == thisInvoice);
-	if (true) { // (int)iSql[STATUS] < 3) { // Change when testing complete!
+	if ((int)iSql[STATUS] < 2) {
 		CreateInvoiceWindow editInvoice(thisInvoice);
 		editInvoice.Run(true);
 	}
@@ -148,7 +148,19 @@ void InvoicesWindow::btnEditClicked()
 
 void InvoicesWindow::btnVoidClicked()
 {
-	PromptOK ( __func__ );
+	if(!InvoicesArray.IsCursor())
+		return;
+	int thisInvoice = InvoicesArray.GetKey();
+	if (IsNull(thisInvoice))
+		return;
+	SQL * SelectAll().From(INVOICES).Where(INVOICE_ID == thisInvoice);
+	SQL.Fetch();
+	if ((double)SQL[AMTPAID] > 0.0) {
+		Exclamation("Can't void after receiving payment");
+		return;
+	}
+	SQL * SqlUpdate(INVOICES)(STATUS, 0).Where(INVOICE_ID == thisInvoice); // Void = 0
+	InvoicesArray.ReQuery();
 }
 
 void InvoicesWindow::btnFixDateClicked()

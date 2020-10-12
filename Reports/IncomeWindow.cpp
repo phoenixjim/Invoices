@@ -22,12 +22,10 @@ IncomeWindow::IncomeWindow() {
  		cbCustomers.Add(SQL[CUST_ID], SQL[CUSTNAME]);
  	}
 	
-	ok << [=] { okPressed();
-				  };
-	cancel << [=] { cancelPressed();
-				  };
-	btnReport << [=] { CreateReport(dateStart.GetData().ToString(), dateEnd.GetData().ToString());
-					 };
+	ok << [=] { okPressed(); };
+	cancel << [=] { cancelPressed(); };
+	btnReport << [=] { CreateReport(dateStart.GetData().ToString(), dateEnd.GetData().ToString()); };
+	btnExport.Hide(); // only for testing
 	btnExport << [=] { ExportQTF(); };
 }
 
@@ -60,11 +58,11 @@ void IncomeWindow::okPressed()
 		return;
 	sqlTaxReport.Clear();
 	
-	// NOTE: still no success here
 	Sql sql;
 	SqlBool where;
 	where = Between(DATEPAID, dateStart.GetData().ToString(), dateEnd.GetData().ToString());
-	where = where && CUSTOMERID == idNum;
+	where = where && CUSTOMERID == idNum && STATUS > 1;
+	
 	sql * SelectAll().From(INVOICES).Where(where);
 
 	while ( sql.Fetch() )

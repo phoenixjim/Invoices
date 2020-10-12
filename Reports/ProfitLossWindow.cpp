@@ -38,7 +38,7 @@ void ProfitLossWindow::okPressed()
 	// This years info:
 	Sql sql;
 	SqlBool where;
-	where = Between(DATEPAID, dateStart.GetData().ToString(), dateEnd.GetData().ToString());
+	where = Between(DATEPAID, dateStart.GetData().ToString(), dateEnd.GetData().ToString()) && STATUS > 1;
 	
 	sqlTaxReport.Clear();
 
@@ -57,7 +57,7 @@ void ProfitLossWindow::okPressed()
 	// Last Years info:
 	Sql oldsql;
 	SqlBool oldwhere;
-	oldwhere = Between(DATEPAID, prevStart, prevEnd );
+	oldwhere = Between(DATEPAID, prevStart, prevEnd ) && STATUS > 1;
 
 	oldsql * SelectAll().From(INVOICES).Where(oldwhere);
 

@@ -15,13 +15,21 @@ using namespace Upp;
 #include <Report/Report.h>
 
 enum pNames
-        { 
-        Service=1,
-        Part,
-        Gift,
-        Refund,
-        Note
-        };
+	{
+	Service=1,
+	Part,
+	Gift,
+	Refund,
+	Note
+};
+/*
+enum Status
+	{
+	Void = 0,
+	Unpaid,
+	PaidInFull
+};
+*/
 //Customers
 struct CustomersWindow : WithCustomersWindowLayout<TopWindow> {
 	Configs	myConfig;
@@ -51,6 +59,13 @@ struct CreateInvoiceWindow : WithCreateInvoiceWindowLayout<TopWindow> {
 	void ClearItem();
 	void DeleteRow();
 	void PrintInvoice();
+	
+	void EditAddItem();
+	void EditDeleteItem();
+	void EditSaveInvoice();
+	void EditPrintInvoice();
+	void EditUpdateItem();
+	
 public:
 	CreateInvoiceWindow();
 	CreateInvoiceWindow(int invoice);
