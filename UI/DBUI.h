@@ -65,7 +65,8 @@ struct CreateInvoiceWindow : WithCreateInvoiceWindowLayout<TopWindow> {
 	void EditSaveInvoice();
 	void EditPrintInvoice();
 	void EditUpdateItem();
-	
+	void ClearEdit();
+	void EditDoUpdate();
 public:
 	CreateInvoiceWindow();
 	CreateInvoiceWindow(int invoice);
@@ -88,7 +89,7 @@ struct InvoicesWindow : WithInvoicesWindowLayout<TopWindow> {
 	void btnByDatesClicked();
 	void btnByCustomerClicked();
 	void btnByVoidedClicked();
-	
+		
 public:
 	typedef InvoicesWindow CLASSNAME;
 	InvoicesWindow();
@@ -99,8 +100,13 @@ public:
 
 // ListLineItems
 struct LineItemsWindow : public WithLineItemsWindowLayout<TopWindow> {
+	Configs myConfig;
 	void EditRow();
 	void AddNewItem();
+	void CalcInvoiceTotal(long invoice);
+	double CalcItemTotal(int itemnumber);
+	void DeleteItem();
+	
 public:
 	typedef LineItemsWindow CLASSNAME;
 	LineItemsWindow();

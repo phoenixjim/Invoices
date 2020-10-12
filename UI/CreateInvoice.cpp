@@ -25,8 +25,10 @@ CreateInvoiceWindow::CreateInvoiceWindow(int invoice) // Edit Existing
 	cancel << [=] { CancelInvoice(); };
 	btnSubtract << [=] { AdjustPrice(); };
 	btnPrintSave << [=] { EditPrintInvoice(); };
-	btnUpdate.Show();
-	btnUpdate << [=] { EditUpdateItem(); };
+	btnUpdate << [=] { EditDoUpdate(); };
+	btnClear << [=] { ClearEdit(); };
+	btnUpdate.Hide();
+	btnClear.Hide();
 	
 	iSql * Select(CUST_ID, CUSTNAME).From(CUSTOMERS);
 	while (iSql.Fetch())
@@ -63,30 +65,58 @@ CreateInvoiceWindow::CreateInvoiceWindow(int invoice) // Edit Existing
 }
 
 void CreateInvoiceWindow::EditAddItem()
-{
+{// add new lineitem to invoice
 	PromptOK(__func__);
 }
 
 void CreateInvoiceWindow::EditDeleteItem()
-{
+{// Delete lineitem from invoice
 	PromptOK(__func__);
 }
 
 void CreateInvoiceWindow::EditSaveInvoice()
-{
+{// Modified for Edited invoice
 	PromptOK(__func__);
 }
 
 void CreateInvoiceWindow::EditPrintInvoice()
-{
+{// Modified for Edited invoice
 	PromptOK(__func__);
 }
 
 void CreateInvoiceWindow::EditUpdateItem()
-{
+{// Fill fields for edit
+	if(!arrayLineItems.IsCursor())
+		return;
+	int thisItem = arrayLineItems.GetClickRow();
+	if (IsNull(thisItem))
+		return;
+	// Fill fields here
+	cbProducts.Set(arrayLineItems.GetColumn(thisItem, 0));
+	txtDescription.SetText(arrayLineItems.GetColumn(thisItem, 1).ToString());
+	txtPrice.SetText(arrayLineItems.GetColumn(thisItem, 2).ToString());
+	txtQty.SetText(arrayLineItems.GetColumn(thisItem, 3).ToString());
+	optProdTaxable.Set(arrayLineItems.GetColumn(thisItem, 4));
+	// need 'global' value for editing id
+	btnUpdate.Show();
+	btnClear.Show();
+}
+
+void CreateInvoiceWindow::EditDoUpdate()
+{//update row from fields
 	PromptOK(__func__);
 }
 
+void CreateInvoiceWindow::ClearEdit()
+{
+	txtDescription.SetText("");
+	txtPrice.SetText("");
+	txtQty.SetText("");
+	cbProducts.SetIndex(0);
+	optProdTaxable.Set(0);
+	CalcInvoiceTotal();
+	btnUpdate.Hide();
+}
 
 CreateInvoiceWindow::CreateInvoiceWindow()
  { 

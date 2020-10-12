@@ -126,13 +126,14 @@ void InvoicesWindow::btnApplyPaymentClicked()
 	else {
 		status = (round(SQL[GRANDTOTAL], 2) <= round((double)edbPayment.GetData(), 2)) ? 2 : 1;
 	}
-	SQL*SqlUpdate(INVOICES)(AMTPAID,round((double)edbPayment.GetData(), 2))(DATEPAID,SQL[TRANSACTIONDATE])(STATUS, status).Where(INVOICE_ID == thisInvoice);
+	SQL * SqlUpdate(INVOICES)(AMTPAID,round((double)edbPayment.GetData(), 2))(DATEPAID,SQL[TRANSACTIONDATE])(STATUS, status).Where(INVOICE_ID == thisInvoice);
 	InvoicesArray.ReQuery();   
 }
 
 void InvoicesWindow::btnEditClicked()
 
 {
+	/* // Edit create and delete line items
 	if(!InvoicesArray.IsCursor())
 		return;
 	int thisInvoice = InvoicesArray.GetKey();
@@ -144,6 +145,7 @@ void InvoicesWindow::btnEditClicked()
 		CreateInvoiceWindow editInvoice(thisInvoice);
 		editInvoice.Run(true);
 	}
+	*/
 }
 
 void InvoicesWindow::btnVoidClicked()
@@ -153,14 +155,21 @@ void InvoicesWindow::btnVoidClicked()
 	int thisInvoice = InvoicesArray.GetKey();
 	if (IsNull(thisInvoice))
 		return;
-	SQL * SelectAll().From(INVOICES).Where(INVOICE_ID == thisInvoice);
-	SQL.Fetch();
-	if ((double)SQL[AMTPAID] > 0.0) {
+	Sql inv;
+	inv * SelectAll().From(INVOICES).Where(INVOICE_ID == thisInvoice);
+	inv.Fetch();
+	if ((double)inv[AMTPAID] > 0.0) {
 		Exclamation("Can't void after receiving payment");
 		return;
 	}
-	SQL * SqlUpdate(INVOICES)(STATUS, 0).Where(INVOICE_ID == thisInvoice); // Void = 0
-	InvoicesArray.ReQuery();
+	if (PromptOKCancel("Are you sure? This can't be undone...")) {
+		PromptOK(~inv[INVOICENUMBER]);
+		long invoice = (int64)inv[INVOICENUMBER];
+		inv * SqlUpdate(INVOICES)(STATUS, 0).Where(INVOICE_ID == thisInvoice); // Void = 0
+		Sql li;
+		li * Delete(LINEITEMS).Where(INVOICEIDNUMBER == (int64)invoice);
+		InvoicesArray.ReQuery();
+	}
 }
 
 void InvoicesWindow::btnFixDateClicked()
