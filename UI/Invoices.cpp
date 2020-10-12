@@ -14,7 +14,8 @@ InvoicesWindow::InvoicesWindow()
 	btnByBalanceDue << [=] { btnByBalanceDueClicked(); };
 	btnByDates << [=] { btnByDatesClicked(); };
 	btnByCustomer << [=] { btnByCustomerClicked(); };
-
+	btnByVoided << [=] { btnByVoidedClicked(); };
+	
 	InvoicesArray.SetTable ( INVOICES, INVOICE_ID );
 
 	// InvoicesArray.Join(BOOK_ID, book); // joins id from other db to this id
@@ -37,6 +38,12 @@ InvoicesWindow::InvoicesWindow()
 	ddRange1.SetConvert ( DateIntConvert() );
 	ddRange2.SetConvert ( DateIntConvert() );
 
+	Sql custSql;
+	custSql * Select(CUST_ID, CUSTNAME).From(CUSTOMERS);
+	while (custSql.Fetch())
+	{
+		cbCustomers.Add(custSql[CUST_ID], custSql[CUSTNAME]);
+	}
 	InvoicesArray.Query();
 
 	
@@ -163,7 +170,6 @@ void InvoicesWindow::btnVoidClicked()
 		return;
 	}
 	if (PromptOKCancel("Are you sure? This can't be undone...")) {
-		PromptOK(~inv[INVOICENUMBER]);
 		long invoice = (int64)inv[INVOICENUMBER];
 		inv * SqlUpdate(INVOICES)(STATUS, 0).Where(INVOICE_ID == thisInvoice); // Void = 0
 		Sql li;
@@ -174,30 +180,49 @@ void InvoicesWindow::btnVoidClicked()
 
 void InvoicesWindow::btnFixDateClicked()
 {
-	PromptOK ( __func__ );
+	if (IsNull(ddFixDate)) return;
+	PromptOK(" Haven't Decided Yet ");
 }
 
 void InvoicesWindow::btnByPaidClicked()
 {
-	PromptOK ( __func__ );
+	InvoicesArray.ReQuery(STATUS == 2);
 }
 
 void InvoicesWindow::btnByBalanceDueClicked()
 {
-	PromptOK ( __func__ );
+	InvoicesArray.ReQuery(STATUS == 1);
 }
 
 void InvoicesWindow::btnByDatesClicked()
 {
-	PromptOK ( __func__ );
+	if ( IsNull ( ddRange1 ) || IsNull ( ddRange2 ))
+	{
+		return;
+	}
+
+	SqlBool where;
+	where = Between(DATEPAID, ddRange1.GetData().ToString(), ddRange2.GetData().ToString());
+	InvoicesArray.ReQuery(where);
 }
 
 void InvoicesWindow::btnByCustomerClicked()
 {
-	PromptOK ( __func__ );
+	if ( IsNull ( cbCustomers ) )
+	{
+		return;
+	}
+
+	int idNum = 1;
+	idNum += cbCustomers.GetIndex();
+	if (IsNull(idNum) || idNum < 1)
+		return;
+	SqlBool where;
+	where = CUSTOMERID == idNum && STATUS > 0;
+	InvoicesArray.ReQuery(where);
 }
 
 void InvoicesWindow::btnByVoidedClicked()
 {
-	PromptOK ( __func__ );
+	InvoicesArray.ReQuery(STATUS == 0);
 }

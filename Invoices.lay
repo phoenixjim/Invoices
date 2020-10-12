@@ -101,7 +101,7 @@ LAYOUT(InvoicesWindowLayout, 1128, 584)
 	ITEM(EditDate, ddRange2, LeftPosZ(92, 84).TopPosZ(192, 19))
 	ITEM(EditDate, ddRange1, LeftPosZ(92, 84).TopPosZ(168, 19))
 	ITEM(EditDate, ddFixDate, LeftPosZ(96, 80).TopPosZ(72, 19))
-	ITEM(DropList, dlCustomers, LeftPosZ(12, 164).TopPosZ(148, 19))
+	ITEM(DropList, cbCustomers, LeftPosZ(12, 164).TopPosZ(148, 19))
 END_LAYOUT
 
 LAYOUT(CustomerAddLayout, 436, 352)

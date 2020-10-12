@@ -207,7 +207,7 @@ void LineItemsWindow::DeleteItem()
 		Sql liTmp;
 		liTmp * SelectAll().From(LINEITEMS).Where(INVOICEIDNUMBER == thisInvoice);
 		liTmp.Fetch();
-		PromptOKCancel(IntStr(liTmp.GetRowsProcessed()));
+
 		if (liTmp.GetRowsProcessed() < 2)
 			inv * SqlUpdate(INVOICES)(STATUS, 0).Where(INVOICENUMBER == thisInvoice); // Void = 0
 		else
