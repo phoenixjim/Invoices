@@ -24,7 +24,7 @@ void Invoices::MainMenu(Bar& bar)
 	bar.Sub(t_("Management"), THISFN(ManagementMenu));
 	bar.Add(t_("About"), [=]{ 
 		String about = "Invoices and Reports \n Version: " << version;
-		PromptOK(about);
+		PromptOK(DeQtf(about));
 	});
 	bar.Add(t_("Exit"), THISFN(Close));
 }

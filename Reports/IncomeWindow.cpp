@@ -91,7 +91,7 @@ void IncomeWindow::CreateReport(String start, String end)
 		
 		String s = ::Format(Date( 1970, 1, 1) + StrInt(start));
 		String e = ::Format(Date( 1970, 1, 1) + StrInt(end));
-		headertext << "Tax Report " << s << " to " << e << " for " << sqlTaxReport.Get( 0, CUSTNAME );
+		headertext << "Tax Report " << s << " to " << e << " for " << myConfig.data.companyname << "and customer: " << sqlTaxReport.Get( 0, CUSTNAME );
 		
 		// {{153:153:0:215:123:122:123:123:123@L [* #Inv NO.#:: #Date Paid#:: #Cust. No.#:: #Customer Name#:: #Taxable#:: #Non-Taxable#:: #Sales Tax#:: #My Parts Cost#:: #Total#::@W ]
 		// {{170:171:111:0:136:137:136:137:137@L

@@ -150,7 +150,7 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 	LineItemsWindow listlineitemswin;
 	
 	MenuBar		mainmenu;
-	String version = "1.0.0.1";
+	String version = "1.1.0.0";
 public:
 	typedef Invoices CLASSNAME;
 	

@@ -88,7 +88,7 @@ void TaxWindow::CreateReport(String start, String end)
 		
 		String s = ::Format(Date( 1970, 1, 1) + StrInt(start));
 		String e = ::Format(Date( 1970, 1, 1) + StrInt(end));
-		headertext << "Tax Report " << s << " to " << e;
+		headertext << "Tax Report " << s << " to " << e << " for " << myConfig.data.companyname;
 		if (anon.Get() == 1)
 			taxQTF = "{{170:171:111:0:136:137:136:137:137@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+40> ";
 		else taxQTF = "{{153:153:0:215:123:122:123:123:123@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+40> ";
