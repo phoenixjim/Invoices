@@ -1,129 +1,11 @@
 #include "DBUI.h"
 
-CreateInvoiceWindow::CreateInvoiceWindow(int invoice) // Edit Existing
-{
-	int custID;
-	Sql iSql, linesSql;
-	CtrlLayout(*this, "Edit Invoice");
-
-	arrayLineItems.AddColumn(PRODUCTNAME, "Name", 40);
-	arrayLineItems.AddColumn(DESCRIPTION, "Description", 80);
-	arrayLineItems.AddColumn(PRICE, "Price", 20).SetConvert(ConvDouble());
-	arrayLineItems.AddColumn(QTY, "Qty", 15);
-	arrayLineItems.AddColumn(ISTAXABLE, "Tax?", 15);
-	arrayLineItems.AddColumn(TOTAL, "Total", 20).SetConvert(ConvDouble());
-	arrayLineItems.Appending() .Removing();
-	arrayLineItems.WhenLeftDouble = [=] { EditUpdateItem(); };
-
-	txtTerms.SetText("Due On Receipt");
-	txtTaxRate.SetData(myConfig.data.taxrate);
-	printInvoice = 0;
-	
-	btnAdd << [=] { EditAddItem(); };
-	btnDelete << [=] { EditDeleteItem(); };
-	ok << [=] { EditSaveInvoice(); };
-	cancel << [=] { CancelInvoice(); };
-	btnSubtract << [=] { AdjustPrice(); };
-	btnPrintSave << [=] { EditPrintInvoice(); };
-	btnUpdate << [=] { EditDoUpdate(); };
-	btnClear << [=] { ClearEdit(); };
-	btnUpdate.Hide();
-	btnClear.Hide();
-	
-	iSql * Select(CUST_ID, CUSTNAME).From(CUSTOMERS);
-	while (iSql.Fetch())
-	{
-		cbCustomers.Add(iSql[CUST_ID], iSql[CUSTNAME]);
-	}
-	
-	cbProducts.Add("Service");
-	cbProducts.Add("Part");
-	cbProducts.Add("Tip");
-	cbProducts.Add("Refund");
-	cbProducts.Add("Note");
-	iSql * SelectAll().From(INVOICES).Where(INVOICE_ID == invoice);
-	txtInvoice = iSql[INVOICENUMBER]; // .SetText(IntStr64(nextInvoice));
-	custID = (int)iSql[CUSTOMERID] - 1;
-	cbCustomers.WhenAction << [=] { CustChanged(); };
-	cbProducts.WhenAction << [=] { ProdChanged(); };
-	
-	cbCustomers.SetIndex(custID);
-	CustChanged();
-	dtpBillDate.SetConvert(DateIntConvert());
-	
-	linesSql * SelectAll().From(LINEITEMS).Where(iSql[INVOICENUMBER] == INVOICEIDNUMBER);
-	while (linesSql.Fetch())
-	{
-		arrayLineItems.Add(linesSql[PRODUCTNAME],
-			linesSql[DESCRIPTION],
-			linesSql[PRICE],
-			linesSql[QTY], 
-			linesSql[ISTAXABLE],
-			linesSql[TOTAL]);
-	}
-	CalcInvoiceTotal();
-}
-
-void CreateInvoiceWindow::EditAddItem()
-{// add new lineitem to invoice
-	PromptOK(__func__);
-}
-
-void CreateInvoiceWindow::EditDeleteItem()
-{// Delete lineitem from invoice
-	PromptOK(__func__);
-}
-
-void CreateInvoiceWindow::EditSaveInvoice()
-{// Modified for Edited invoice
-	PromptOK(__func__);
-}
-
-void CreateInvoiceWindow::EditPrintInvoice()
-{// Modified for Edited invoice
-	PromptOK(__func__);
-}
-
-void CreateInvoiceWindow::EditUpdateItem()
-{// Fill fields for edit
-	if(!arrayLineItems.IsCursor())
-		return;
-	int thisItem = arrayLineItems.GetClickRow();
-	if (IsNull(thisItem))
-		return;
-	// Fill fields here
-	cbProducts.Set(arrayLineItems.GetColumn(thisItem, 0));
-	txtDescription.SetText(arrayLineItems.GetColumn(thisItem, 1).ToString());
-	txtPrice.SetText(arrayLineItems.GetColumn(thisItem, 2).ToString());
-	txtQty.SetText(arrayLineItems.GetColumn(thisItem, 3).ToString());
-	optProdTaxable.Set(arrayLineItems.GetColumn(thisItem, 4));
-	// need 'global' value for editing id
-	btnUpdate.Show();
-	btnClear.Show();
-}
-
-void CreateInvoiceWindow::EditDoUpdate()
-{//update row from fields
-	PromptOK(__func__);
-}
-
-void CreateInvoiceWindow::ClearEdit()
-{
-	txtDescription.SetText("");
-	txtPrice.SetText("");
-	txtQty.SetText("");
-	cbProducts.SetIndex(0);
-	optProdTaxable.Set(0);
-	CalcInvoiceTotal();
-	btnUpdate.Hide();
-}
-
 CreateInvoiceWindow::CreateInvoiceWindow()
  { 
  	CtrlLayout(*this, "Create Invoice");
  	txtTerms.SetText("Due On Receipt");
  	txtTaxRate.SetData(myConfig.data.taxrate);
- 	printInvoice = 0;
+ 	pInvoice = 0;
 	
 	btnAdd << [=] { AddItem(); };
 	btnDelete << [=] { ClearItem(); };
@@ -240,7 +122,7 @@ void CreateInvoiceWindow::SaveInvoice()
 		(GRANDTOTAL, (double)grandTotal)
 		(AMTPAID, 0.0)
 		(STATUS, 1);
-	printInvoice = SQL.GetInsertedId();
+	pInvoice = SQL.GetInsertedId();
 	ClearItem();
 }
 
@@ -251,8 +133,8 @@ void CreateInvoiceWindow::PrintInvoice()
 	
 	SaveInvoice();
 	
-	// printInvoice = InvoicesArray.GetKey();
-	if (printInvoice == 0 || IsNull(printInvoice))
+	// pInvoice = InvoicesArray.GetKey();
+	if (pInvoice == 0 || IsNull(pInvoice))
 	{
 		Exclamation("No invoice number saved!");
 		return;
@@ -267,7 +149,7 @@ void CreateInvoiceWindow::PrintInvoice()
 		myConfig.data.companyname << " @$2022; " << myConfig.data.companyaddress << " @$2022; " << myConfig.data.companycity << ", " << myConfig.data.companystate <<
 		" "  << myConfig.data.companyzip << " @$2022; " << myConfig.data.companyphone << " @$2022; " << myConfig.data.companyemail << "]]]";
 	
-	invoiceSQL * SelectAll().From( INVOICES ).Where( INVOICE_ID == printInvoice );
+	invoiceSQL * SelectAll().From( INVOICES ).Where( INVOICE_ID == pInvoice );
 	
 	if ((int)invoiceSQL[STATUS] < 2)
 		header <<  "]]}}]";

@@ -5,7 +5,6 @@ InvoicesWindow::InvoicesWindow()
 {
 	CtrlLayout ( *this, "List Invoices" );
 
-	btnEdit << [=] { btnEditClicked(); };
 	btnPrint << [=] { btnPrintClicked(); };
 	btnApplyPayment << [=] { btnApplyPaymentClicked(); };
 	btnVoid << [=] { btnVoidClicked() ; };
@@ -32,7 +31,6 @@ InvoicesWindow::InvoicesWindow()
 	InvoicesArray.AddColumn ( STATUS, "Status" );
 
 	InvoicesArray.SetOrderBy ( Descending(INVOICENUMBER) );
-	InvoicesArray.WhenLeftDouble << [=] { btnEditClicked(); };
 	
 	ddFixDate.SetConvert ( DateIntConvert() );
 	ddRange1.SetConvert ( DateIntConvert() );
@@ -136,11 +134,11 @@ void InvoicesWindow::btnApplyPaymentClicked()
 	SQL * SqlUpdate(INVOICES)(AMTPAID,round((double)edbPayment.GetData(), 2))(DATEPAID,SQL[TRANSACTIONDATE])(STATUS, status).Where(INVOICE_ID == thisInvoice);
 	InvoicesArray.ReQuery();   
 }
-
+/*
 void InvoicesWindow::btnEditClicked()
 
 {
-	/* // Edit create and delete line items
+	// Edit create and delete line items
 	if(!InvoicesArray.IsCursor())
 		return;
 	int thisInvoice = InvoicesArray.GetKey();
@@ -152,9 +150,8 @@ void InvoicesWindow::btnEditClicked()
 		CreateInvoiceWindow editInvoice(thisInvoice);
 		editInvoice.Run(true);
 	}
-	*/
 }
-
+*/
 void InvoicesWindow::btnVoidClicked()
 {
 	if(!InvoicesArray.IsCursor())
