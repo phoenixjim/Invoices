@@ -19,14 +19,18 @@ void Invoices::MainMenu(Bar& bar)
     		}
     	});
 	
-	bar.Sub(t_("Transactions"), THISFN(TransactionsMenu));
-	bar.Sub(t_("Reports"), THISFN(ReportsMenu));
-	bar.Sub(t_("Management"), THISFN(ManagementMenu));
+	bar.Sub(t_("Transactions"), [=] ( Bar& bar ) {
+		TransactionsMenu( bar ); });
+	bar.Sub(t_("Reports"), [=] (Bar& bar) {
+		ReportsMenu( bar );; });
+	bar.Sub(t_("Management"), [=] ( Bar& bar ) {
+		ManagementMenu( bar ); });
 	bar.Add(t_("About"), [=]{ 
 		String about = "Invoices and Reports \n Version: " << version;
 		PromptOK(DeQtf(about));
 	});
-	bar.Add(t_("Exit"), THISFN(Close));
+	bar.Add(t_("Exit"), [=] {
+		Close(); });
 }
 
 void Invoices::TransactionsMenu(Bar& bar)
@@ -69,13 +73,13 @@ void Invoices::ManagementMenu(Bar& bar)
 Invoices::Invoices()
 {
 	CtrlLayout(*this, "Invoices");
-	// UseHomeDirectoryConfig(false);
+
 	AddFrame(mainmenu);
-	mainmenu.Set(THISFN(MainMenu));
+	mainmenu.Set( [=] ( Bar& bar ) {
+		MainMenu( bar ); });
 	Date min = Date(2010,1,1);
 	Date max = Date(2040,1,1);
 	ConvertDate::SetDefaultMinMax(min, max);
-	// from http://leonardoce.interfree.it/leowiki.html "simple configfile"
 }
 
 GUI_APP_MAIN

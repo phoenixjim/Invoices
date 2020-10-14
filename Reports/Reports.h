@@ -24,7 +24,6 @@ struct TaxWindow : WithTaxWindowLayout<TopWindow> {
 	String taxQTF;
 	String GetCustomerName(int custId);
 public:
-	typedef TaxWindow CLASSNAME;
 	TaxWindow();
 	void Paint(Draw& w) {
 		w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
@@ -43,7 +42,6 @@ struct IncomeWindow : WithIncomeByCustomerLayout<TopWindow> {
 	String taxQTF;
 	String GetCustomerName(int custId);
 public:
-	typedef IncomeWindow CLASSNAME;
 	IncomeWindow();
 	void Paint(Draw& w) {
         w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
@@ -67,7 +65,6 @@ struct ProfitLossWindow : WithProfitLossWindowLayout<TopWindow> {
 	void CreateReport(String start, String end);
 	double GetPartsCost(int invId);
 public:
-	typedef ProfitLossWindow CLASSNAME;
 	ProfitLossWindow();
 	void Paint(Draw& w) {
 		w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here

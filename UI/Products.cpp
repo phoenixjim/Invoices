@@ -4,7 +4,6 @@
 class AddProduct : public WithProductAddLayout<TopWindow> {
 	public:
 		SqlCtrls ctrls;
-		typedef AddProduct CLASSNAME;
 		AddProduct(String title);
 };
 

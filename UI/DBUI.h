@@ -83,7 +83,6 @@ struct InvoicesWindow : WithInvoicesWindowLayout<TopWindow> {
 	void btnByVoidedClicked();
 		
 public:
-	typedef InvoicesWindow CLASSNAME;
 	InvoicesWindow();
 	virtual void Paint(Draw& w) {
         w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
@@ -100,7 +99,6 @@ struct LineItemsWindow : public WithLineItemsWindowLayout<TopWindow> {
 	void DeleteItem();
 	
 public:
-	typedef LineItemsWindow CLASSNAME;
 	LineItemsWindow();
 	void Paint(Draw& w) {
         w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
@@ -110,7 +108,6 @@ public:
 // Products
 struct ProductsWindow : WithProductsWindowLayout<TopWindow> {
 public:
-	typedef ProductsWindow CLASSNAME;
 	ProductsWindow();
 	SqlCtrls ctrls;
 	
@@ -128,7 +125,6 @@ public:
 	IdCtrls ctrls;
 	
 	Configs myConfig;
-	typedef CompanyInfoWindow CLASSNAME;
 	CompanyInfoWindow();
 	void Paint(Draw& w) {
         w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
@@ -139,6 +135,7 @@ public:
 
 class Invoices : public WithInvoicesLayout<TopWindow> {
 	Configs myConfig;
+	
 	CustomersWindow	cwin;
 	ProductsWindow prodwin;
 	CreateInvoiceWindow createinvoicewin;
@@ -152,8 +149,6 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 	MenuBar		mainmenu;
 	String version = "1.1.0.0";
 public:
-	typedef Invoices CLASSNAME;
-	
 	Invoices();
 	void Paint(Draw& w) {
 		w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here

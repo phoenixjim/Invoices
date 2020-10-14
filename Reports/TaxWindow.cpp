@@ -20,7 +20,7 @@ TaxWindow::TaxWindow()
 	// Anonymous by default, hide names
 	anon.Set ( 1 );
 
-	anon.WhenAction << THISBACK ( anonChanged );
+	anon.WhenAction << [=] { anonChanged(); };
 	ok << [=] { okPressed();
 			  };
 	cancel << [=] { cancelPressed();

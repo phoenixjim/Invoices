@@ -10,7 +10,6 @@ class AddLineItem : public WithLineItemAddLayout<TopWindow> {
 	void AdjustPrice();
 public:
 	SqlCtrls ctrls;
-	typedef AddLineItem CLASSNAME;
 	AddLineItem();
 };
 

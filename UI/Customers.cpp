@@ -6,7 +6,6 @@
 class AddCustomer : public WithCustomerAddLayout<TopWindow> {
 	public:
 		SqlCtrls ctrls;
-		typedef AddCustomer CLASSNAME;
 		AddCustomer();
 };
 
@@ -28,12 +27,8 @@ AddCustomer::AddCustomer()
 
 CustomersWindow::CustomersWindow() {
 	CtrlLayout(*this, "Customers");
-	// Major assistance on the following code from 
-	btnNewCustomer << [=] { AddNewCustomer(); }; // THISBACK is not needed in c++11 world and could be replaced with lambda.
-	/*
-	btnSearchCustomer << [=] { btnSearchCustomerClick(); }; // assisted by forum user Klugier
-	btnUpdateCustomer << [=] { btnUpdateCustomerClick(); };
-	*/
+	// assisted by forum user Klugier
+	btnNewCustomer << [=] { AddNewCustomer(); };
 	
 	CustArray.SetTable(CUSTOMERS, CUST_ID);
 		
