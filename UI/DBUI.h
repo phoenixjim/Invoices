@@ -136,7 +136,7 @@ public:
 class Invoices : public WithInvoicesLayout<TopWindow> {
 	Configs myConfig;
 	
-	CustomersWindow	cwin;
+	CustomersWindow	custwin;
 	ProductsWindow prodwin;
 	CreateInvoiceWindow createinvoicewin;
 	TaxWindow taxreportwin;

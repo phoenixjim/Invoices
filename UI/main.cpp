@@ -6,9 +6,9 @@
 void Invoices::MainMenu(Bar& bar)
 {
 	bar.Add(t_("Customers"),  [=]{
-		if(!cwin.IsOpen()) {
-			cwin.CustArray.ReQuery();
-		 	cwin.Open(this); 
+		if(!custwin.IsOpen()) {
+			custwin.CustArray.ReQuery();
+		 	custwin.Open(this); 
 			}
 		});
 
