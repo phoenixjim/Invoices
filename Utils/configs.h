@@ -24,8 +24,7 @@ public:
 	void 	Populate();
 	void	SelectDB();
 	void	SaveSettings();
-	void	CreateSample();
-	
+
 	FileSel	selectdbwin;
 
 };

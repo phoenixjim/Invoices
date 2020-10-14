@@ -123,7 +123,7 @@ void LineItemsWindow::EditRow()
 
 	SQL * Select(dlg.ctrls).From(LINEITEMS).Where(LINEITEM_ID == idNum);
 	
-	dlg.txtInvoiceNum.Enable(false);
+	dlg.txtInvoiceNum.WantFocus(false).Enable(false);
 	if(!dlg.ctrls.Fetch(SQL))
 		return;
 	
@@ -146,7 +146,7 @@ void LineItemsWindow::AddNewItem()
 {
     AddLineItem dlg;
     dlg.Title("New Item");
-    dlg.txtInvoiceNum.Enable(true);
+    dlg.txtInvoiceNum.WantFocus(true).Enable(true);
     Sql tempSql;
 	tempSql.Execute("Select MAX(INVOICENUMBER) From INVOICES Where STATUS == 1");
 	tempSql.Fetch();

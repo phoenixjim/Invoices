@@ -31,7 +31,11 @@ void Invoices::MainMenu(Bar& bar)
 
 void Invoices::TransactionsMenu(Bar& bar)
 {
-	bar.Add(t_("Create Invoice"), [=]{ if(!createinvoicewin.IsOpen()) 	createinvoicewin.Open(this); });
+	bar.Add(t_("Create Invoice"), [=]{ if(!createinvoicewin.IsOpen()) {
+		createinvoicewin.ActiveFocus(createinvoicewin.cbCustomers);
+		createinvoicewin.Open(this);
+		}
+	});
 	bar.Add(t_("List Invoices"), [=]{
 		if(!invoiceswin.IsOpen())	{
 			invoiceswin.InvoicesArray.ReQuery();

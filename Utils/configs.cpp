@@ -27,10 +27,6 @@ void Configs::SelectDB()
 	data.dbfile = selectdbwin.Get();
 	SaveSettings();
 }
-void Configs::CreateSample()
-{
-	// Sql sql;
-}
 
 void Configs::Populate()
 {
