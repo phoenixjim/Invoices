@@ -67,7 +67,7 @@ void ProductsWindow::EditRow() // CONTINUE HERE
 void ProductsWindow::AddNewProduct()
 {
 	AddProduct dlg("Add Product");
-	if(dlg.Execute() != IDOK)
+	if(dlg.Run() != IDOK)
 		return;
 	SQL * dlg.ctrls.Insert(PRODUCTS);
 

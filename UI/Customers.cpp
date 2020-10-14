@@ -74,7 +74,7 @@ void CustomersWindow::AddNewCustomer()
 {
     AddCustomer dlg;
     dlg.Title("New Customer");
-    if(dlg.Execute() != IDOK)
+    if(dlg.Run() != IDOK)
         return;
     SQL * dlg.ctrls.Insert(CUSTOMERS);
     int id = SQL.GetInsertedId();
