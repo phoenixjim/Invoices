@@ -124,6 +124,9 @@ void LineItemsWindow::EditRow()
 	SQL * Select(dlg.ctrls).From(LINEITEMS).Where(LINEITEM_ID == idNum);
 	
 	dlg.txtInvoiceNum.WantFocus(false).Enable(false);
+    dlg.txtPrice.SetData(0.0);
+    dlg.txtQty.SetData(0);
+    dlg.txtTotal.SetData(0.0);
 	if(!dlg.ctrls.Fetch(SQL))
 		return;
 	
@@ -156,7 +159,10 @@ void LineItemsWindow::AddNewItem()
 	tempSql.Fetch();
 	int minInv = (int)tempSql[0];
     dlg.txtInvoiceNum.Max(maxInv).Min(minInv).SetData(maxInv);
-    if(dlg.Execute() != IDOK)
+    dlg.txtPrice.SetData(0.0);
+    dlg.txtQty.SetData(0);
+    dlg.txtTotal.SetData(0.0);
+    if(dlg.Run() != IDOK)
         return;
 
 	long invoice = (int64)dlg.txtInvoiceNum.GetData();
@@ -175,17 +181,6 @@ void LineItemsWindow::AddNewItem()
 
 void LineItemsWindow::DeleteItem()
 {
-	/*
-	1	verify item is selected
-	2	prompt for confirmation
-	3	get invoice number
-	4	are there other items for this invoice?
-	5		No - prompt to confirm as this will void invoice
-	5b			if yes, also void invoice
-	6		Yes - delete item without additional confirmation
-	7		update invoice totals
-	8		requery item list
-	*/
 	int idNum;
 	if(!LineItemsArray.IsCursor())
 		return;
