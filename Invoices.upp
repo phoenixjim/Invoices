@@ -11,6 +11,8 @@ file
 	UI/Company.cpp,
 	UI/CreateInvoice.cpp,
 	UI/DBUI.h,
+	Invoices.ico,
+	Invoices.rc,
 	UI/Customers.cpp,
 	UI/Invoices.cpp,
 	UI/LineItems.cpp,

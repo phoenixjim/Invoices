@@ -125,7 +125,7 @@ void IncomeWindow::CreateReport(String start, String end)
 		Report report;
 		report.Header ( headertext ).Footer ( "Page $$P" );
 		report << taxQTF;
-
+		// QtfReport((Size)(216,279), taxQTF, "", true); // no difference
 		Perform ( report );
 	}
 }
