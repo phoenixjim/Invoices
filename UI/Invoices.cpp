@@ -132,26 +132,10 @@ void InvoicesWindow::btnApplyPaymentClicked()
 		status = (round(SQL[GRANDTOTAL], 2) <= round((double)edbPayment.GetData(), 2)) ? 2 : 1;
 	}
 	SQL * SqlUpdate(INVOICES)(AMTPAID,round((double)edbPayment.GetData(), 2))(DATEPAID,SQL[TRANSACTIONDATE])(STATUS, status).Where(INVOICE_ID == thisInvoice);
-	InvoicesArray.ReQuery();   
+	InvoicesArray.ReQuery();
+	InvoicesArray.FindSetCursor(thisInvoice);
 }
-/*
-void InvoicesWindow::btnEditClicked()
 
-{
-	// Edit create and delete line items
-	if(!InvoicesArray.IsCursor())
-		return;
-	int thisInvoice = InvoicesArray.GetKey();
-	if (IsNull(thisInvoice))
-		return;
-	Sql iSql;
-	iSql * Select(STATUS).From(INVOICES).Where(INVOICE_ID == thisInvoice);
-	if ((int)iSql[STATUS] < 2) {
-		CreateInvoiceWindow editInvoice(thisInvoice);
-		editInvoice.Run(true);
-	}
-}
-*/
 void InvoicesWindow::btnVoidClicked()
 {
 	if(!InvoicesArray.IsCursor())
@@ -172,14 +156,31 @@ void InvoicesWindow::btnVoidClicked()
 		Sql li;
 		li * Delete(LINEITEMS).Where(INVOICEIDNUMBER == (int64)invoice);
 		InvoicesArray.ReQuery();
+		InvoicesArray.FindSetCursor(thisInvoice);
 	}
 }
 
 void InvoicesWindow::btnFixDateClicked()
 {
 	if (IsNull(ddFixDate)) return;
-	PromptOK(" Haven't Decided Yet ");
+	
+	if(!InvoicesArray.IsCursor())
+		return;
+	int thisInvoice = InvoicesArray.GetKey();
+	if (IsNull(thisInvoice))
+		return;
+	Sql inv;
+	inv * SelectAll().From(INVOICES).Where(INVOICE_ID == thisInvoice);
+	inv.Fetch();
+	inv[TRANSACTIONDATE] = ddFixDate.GetData();
+	if (!IsNull(inv[DATEPAID])) 
+		inv * SqlUpdate(INVOICES)(TRANSACTIONDATE, ddFixDate.GetData())(DATEPAID, ddFixDate.GetData()).Where(INVOICE_ID == thisInvoice);
+	else inv * SqlUpdate(INVOICES)(TRANSACTIONDATE, ddFixDate.GetData()).Where(INVOICE_ID == thisInvoice);
+	
+	InvoicesArray.ReQuery();
+	InvoicesArray.FindSetCursor(thisInvoice);
 }
+
 
 void InvoicesWindow::btnByPaidClicked()
 {
