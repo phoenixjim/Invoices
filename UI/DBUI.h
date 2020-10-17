@@ -81,6 +81,7 @@ struct InvoicesWindow : WithInvoicesWindowLayout<TopWindow> {
 	void btnByDatesClicked();
 	void btnByCustomerClicked();
 	void btnByVoidedClicked();
+	void btnAllClicked();
 		
 public:
 	InvoicesWindow();

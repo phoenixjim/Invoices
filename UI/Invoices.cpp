@@ -14,6 +14,7 @@ InvoicesWindow::InvoicesWindow()
 	btnByDates << [=] { btnByDatesClicked(); };
 	btnByCustomer << [=] { btnByCustomerClicked(); };
 	btnByVoided << [=] { btnByVoidedClicked(); };
+	btnAll << [=] { btnAllClicked(); };
 	
 	InvoicesArray.SetTable ( INVOICES, INVOICE_ID );
 
@@ -185,6 +186,11 @@ void InvoicesWindow::btnFixDateClicked()
 void InvoicesWindow::btnByPaidClicked()
 {
 	InvoicesArray.ReQuery(STATUS == 2);
+}
+
+void InvoicesWindow::btnAllClicked()
+{
+	InvoicesArray.ReQuery(STATUS < 3);
 }
 
 void InvoicesWindow::btnByBalanceDueClicked()
