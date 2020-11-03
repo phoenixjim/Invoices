@@ -1,33 +1,35 @@
 #include "DBUI.h"
 
 CreateInvoiceWindow::CreateInvoiceWindow()
- { 
- 	CtrlLayout(*this, "Create Invoice");
- 	txtTerms.SetText("Due On Receipt");
- 	txtTaxRate.SetData(myConfig.data.taxrate);
- 	pInvoice = 0;
+ {
+	CtrlLayout(*this, "Create Invoice");
+	txtTerms.SetText("Due On Receipt");
+	txtTaxRate.SetData(myConfig.data.taxrate);
+	pInvoice = 0;
 	
 	btnAdd << [=] { AddItem(); };
 	btnDelete << [=] { ClearItem(); };
 	ok << [=] { SaveInvoice(); };
 	btnSubtract << [=] { AdjustPrice(); };
 	btnPrintSave << [=] { PrintInvoice(); };
- 	cancel << [=] { CancelInvoice(); };
- 	btnUpdate.Hide();
-	
- 	arrayLineItems.AddColumn(PRODUCTNAME, "Name", 40);
- 	arrayLineItems.AddColumn(DESCRIPTION, "Description", 80);
- 	arrayLineItems.AddColumn(PRICE, "Price", 20).SetConvert(ConvDouble());
- 	arrayLineItems.AddColumn(QTY, "Qty", 15);
- 	arrayLineItems.AddColumn(ISTAXABLE, "Tax?", 15);
- 	arrayLineItems.AddColumn(TOTAL, "Total", 20).SetConvert(ConvDouble());
- 	arrayLineItems.Appending() .Removing();
+	cancel << [=] { CancelInvoice(); };
+	btnUpdate.Hide();
+
+	arrayLineItems.AddColumn(PRODUCTNAME, "Name", 40);
+	arrayLineItems.AddColumn(DESCRIPTION, "Description", 80);
+	arrayLineItems.AddColumn(PRICE, "Price", 20).SetConvert(ConvDouble());
+	arrayLineItems.AddColumn(QTY, "Qty", 15);
+	arrayLineItems.AddColumn(ISTAXABLE, "Tax?", 15);
+	arrayLineItems.AddColumn(TOTAL, "Total", 20).SetConvert(ConvDouble());
+	arrayLineItems.Appending() .Removing();
  
- 	SQL * Select(CUST_ID, CUSTNAME).From(CUSTOMERS);
- 	while (SQL.Fetch())
- 	{
- 		cbCustomers.Add(SQL[CUST_ID], SQL[CUSTNAME]);
- 	}
+	optProdTaxable.WantFocus(true);
+	
+	SQL * Select(CUST_ID, CUSTNAME).From(CUSTOMERS);
+	while (SQL.Fetch())
+	{
+		cbCustomers.Add(SQL[CUST_ID], SQL[CUSTNAME]);
+	}
 	
 	cbProducts.Add("Service");
 	cbProducts.Add("Part");
@@ -42,7 +44,7 @@ CreateInvoiceWindow::CreateInvoiceWindow()
 	cbCustomers.WhenAction << [=] { CustChanged(); };
 	cbProducts.WhenAction << [=] { ProdChanged(); };
 	dtpBillDate.SetConvert(DateIntConvert());
- }
+}
  
 void CreateInvoiceWindow::CustChanged()
 {
@@ -89,6 +91,7 @@ void CreateInvoiceWindow::SaveInvoice()
 		return;
 	}
 	double nonTaxable = 0.0, taxable = 0.0, salestax = 0.0, grandTotal = 0.0;
+	double nonTaxableTotal = 0.0, taxableTotal = 0.0;
 
 	for (int i = 0; i < idNum; i++)
 	{
@@ -96,8 +99,10 @@ void CreateInvoiceWindow::SaveInvoice()
 			taxable = round((double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY), 2);
 		}
 		else 	nonTaxable = round((double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY), 2);
+		taxableTotal += taxable;
+		nonTaxableTotal += nonTaxable;
+		nonTaxable = taxable = 0.0;
 		
-		grandTotal += salestax + nonTaxable + taxable;
 		SQL * Insert(LINEITEMS)
 		(PRODUCTNAME, arrayLineItems.Get(i,PRODUCTNAME))
 		(DESCRIPTION, arrayLineItems.Get(i, DESCRIPTION))
@@ -107,7 +112,9 @@ void CreateInvoiceWindow::SaveInvoice()
 		(INVOICEIDNUMBER, (int64)txtInvoice)
 		(ISTAXABLE, (int)arrayLineItems.Get(i, ISTAXABLE));
 	}
-	if (optCustTaxable.Get() == true) salestax = round(taxable * (double)txtTaxRate, 2);
+	
+	if (optCustTaxable.Get() == true) salestax = round(taxableTotal * (double)txtTaxRate, 2);
+	grandTotal = salestax + nonTaxableTotal + taxableTotal;
 	int custId = 1;
 	custId += cbCustomers.GetIndex();
 
@@ -116,8 +123,8 @@ void CreateInvoiceWindow::SaveInvoice()
 		(CUSTOMERID, custId)
 		(TRANSACTIONDATE, dtpBillDate.GetData())
 		(TERMS, ~txtTerms)
-		(NONTAXABLESUB, (double)nonTaxable)
-		(TAXABLESUB, (double)taxable)
+		(NONTAXABLESUB, (double)nonTaxableTotal)
+		(TAXABLESUB, (double)taxableTotal)
 		(TAX, (double)salestax)
 		(GRANDTOTAL, (double)grandTotal)
 		(AMTPAID, 0.0)

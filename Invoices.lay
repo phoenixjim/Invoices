@@ -46,7 +46,7 @@ LAYOUT(CreateInvoiceWindowLayout, 935, 478)
 	ITEM(EditDate, dtpBillDate, LeftPosZ(436, 104).TopPosZ(24, 19))
 	ITEM(EditDouble, txtTaxRate, WantFocus(false).LeftPosZ(652, 36).TopPosZ(24, 19))
 	ITEM(EditString, txtTerms, SetFont(SansSerifZ(12)).WantFocus(false).LeftPosZ(736, 148).TopPosZ(24, 19))
-	ITEM(Option, optProdTaxable, SetLabel(t_("Taxable?")).WantFocus(true).LeftPosZ(708, 60).TopPosZ(120, 16))
+	ITEM(Option, optProdTaxable, SetLabel(t_("Taxable?")).LeftPosZ(708, 60).TopPosZ(120, 16))
 	ITEM(DropList, cbProducts, LeftPosZ(76, 108).TopPosZ(120, 19))
 	ITEM(EditString, txtDescription, SetFont(SansSerifZ(12)).LeftPosZ(280, 172).TopPosZ(120, 19))
 	ITEM(EditDouble, txtPrice, LeftPosZ(512, 64).TopPosZ(120, 19))
@@ -156,5 +156,20 @@ LAYOUT(LineItemAddLayout, 292, 168)
 	ITEM(Option, optProdTaxable, SetLabel(t_("Taxable?")).LeftPosZ(8, 60).TopPosZ(112, 16))
 	ITEM(Button, ok, SetLabel(t_("Save")).SetFont(SansSerifZ(12)).LeftPosZ(8, 56).TopPosZ(148, 15))
 	ITEM(Button, cancel, SetLabel(t_("Cancel")).LeftPosZ(228, 56).TopPosZ(148, 15))
+END_LAYOUT
+
+LAYOUT(AddTaxRatesLayout, 400, 108)
+	ITEM(Label, dv___0, SetLabel(t_("Rate:")).SetFont(SansSerifZ(12)).LeftPosZ(16, 40).TopPosZ(16, 19))
+	ITEM(Label, dv___1, SetLabel(t_("Locality:")).SetFont(SansSerifZ(12)).LeftPosZ(16, 52).TopPosZ(44, 19))
+	ITEM(EditDouble, txtRate, LeftPosZ(76, 64).TopPosZ(16, 19))
+	ITEM(EditString, txtLocality, LeftPosZ(76, 308).TopPosZ(44, 19))
+	ITEM(Button, cancel, SetLabel(t_("Cancel")).LeftPosZ(280, 56).TopPosZ(80, 15))
+	ITEM(Button, ok, SetLabel(t_("Save")).LeftPosZ(72, 56).TopPosZ(80, 15))
+END_LAYOUT
+
+LAYOUT(ListTaxRatesLayout, 508, 196)
+	ITEM(SqlArray, dv___0, Inserting(true).Removing(true).LeftPosZ(16, 480).TopPosZ(12, 140))
+	ITEM(Button, btnAddRate, SetLabel(t_("Add New")).LeftPosZ(132, 56).TopPosZ(172, 15))
+	ITEM(Button, btnDelRate, SetLabel(t_("Delete")).LeftPosZ(308, 56).TopPosZ(172, 15))
 END_LAYOUT
 
