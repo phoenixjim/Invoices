@@ -32,6 +32,7 @@ InvoicesWindow::InvoicesWindow()
 	InvoicesArray.AddColumn ( STATUS, "Status" );
 
 	InvoicesArray.SetOrderBy ( Descending(INVOICENUMBER) );
+	InvoicesArray.WhenLeftDouble = [=] { btnPrintClicked(); };
 	
 	ddFixDate.SetConvert ( DateIntConvert() );
 	ddRange1.SetConvert ( DateIntConvert() );
