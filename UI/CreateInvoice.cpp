@@ -36,6 +36,8 @@ CreateInvoiceWindow::CreateInvoiceWindow()
 	cbProducts.Add("Tip");
 	cbProducts.Add("Refund");
 	cbProducts.Add("Note");
+	cbProducts.Add("Weekly");
+	cbProducts.Add("Daily");
 
 	SQL.Execute("Select MAX(INVOICENUMBER) From INVOICES");
 	SQL.Fetch();
@@ -69,6 +71,18 @@ void CreateInvoiceWindow::ProdChanged()
 		case Gift:
 		case Note:
 			optProdTaxable.Set(false);
+			break;
+		case Weekly:
+			optProdTaxable.Set(false);
+			txtPrice.SetText("100");
+			txtDescription.SetText("Weekly Fee");
+			txtQty.SetText("1");
+			break;
+		case Daily:
+			optProdTaxable.Set(false);
+			txtPrice.SetText("140");
+			txtDescription.SetText("Per Diem");
+			txtQty.SetText("1");
 			break;
 	}
 }

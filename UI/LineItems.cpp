@@ -32,6 +32,8 @@ AddLineItem::AddLineItem()
 	cbProducts.Add("Tip");
 	cbProducts.Add("Refund");
 	cbProducts.Add("Note");
+	cbProducts.Add("Weekly");
+	cbProducts.Add("Daily");
 	Sql tempSql;
 	tempSql.Execute("Select MAX(INVOICENUMBER) From INVOICES");
 	tempSql.Fetch();
@@ -79,6 +81,8 @@ void AddLineItem::ProdChanged()
 			break;
 			
 		case Gift:
+		case Weekly:
+		case Daily:
 			optProdTaxable.Set(false);
 			break;
 	}

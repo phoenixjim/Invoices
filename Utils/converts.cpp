@@ -81,6 +81,12 @@ Value ConvLineItemCls::Format ( const Value &q ) const
 		case 5:
 			return "Note";
 			break;
+		case 6:
+			return "Weekly";
+			break;
+		case 7:
+			return "Daily";
+			break;
 		default:
 			return "Service";
 	}
@@ -100,6 +106,10 @@ Value ConvLineItemCls::Scan(const Value &q) const
 		return 4;
 	else if (text.IsEqual("Note"))
 		return 5;
+	else if (text.IsEqual("Weekly"))
+		return 6;
+	else if (text.IsEqual("Daily"))
+		return 7;
 	else return 1;
 }
 

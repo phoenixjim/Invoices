@@ -20,16 +20,11 @@ enum pNames
 	Part,
 	Gift,
 	Refund,
-	Note
+	Note,
+	Weekly,
+	Daily
 };
-/*
-enum Status
-	{
-	Void = 0,
-	Unpaid,
-	PaidInFull
-};
-*/
+
 //Customers
 struct CustomersWindow : WithCustomersWindowLayout<TopWindow> {
 	Configs	myConfig;
