@@ -6,7 +6,7 @@ CreateInvoiceWindow::CreateInvoiceWindow()
  	txtTerms.SetText("Due On Receipt");
  	txtTaxRate.SetData(myConfig.data.taxrate);
  	pInvoice = 0;
-	
+	optProdTaxable.WantFocus(true);
 	btnAdd << [=] { AddItem(); };
 	btnDelete << [=] { ClearItem(); };
 	ok << [=] { SaveInvoice(); };
