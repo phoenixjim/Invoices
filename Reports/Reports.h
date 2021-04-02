@@ -53,13 +53,7 @@ struct ProfitLossWindow : WithProfitLossWindowLayout<TopWindow> {
 	Date prevDateStart, prevDateEnd;
 	String prevStart, prevEnd;
 
-	double nowTaxable = 0.0, nowNontaxable = 0.0, nowParts = 0.0,
-		thenTaxable = 0.0, thenNontaxable = 0.0, thenParts = 0.0,
-		thenGross = 0.0, thenNet = 0.0, partsChange = 0.0, partsPercent = 0.0,
-		grossChange = 0.0, grossPercent = 0.0, netChange = 0.0, netPercent = 0.0;
-	
-
-
+	void cleanup();
 	void cancelPressed();
 	void okPressed();
 	void CreateReport(String start, String end);

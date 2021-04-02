@@ -34,7 +34,7 @@ LAYOUT(ProfitLossWindowLayout, 968, 100)
 	ITEM(Upp::Button, cancel, SetLabel(t_("Cancel")).SetFont(SansSerifZ(12)).LeftPosZ(88, 56).TopPosZ(80, 15))
 	ITEM(Upp::SqlArray, sqlTaxReport, LeftPosZ(252, 708).TopPosZ(8, 76))
 	ITEM(Upp::Button, btnReport, SetLabel(t_("Create Report")).LeftPosZ(160, 80).TopPosZ(8, 76))
-	ITEM(Upp::Label, dv___8, SetLabel(t_("Year")).SetFont(SansSerifZ(12)).LeftPosZ(8, 32).TopPosZ(56, 16))
-	ITEM(Upp::EditIntSpin, dateYear, Min(1).NotNull(true).MaxChars(4).LeftPosZ(44, 104).TopPosZ(52, 19))
+	ITEM(Upp::Label, dv___8, SetLabel(t_("Years between")).SetFont(SansSerifZ(12)).LeftPosZ(8, 92).TopPosZ(56, 16))
+	ITEM(Upp::EditIntSpin, dateYear, Min(1).NotNull(true).MaxChars(4).LeftPosZ(104, 44).TopPosZ(52, 19))
 END_LAYOUT
 

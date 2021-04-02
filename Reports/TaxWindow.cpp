@@ -13,7 +13,7 @@ TaxWindow::TaxWindow()
 	sqlTaxReport.AddColumn ( NONTAXABLESUB, "Non-Taxable", 80 ).SetConvert ( ConvDouble() ).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight();
 	sqlTaxReport.AddColumn ( TAX, "Sales Tax", 80 ).SetConvert ( ConvDouble() ).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight();
 	sqlTaxReport.AddColumn ( COST, "My Parts Cost", 80 ).SetConvert ( ConvDouble() ).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight(); // PARTS COST FOR THIS INVOICE
-	sqlTaxReport.AddColumn ( GRANDTOTAL, "Total", 80 ).SetConvert ( ConvDouble() ).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight();
+	sqlTaxReport.AddColumn ( AMTPAID, "Total", 80 ).SetConvert ( ConvDouble() ).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight();
 	
 	dateStart.SetConvert ( DateIntConvert() );
 	dateEnd.SetConvert ( DateIntConvert() );
@@ -70,7 +70,7 @@ void TaxWindow::okPressed()
 						   round ( sql[NONTAXABLESUB], 2 ),
 						   round ( sql[TAX], 2 ),
 						   GetPartsCost ( sql[INVOICENUMBER] ),
-						   round ( sql[GRANDTOTAL], 2 ));
+						   round ( sql[AMTPAID], 2 ));
 	}
 
 }
@@ -104,7 +104,7 @@ void TaxWindow::CreateReport(String start, String end)
 				Format("%2!nl", sqlTaxReport.Get ( i, NONTAXABLESUB )) << ":: " << 
 				Format("%2!nl", sqlTaxReport.Get ( i, TAX )) << ":: " << 
 				Format("%2!nl", (IsNull(sqlTaxReport.Get ( i, COST ))) ? 0.0 : ( double ) sqlTaxReport.Get ( i, COST )) << ":: " << 
-				Format("%2!nl", sqlTaxReport.Get ( i, GRANDTOTAL ));
+				Format("%2!nl", sqlTaxReport.Get ( i, AMTPAID ));
 			if ((i % 2 == 0 )&& (i < rowcount - 1)) taxQTF << " ::@L ][+40> ";
 			else if (i < rowcount - 1) taxQTF << " ::@W ][+40> ";
 			else taxQTF << ":: ]";
@@ -112,7 +112,7 @@ void TaxWindow::CreateReport(String start, String end)
 			sumTaxable += ( double ) sqlTaxReport.Get ( i, TAXABLESUB );
 			sumNontaxable += ( double ) sqlTaxReport.Get ( i, NONTAXABLESUB );
 			sumTax += ( double ) sqlTaxReport.Get ( i, TAX );
-			sumTotal += ( double ) sqlTaxReport.Get ( i, GRANDTOTAL );
+			sumTotal += ( double ) sqlTaxReport.Get ( i, AMTPAID );
 			sumParts += (IsNull(sqlTaxReport.Get ( i, COST ))) ? 0.0 : ( double ) sqlTaxReport.Get ( i, COST );
 		}
 
