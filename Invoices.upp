@@ -16,7 +16,7 @@ file
 	UI/Customers.cpp,
 	UI/Invoices.cpp,
 	UI/LineItems.cpp,
-	Invoices.lay,
+	Invoices.lay readonly,
 	Utils/configs.cpp,
 	Utils/configs.h,
 	Utils/converts.cpp,

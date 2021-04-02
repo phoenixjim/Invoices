@@ -34,10 +34,14 @@ CreateInvoiceWindow::CreateInvoiceWindow()
 	cbProducts.Add("Tip");
 	cbProducts.Add("Refund");
 	cbProducts.Add("Note");
+	cbProducts.Add("Weekly");
+	cbProducts.Add("Daily");
 
 	SQL.Execute("Select MAX(INVOICENUMBER) From INVOICES");
 	SQL.Fetch();
+	
 	nextInvoice = (int)SQL[0] + 1; // stol(SQL[0].ToString().ToStd()) + 1;
+	if (nextInvoice < 1) nextInvoice = 1;
 	txtInvoice = nextInvoice; // .SetText(IntStr64(nextInvoice));
 	cbCustomers.WhenAction << [=] { CustChanged(); };
 	cbProducts.WhenAction << [=] { ProdChanged(); };
@@ -68,6 +72,19 @@ void CreateInvoiceWindow::ProdChanged()
 		case Note:
 			optProdTaxable.Set(false);
 			break;
+		case Weekly:
+			optProdTaxable.Set(false);
+			txtDescription.SetText("Weekly Salary");
+			txtPrice.SetText("100");
+			txtQty.SetText("1");
+			break;
+		case Daily:
+			optProdTaxable.Set(false);
+			txtDescription.SetText("Per Diem");
+			txtPrice.SetText("140");
+			txtQty.SetText("1");
+			break;
+			
 	}
 }
 
@@ -97,7 +114,6 @@ void CreateInvoiceWindow::SaveInvoice()
 		}
 		else 	nonTaxable = round((double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY), 2);
 		
-		grandTotal += salestax + nonTaxable + taxable;
 		SQL * Insert(LINEITEMS)
 		(PRODUCTNAME, arrayLineItems.Get(i,PRODUCTNAME))
 		(DESCRIPTION, arrayLineItems.Get(i, DESCRIPTION))
@@ -108,6 +124,9 @@ void CreateInvoiceWindow::SaveInvoice()
 		(ISTAXABLE, (int)arrayLineItems.Get(i, ISTAXABLE));
 	}
 	if (optCustTaxable.Get() == true) salestax = round(taxable * (double)txtTaxRate, 2);
+	else salestax = 0.0;
+	
+	grandTotal += salestax + nonTaxable + taxable;
 	int custId = 1;
 	custId += cbCustomers.GetIndex();
 
@@ -124,6 +143,7 @@ void CreateInvoiceWindow::SaveInvoice()
 		(STATUS, 1);
 	pInvoice = SQL.GetInsertedId();
 	ClearItem();
+	txtInvoice = StrInt(txtInvoice.GetData().ToString()) + 1;
 }
 
 void CreateInvoiceWindow::PrintInvoice()
@@ -220,6 +240,7 @@ void CreateInvoiceWindow::ClearItem()
 	txtPrice.SetText("");
 	txtQty.SetText("");
 	cbProducts.SetIndex(0);
+	cbCustomers.SetIndex(4);
 	optProdTaxable.Set(0);
 	arrayLineItems.Clear();
 	CalcInvoiceTotal();
@@ -252,6 +273,8 @@ void CreateInvoiceWindow::CalcInvoiceTotal()
 		else 	nonTaxable += round((double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY), 2);
 	}
 	if (optCustTaxable.Get() == true) salestax = round( taxable * txtTaxRate, 2);
+	else salestax = 0.0;
+	
 	grandtotal = nonTaxable + taxable + salestax;
 	txtNonTaxable.SetText(Format("%2!nl",nonTaxable)); // .SetData
 	txtTaxable.SetText(Format("%2!nl",taxable));

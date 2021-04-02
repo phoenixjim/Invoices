@@ -11,6 +11,10 @@ ProfitLossWindow::ProfitLossWindow()
 	sqlTaxReport.AddColumn("Change", 50);
 	sqlTaxReport.AddColumn("Percent", 50);
 	
+	dateYear.SetText("1");
+	Date thisdate = GetSysDate();
+	
+	dateYear.Max((int)thisdate.year - 2018);
 	dateStart.SetConvert(DateIntConvert());
 	dateEnd.SetConvert(DateIntConvert());
 	
@@ -28,9 +32,9 @@ void ProfitLossWindow::okPressed()
 {	// generate table
 	// get needed data:
 	if (IsNull(dateStart) || IsNull(dateEnd)) return;
-	
-	prevDateStart = Date(1969, 1, 1) + StrInt(~dateStart.GetData());
-	prevDateEnd = Date(1969, 1, 1) + StrInt(~dateEnd.GetData());
+	int yearIndex = (dateYear.IsNotNull() ? StrInt(dateYear.GetData().ToString()) : 1);
+	prevDateStart = Date(1970-yearIndex, 1, 1) + StrInt(~dateStart.GetData());
+	prevDateEnd = Date(1970-yearIndex, 1, 1) + StrInt(~dateEnd.GetData());
 
 	prevStart = IntStr(prevDateStart.Get() - Date(1970, 1, 1).Get());
 	prevEnd   = IntStr(prevDateEnd.Get() - Date(1970, 1, 1).Get());
@@ -91,8 +95,9 @@ void ProfitLossWindow::CreateReport( String start, String end)
 	String plQTF;
 	String s = ::Format(Date( 1970, 1, 1) + StrInt(start));
 	String e = ::Format(Date( 1970, 1, 1) + StrInt(end));
-	prevDateStart = Date(1969, 1, 1) + StrInt(~dateStart.GetData());
-	prevDateEnd = Date(1969, 1, 1) + StrInt(~dateEnd.GetData());
+	int yearIndex = (dateYear.IsNotNull() ? StrInt(dateYear.GetData().ToString()) : 1);
+	prevDateStart = Date(1970-yearIndex, 1, 1) + StrInt(~dateStart.GetData());
+	prevDateEnd = Date(1970-yearIndex, 1, 1) + StrInt(~dateEnd.GetData());
 	
 	String header = "[+40< Profit / Loss between " << s << " to " << e << " and " << prevDateStart << " to " << prevDateEnd << " for " << myConfig.data.companyname << "]";
 

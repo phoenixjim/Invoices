@@ -20,7 +20,9 @@ enum pNames
 	Part,
 	Gift,
 	Refund,
-	Note
+	Note,
+	Weekly,
+	Daily
 };
 /*
 enum Status
