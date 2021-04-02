@@ -119,10 +119,10 @@ void TaxWindow::CreateReport(String start, String end)
 		if (anon.Get() == 1)
 			taxQTF << "[+40>* :: :: :: :: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total:: ][+60>* :: Totals:: :: :: ";
 		else taxQTF << "[+40>* :: :: :: :: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total:: ][+60>* :: Totals:: :: :: ";
-		double income1040 = sumTaxable + sumNontaxable;
+		// double income1040 = sumTaxable + sumNontaxable;
 		taxQTF << Format("%2!nl", sumTaxable) << ":: " << Format("%2!nl", sumNontaxable) << ":: " << 
 			Format( "%2!nl", sumTax ) << ":: " << Format("%2!nl", sumParts) << ":: " << Format("%2!nl", sumTotal) <<  "][+60>* :: Fed/State Income :: :: :: :: " << 
-			Format( "%2!nl", income1040 ) << ":: :: ] }}";
+			Format( "%2!nl", sumTotal - sumTax ) << ":: :: ] }}"; // was income1040 instead of sumTotal
 		taxQTF << "[+80< &&Remember to deduct parts cost from income on Schedule C (Not done here) ]";
 		Report report;
 		// report.SetStdFont ( SansSerif (12) );

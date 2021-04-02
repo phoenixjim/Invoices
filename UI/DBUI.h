@@ -150,7 +150,7 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 	LineItemsWindow listlineitemswin;
 	
 	MenuBar		mainmenu;
-	String version = "1.2.1.0";
+	String version = "1.2.1.1";
 public:
 	Invoices();
 	void Paint(Draw& w) {
