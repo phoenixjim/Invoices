@@ -146,13 +146,31 @@ void CreateInvoiceWindow::SaveInvoice()
 	txtInvoice = StrInt(txtInvoice.GetData().ToString()) + 1;
 }
 
+void CreateInvoiceWindow::MarkAsPaid()
+{
+	// int thisInvoice = StrInt(txtInvoice.GetData().ToString()) - 1;
+	
+	if (IsNull(pInvoice) || pInvoice==0)
+		{
+		Exclamation("No invoice number saved!");
+		return;
+	}
+	int status;
+	SQL * SelectAll().From(INVOICES).Where(INVOICE_ID == pInvoice);
+	SQL.Fetch();
+	// edbPayment.SetData(SQL[GRANDTOTAL]);
+	status = 2;
+	
+	SQL * SqlUpdate(INVOICES)(AMTPAID,round((double)SQL[GRANDTOTAL], 2))(DATEPAID,SQL[TRANSACTIONDATE])(STATUS, status).Where(INVOICE_ID == pInvoice);
+}
+
 void CreateInvoiceWindow::PrintInvoice()
 {
 	String invoiceQTF;
 	Report myInvoice;
 	
 	SaveInvoice();
-	
+	MarkAsPaid();
 	// pInvoice = InvoicesArray.GetKey();
 	if (pInvoice == 0 || IsNull(pInvoice))
 	{

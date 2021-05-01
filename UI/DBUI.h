@@ -61,6 +61,7 @@ struct CreateInvoiceWindow : WithCreateInvoiceWindowLayout<TopWindow> {
 	void ClearItem();
 	void DeleteRow();
 	void PrintInvoice();
+	void MarkAsPaid();
 	
 public:
 	CreateInvoiceWindow();
@@ -150,7 +151,8 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 	LineItemsWindow listlineitemswin;
 	
 	MenuBar		mainmenu;
-	String version = "1.2.1.1";
+	// added 'save and mark paid' on create invoice window
+	String version = "1.2.2.0";
 public:
 	Invoices();
 	void Paint(Draw& w) {
