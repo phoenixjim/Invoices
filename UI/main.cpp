@@ -85,6 +85,8 @@ Invoices::Invoices()
 GUI_APP_MAIN
 {
 	Configs myConfig;
+	int unpaid = 0;
+	String notpaid = "";
 
 	Sqlite3Session sqlite3;
 	if(!sqlite3.Open(myConfig.data.dbfile)) {
@@ -93,6 +95,16 @@ GUI_APP_MAIN
 	}
 
 	SQL = sqlite3;
+	SQL * Select(INVOICENUMBER).From(INVOICES).Where(STATUS==1);
+	while(SQL.Fetch()) {
+		unpaid++;
+		notpaid << "Invoice number " << SQL[INVOICENUMBER] << "\n";
+	}
+	if (unpaid > 0)
+	{
+		notpaid << "You have " << IntStr( unpaid ) << " unpaid invoices!";
+		PromptOK(DeQtf(notpaid));
+	}
 	
 	Invoices().Run();
 }
