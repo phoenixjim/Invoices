@@ -26,12 +26,13 @@ AddLineItem::AddLineItem()
 		(ISTAXABLE, optProdTaxable)
 	;
 	// cbProducts.SetConvert(ConvLineItem());
-	
 	cbProducts.Add("Service");
 	cbProducts.Add("Part");
 	cbProducts.Add("Tip");
 	cbProducts.Add("Refund");
 	cbProducts.Add("Note");
+	cbProducts.Add("Weekly");
+	cbProducts.Add("Daily");
 	Sql tempSql;
 	tempSql.Execute("Select MAX(INVOICENUMBER) From INVOICES");
 	tempSql.Fetch();
@@ -79,7 +80,9 @@ void AddLineItem::ProdChanged()
 			break;
 			
 		case Gift:
-			optProdTaxable.Set(false);
+		case Weekly:
+		case Daily:
+				optProdTaxable.Set(false);
 			break;
 	}
 }
@@ -150,11 +153,11 @@ void LineItemsWindow::AddNewItem()
     dlg.Title("New Item");
     dlg.txtInvoiceNum.WantFocus(true).Enable(true);
     Sql tempSql;
-	tempSql.Execute("Select MAX(INVOICENUMBER) From INVOICES Where STATUS == 1");
+	tempSql.Execute("Select MAX(INVOICENUMBER) From INVOICES Where STATUS != 0");
 	tempSql.Fetch();
 	if (IsNull(tempSql[0])) return;
 	int maxInv = (int)tempSql[0];
-	tempSql.Execute("Select MIN(INVOICENUMBER) From INVOICES Where STATUS == 1");
+	tempSql.Execute("Select MIN(INVOICENUMBER) From INVOICES Where STATUS != 0");
 	tempSql.Fetch();
 	int minInv = (int)tempSql[0];
     dlg.txtInvoiceNum.Max(maxInv).Min(minInv).SetData(maxInv);
@@ -163,7 +166,7 @@ void LineItemsWindow::AddNewItem()
     dlg.txtTotal.SetData(0.0);
     if(dlg.Run() != IDOK)
         return;
-
+	
 	long invoice = (int64)dlg.txtInvoiceNum.GetData();
 	tempSql * Select(STATUS).From(INVOICES).Where(INVOICENUMBER == (int64)invoice);
 	if (tempSql[STATUS] == 0) {
