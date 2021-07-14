@@ -134,7 +134,7 @@ void LineItemsWindow::EditRow()
 	
 	Sql invSql;
 	invSql * Select(STATUS, INVOICENUMBER).From(INVOICES).Where(INVOICENUMBER == (int64)dlg.txtInvoiceNum.GetData());
-	if (invSql[STATUS] != 1) return;
+	if (invSql[STATUS] == 0) return;
 	
 	if(dlg.Run() != IDOK)
 		return;
