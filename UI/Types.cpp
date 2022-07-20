@@ -11,30 +11,24 @@ class AddType : public WithTypesAddLayout<TopWindow> {
 AddType::AddType(String title)
 {
 	CtrlLayoutOKCancel(*this, title);
-	ctrls 
-//		(PROD_ID, txtTypeID)
+	ctrls
 		(TYPENUM, txtTypeNo)
 		(TYPENAME, txtTypeName)
-		(TYPEDESC, txtDescription)
+		(TYPEDESCR, txtDescription)
 		(TYPECOST, txtTypeCost)
 		(TYPEQUANT, txtTypeQuantity)
 		(TYPETAXABLE, optTaxable)
 		;
-// 	dtpDatePurchased.SetConvert(DateIntConvert());
 }
 
 TypesWindow::TypesWindow() {
 	CtrlLayout(*this, "Types");	
 	btnAddType << [=] { AddNewType(); };
-	// btnUpdateType << [=] { btnUpdateTypeClick(); };
-	// btnShowAllType << [=] { btnShowAllTypeClick(); };
-	// btnTypeRange << [=] { btnTypeRangeClick(); };
-		
+
 	TypeArray.SetTable(TYPES, TYPENUM);
 		
-	// TypeArray.Join(BOOK_ID, book); // joins id from other db to this id
 	TypeArray.AddColumn(TYPENAME, "Name");
-	TypeArray.AddColumn(TYPEDESC, "Description");
+	TypeArray.AddColumn(TYPEDESCR, "Description");
 	TypeArray.AddColumn(TYPECOST, "Cost").SetConvert(ConvDouble());
 	TypeArray.AddColumn(TYPEQUANT, "Quantity");
 	TypeArray.AddColumn(TYPETAXABLE, "Tax?");

@@ -61,7 +61,7 @@ void CreateInvoiceWindow::ProdChanged()
 	int idNum = cbProducts.GetIndex() + 1;
 	if (IsNull(idNum) || idNum < 1)
 		return;
-	String txt = SQL % Select(TYPEDESC).From(TYPES).Where(TYPENUM == idNum);
+	String txt = "" << SQL % Select(TYPEDESCR).From(TYPES).Where(TYPENUM == idNum);
 	txtDescription.SetText(txt);
 	double price = SQL % Select(TYPECOST).From(TYPES).Where(TYPENUM == idNum);
 	txtPrice.SetText(DblStr(price));
