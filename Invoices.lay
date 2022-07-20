@@ -40,6 +40,11 @@ LAYOUT(ProductsWindowLayout, 580, 500)
 	ITEM(Upp::SqlArray, ProductArray, SetFrame(ThinInsetFrame()).LeftPosZ(4, 572).TopPosZ(4, 440))
 END_LAYOUT
 
+LAYOUT(TypesWindowLayout, 580, 500)
+	ITEM(Upp::Button, btnAddType, SetLabel(t_("Add New Type")).SetFont(SansSerifZ(16)).SetFrame(ButtonFrame()).LeftPosZ(210, 160).TopPosZ(456, 28))
+	ITEM(Upp::SqlArray, TypeArray, SetFrame(ThinInsetFrame()).LeftPosZ(4, 572).TopPosZ(4, 440))
+END_LAYOUT
+
 LAYOUT(CreateInvoiceWindowLayout, 935, 478)
 	ITEM(Upp::DropList, cbCustomers, LeftPosZ(92, 140).TopPosZ(24, 19))
 	ITEM(Upp::Option, optCustTaxable, SetLabel(t_("Taxable?")).LeftPosZ(548, 56).TopPosZ(25, 16))
@@ -137,6 +142,22 @@ LAYOUT(ProductAddLayout, 360, 360)
 	ITEM(Upp::EditDouble, txtProductCost, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(108, 244).TopPosZ(292, 19))
 	ITEM(Upp::Button, ok, SetLabel(t_("Ok")).LeftPosZ(44, 56).TopPosZ(332, 15))
 	ITEM(Upp::Button, cancel, SetLabel(t_("Cancel")).LeftPosZ(252, 56).TopPosZ(332, 15))
+END_LAYOUT
+
+LAYOUT(TypesAddLayout, 360, 260)
+	ITEM(Upp::Label, dv___0, SetLabel(t_("Name")).SetFont(SansSerifZ(16)).LeftPosZ(8, 88).TopPosZ(52, 32))
+	ITEM(Upp::Label, dv___1, SetLabel(t_("Description")).SetFont(SansSerifZ(16)).LeftPosZ(8, 88).TopPosZ(88, 32))
+	ITEM(Upp::Label, dv___2, SetLabel(t_("Quantity")).SetFont(SansSerifZ(16)).LeftPosZ(8, 88).TopPosZ(188, 32))
+	ITEM(Upp::Label, dv___3, SetLabel(t_("Cost")).SetFont(SansSerifZ(16)).LeftPosZ(8, 88).TopPosZ(156, 32))
+	ITEM(Upp::Label, dv___4, SetLabel(t_("Type #")).SetFont(SansSerifZ(16)).LeftPosZ(8, 72).TopPosZ(8, 32))
+	ITEM(Upp::EditIntSpin, txtTypeNo, Min(-1).SetFrame(FieldFrame()).LeftPosZ(104, 80).TopPosZ(16, 19))
+	ITEM(Upp::EditString, txtTypeName, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(108, 244).TopPosZ(56, 19))
+	ITEM(Upp::DocEdit, txtDescription, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(108, 244).TopPosZ(88, 56))
+	ITEM(Upp::EditDouble, txtTypeCost, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(108, 244).TopPosZ(160, 19))
+	ITEM(Upp::EditDouble, txtTypeQuantity, SetFont(SansSerifZ(16)).SetFrame(FieldFrame()).LeftPosZ(108, 244).TopPosZ(192, 19))
+	ITEM(Upp::Button, ok, SetLabel(t_("Ok")).LeftPosZ(44, 56).TopPosZ(232, 15))
+	ITEM(Upp::Button, cancel, SetLabel(t_("Cancel")).LeftPosZ(252, 56).TopPosZ(232, 15))
+	ITEM(Upp::Option, optTaxable, SetLabel(t_("Taxable?")).LeftPosZ(236, 92).TopPosZ(16, 16))
 END_LAYOUT
 
 LAYOUT(LineItemAddLayout, 292, 168)

@@ -19,6 +19,13 @@ void Invoices::MainMenu(Bar& bar)
     		}
     	});
 	
+    bar.Add(t_("Types"), [=]{ 
+    	if(!typewin.IsOpen()) {
+    		typewin.TypeArray.ReQuery();
+    		typewin.Open(this); 
+    		}
+    	});
+	
 	bar.Sub(t_("Transactions"), [=] ( Bar& bar ) {
 		TransactionsMenu( bar ); });
 	bar.Sub(t_("Reports"), [=] (Bar& bar) {

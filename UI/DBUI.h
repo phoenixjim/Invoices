@@ -22,7 +22,8 @@ enum pNames
 	Refund,
 	Note,
 	Weekly,
-	Daily
+	Daily,
+	SemiWeekly
 };
 /*
 enum Status
@@ -122,6 +123,19 @@ public:
 	void EditRow();
 };
 
+// Types
+struct TypesWindow : WithTypesWindowLayout<TopWindow> {
+public:
+	TypesWindow();
+	SqlCtrls ctrls;
+	
+	virtual void Paint(Draw& w) {
+        w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
+    }
+    void AddNewType();
+	void EditRow();
+};
+
 struct CompanyInfoWindow : WithCompanyInfoWindowLayout<TopWindow> {
 	void Save();
 	void Cancel();
@@ -142,6 +156,7 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 	
 	CustomersWindow	custwin;
 	ProductsWindow prodwin;
+	TypesWindow typewin;
 	CreateInvoiceWindow createinvoicewin;
 	TaxWindow taxreportwin;
 	IncomeWindow incomewin;
@@ -152,7 +167,7 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 	
 	MenuBar		mainmenu;
 	// added 'save and mark paid' on create invoice window
-	String version = "1.2.2.1";
+	String version = "1.5.0.0";
 public:
 	Invoices();
 	void Paint(Draw& w) {

@@ -29,14 +29,13 @@ CreateInvoiceWindow::CreateInvoiceWindow()
  		cbCustomers.Add(SQL[CUST_ID], SQL[CUSTNAME]);
  	}
 	
-	cbProducts.Add("Service");
-	cbProducts.Add("Part");
-	cbProducts.Add("Tip");
-	cbProducts.Add("Refund");
-	cbProducts.Add("Note");
-	cbProducts.Add("Weekly");
-	cbProducts.Add("Daily");
-
+	SQL * Select(TYPENUM, TYPENAME).From(TYPES);
+	
+	while (SQL.Fetch())
+	{
+		cbProducts.Add(SQL[TYPENUM], SQL[TYPENAME]);
+	}
+	
 	SQL.Execute("Select MAX(INVOICENUMBER) From INVOICES");
 	SQL.Fetch();
 	
@@ -60,32 +59,15 @@ void CreateInvoiceWindow::CustChanged()
 void CreateInvoiceWindow::ProdChanged()
 {
 	int idNum = cbProducts.GetIndex() + 1;
-	switch(idNum)
-	{
-		case Service:
-		case Part:
-		case Refund:
-			optProdTaxable.Set(true);
-			break;
-			
-		case Gift:
-		case Note:
-			optProdTaxable.Set(false);
-			break;
-		case Weekly:
-			optProdTaxable.Set(false);
-			txtDescription.SetText("Weekly Salary");
-			txtPrice.SetText("100");
-			txtQty.SetText("1");
-			break;
-		case Daily:
-			optProdTaxable.Set(false);
-			txtDescription.SetText("Per Diem");
-			txtPrice.SetText("140");
-			txtQty.SetText("1");
-			break;
-			
-	}
+	if (IsNull(idNum) || idNum < 1)
+		return;
+	String txt = SQL % Select(TYPEDESC).From(TYPES).Where(TYPENUM == idNum);
+	txtDescription.SetText(txt);
+	double price = SQL % Select(TYPECOST).From(TYPES).Where(TYPENUM == idNum);
+	txtPrice.SetText(DblStr(price));
+	double quant = SQL % Select(TYPEQUANT).From(TYPES).Where(TYPENUM == idNum);
+	txtQty.SetText(DblStr(quant));
+	optProdTaxable.Set(SQL % Select(TYPETAXABLE).From(TYPES).Where(TYPENUM == idNum));
 }
 
 void CreateInvoiceWindow::AdjustPrice()

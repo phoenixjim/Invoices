@@ -7,6 +7,7 @@ uses
 file
 	Tables/Invoices.sch,
 	Tables/sqlincludes.h,
+	UI/Types.cpp,
 	UI/Products.cpp,
 	UI/Company.cpp,
 	UI/CreateInvoice.cpp,
