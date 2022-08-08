@@ -75,7 +75,7 @@ void CreateInvoiceWindow::AdjustPrice()
 	if (IsNull(txtPrice)) return;
 	
 	double newPrice = round((double)txtPrice / ( 1 + myConfig.data.taxrate ), 2);
-	txtPrice = newPrice;
+	txtPreTax = newPrice;
 }
 
 void CreateInvoiceWindow::SaveInvoice()
