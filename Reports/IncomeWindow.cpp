@@ -16,6 +16,10 @@ IncomeWindow::IncomeWindow() {
 	dateStart.SetConvert ( DateIntConvert() );
 	dateEnd.SetConvert ( DateIntConvert() );
 
+	Date now = GetSysDate();
+	dateStart.SetText( Format("%", FirstDayOfYear( now ) ).ToString() );
+	dateEnd.SetText( Format("%", now ).ToString() );
+
  	SQL * Select(CUST_ID, CUSTNAME).From(CUSTOMERS);
  	while (SQL.Fetch())
  	{
@@ -105,7 +109,7 @@ void IncomeWindow::CreateReport(String start, String end)
 			prnMoney(sqlTaxReport.Get ( i, COST ));
 			if ((i % 2 == 0 )&& (i < rowcount - 1)) taxQTF << " ::@L ][+80> ";
 			else if (i < rowcount - 1) taxQTF << " ::@W ][+80> ";
-			else taxQTF << ":: ]";
+			else taxQTF << " ] }} {{110:153:205:123:132:123:123:123@L ";
 
 			sumTaxable += (double)sqlTaxReport.Get ( i, TAXABLESUB );
 			sumNontaxable += (double)sqlTaxReport.Get ( i, NONTAXABLESUB );
@@ -113,11 +117,13 @@ void IncomeWindow::CreateReport(String start, String end)
 			sumTotal += (double)sqlTaxReport.Get ( i, AMTPAID );
 			sumParts += (double)sqlTaxReport.Get ( i, COST );
 		}
-		double income1040 = sumTaxable + sumNontaxable - sumTax;
-		taxQTF << "[+70>* :: :: Taxable:: Non-Taxable:: Sales Tax:: Grand Total:: Parts Cost:: ][+80>* Totals:: :: ";
-		taxQTF << prnMoney(sumTaxable) << ":: " << prnMoney(sumNontaxable) << ":: " << 
-			prnMoney( sumTax ) << ":: " << prnMoney( sumTotal) << ":: " << prnMoney( sumParts) <<  "][+70>* :: Fed/State Income :: :: :: :: " << 
-			prnMoney( income1040 ) << ":: :: ] }}";
+
+		taxQTF << "[+70>* Taxable&[ " << prnMoney( sumTaxable) << " ] :: Non-Taxable&[ " << prnMoney( sumNontaxable);
+		taxQTF << " ] :: Sales Tax&[ " << prnMoney( sumTax) <<  " ] :: COGS&[ " << prnMoney( sumParts);
+		taxQTF << " ] :: Grand Total&[ " << prnMoney( sumTotal) << " ] :: ";
+
+		taxQTF << " :: [ Fed/State Income:: " << prnMoney( sumTotal - sumTax ) << " ] }}"; // was income1040 instead of sumTotal
+			
 		taxQTF << "[+80< &&Remember parts cost was not deducted from income on last line.]";
 		Report report;
 		report.Header ( headertext ).Footer ( "Page $$P" );

@@ -6,9 +6,9 @@ ProfitLossWindow::ProfitLossWindow()
 	CtrlLayoutOKCancel(*this, "Profit / Loss Report"); 
 	
 	sqlTaxReport.AddColumn("Accounts", 50);
-	sqlTaxReport.AddColumn("Current", 50);
-	sqlTaxReport.AddColumn("Previous", 50);
-	sqlTaxReport.AddColumn("Change", 50);
+	sqlTaxReport.AddColumn("Current", 50).SetConvert(ConvDouble());
+	sqlTaxReport.AddColumn("Previous", 50).SetConvert(ConvDouble());
+	sqlTaxReport.AddColumn("Change", 50).SetConvert(ConvDouble());
 	sqlTaxReport.AddColumn("Percent", 50);
 	
 	dateYear.SetText("1");
@@ -16,6 +16,9 @@ ProfitLossWindow::ProfitLossWindow()
 	dateYear.Max((int)thisdate.year - 2018);
 	dateStart.SetConvert(DateIntConvert());
 	dateEnd.SetConvert(DateIntConvert());
+	
+	dateStart.SetText( Format("%", FirstDayOfYear( thisdate ) ).ToString() );
+	dateEnd.SetText( Format("%", thisdate ).ToString() );
 	
 	ok << [=] { okPressed(); };
 	cancel << [=] { cancelPressed(); };
@@ -62,9 +65,9 @@ void ProfitLossWindow::okPressed()
 
 	while ( sql.Fetch() )
 	{
-		nowTaxable += (double) sql[TAXABLESUB] / 100.0;
-		nowNontaxable += (double) sql[NONTAXABLESUB] / 100.0;
-		nowParts += round((double)GetPartsCost(sql[INVOICENUMBER]), 2) / 100.0;
+		nowTaxable += (double) sql[TAXABLESUB];
+		nowNontaxable += (double) sql[NONTAXABLESUB];
+		nowParts += round((double)GetPartsCost(sql[INVOICENUMBER]), 2);
 	}
 
 	double nowGross = nowTaxable + nowNontaxable;
@@ -79,9 +82,9 @@ void ProfitLossWindow::okPressed()
 
 	while ( oldsql.Fetch() )
 	{
-		thenTaxable += (double) oldsql[TAXABLESUB] / 100.0;
-		thenNontaxable += (double) oldsql[NONTAXABLESUB] / 100.0;
-		thenParts += round((double)GetPartsCost(oldsql[INVOICENUMBER]), 2) / 100.0;
+		thenTaxable += (double) oldsql[TAXABLESUB];
+		thenNontaxable += (double) oldsql[NONTAXABLESUB];
+		thenParts += round((double)GetPartsCost(oldsql[INVOICENUMBER]), 2);
 	}
 	
 	thenGross = thenTaxable + thenNontaxable;
@@ -119,7 +122,7 @@ void ProfitLossWindow::CreateReport( String start, String end)
 	for (int i = 0; i < sqlTaxReport.GetCount(); i++)
 	{
 		plQTF << "&[ [+60 {{2000:2000:2000:2000:2000@L [< " << sqlTaxReport.Get(i, 0) << "]:: [> ";
-			plQTF << sqlTaxReport.Get(i, 1) << "]:: [> " << sqlTaxReport.Get(i, 2) << "]:: [> " << sqlTaxReport.Get(i, 3) <<
+			plQTF << prnMoney(sqlTaxReport.Get(i, 1)) << "]:: [> " << prnMoney(sqlTaxReport.Get(i, 2)) << "]:: [> " << prnMoney(sqlTaxReport.Get(i, 3)) <<
 			"]:: [> " << sqlTaxReport.Get(i, 4) << "]}}]";
 	}
 

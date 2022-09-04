@@ -33,8 +33,12 @@ void Invoices::MainMenu(Bar& bar)
 	bar.Sub(t_("Management"), [=] ( Bar& bar ) {
 		ManagementMenu( bar ); });
 	bar.Add(t_("About"), [=]{ 
-		String about = "Invoices and Reports \n Version: " << version << "\n Now with more crunch!";
-		PromptOK(DeQtf(about));
+		String about = "[ [ {{10000~ [ Invoices and Reports version " << version << " ] & [ Copyright © 2022 James Lefavour ]&";
+		about << " :: [ This software is licensed under the BSD-3-Clause license. Please see the file LICENSE, or visit ]& [^https`:`/`/spdx`.org`/licenses`/BSD-3-Clause`.html^ https://spdx.org/licenses/BSD-3-Clause.html for details.]";
+		about << " :: [ Developed using the U`+`+ Library, with help from the forum members there ]:: }}&][ {{3333:6667 [ U`+`+ home page]:: [ [^http`:`/`/www`.ultimatepp`.org`/^ https://www.ultimatepp.org]]:: [ U`+`+ forum]:: [ [^https`:`/`/www`.ultimatepp`.org`/forums^ https://www.ultimatepp.org/forums]]}}]]&";
+		about << " For more info including licensing of U`+`+, or it's plugins etc, please visit the website above.";
+
+		PromptOK(about);
 	});
 	bar.Add(t_("Exit"), [=] {
 		Close(); });

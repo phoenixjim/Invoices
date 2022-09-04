@@ -17,6 +17,10 @@ TaxWindow::TaxWindow()
 	
 	dateStart.SetConvert ( DateIntConvert() );
 	dateEnd.SetConvert ( DateIntConvert() );
+	
+	Date now = GetSysDate();
+	dateStart.SetText( Format("%", FirstDayOfYear( now ) ).ToString() );
+	dateEnd.SetText( Format("%", now ).ToString() );
 	// Anonymous by default, hide names
 	anon.Set ( 1 );
 
@@ -90,8 +94,8 @@ void TaxWindow::CreateReport(String start, String end)
 		String e = ::Format(Date( 1970, 1, 1) + StrInt(end));
 		headertext << "Tax Report " << s << " to " << e << " for " << myConfig.data.companyname;
 		if (anon.Get() == 1)
-			taxQTF = "{{110:171:111:0:136:137:136:137:137@L [+70>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+80> ";
-		else taxQTF = "{{110:153:0:205:123:132:123:123:123@L [+70>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+80> ";
+			taxQTF = "{{110:171:111:0:136:137:136:137:137@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+60> ";
+		else taxQTF = "{{110:153:0:205:123:132:123:123:123@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+60> ";
 		int rowcount = sqlTaxReport.GetCount();
 		int custID;
 		for ( int i = 0; i < rowcount; i++ )
@@ -106,9 +110,9 @@ void TaxWindow::CreateReport(String start, String end)
 				prnMoney(sqlTaxReport.Get ( i, TAX )) << ":: " << 
 				prnMoney(sqlTaxReport.Get ( i, COST )) << ":: " << 
 				prnMoney(sqlTaxReport.Get ( i, AMTPAID ));
-			if ((i % 2 == 0 )&& (i < rowcount - 1)) taxQTF << " ::@L ][+80> ";
-			else if (i < rowcount - 1) taxQTF << " ::@W ][+80> ";
-			else taxQTF << ":: ]";
+			if ((i % 2 == 0 )&& (i < rowcount - 1)) taxQTF << " ::@L ][+60> ";
+			else if (i < rowcount - 1) taxQTF << " ::@W ][+60> ";
+			else taxQTF << " :: ] }} {{110:153:205:123:132:123:123:123@L ";
 
 			sumTaxable += (double)sqlTaxReport.Get ( i, TAXABLESUB );
 			sumNontaxable += (double)sqlTaxReport.Get ( i, NONTAXABLESUB );
@@ -116,20 +120,26 @@ void TaxWindow::CreateReport(String start, String end)
 			sumTotal += (double)sqlTaxReport.Get ( i, AMTPAID );
 			sumParts += (double)sqlTaxReport.Get ( i, COST );
 		}
-
+		// []&:: []&:: []&:: 
 		if (anon.Get() == 1)
-			taxQTF << "[+70>* []&:: []&:: []&:: Taxable& [ " << prnMoney( sumTaxable) << " ] :: Non-Taxable&[ " << prnMoney( sumNontaxable) << " ] :: Sales Tax&[ " << 
-			prnMoney( sumTax ) << " ] :: Parts Cost&[ " << prnMoney( sumParts) << " ] :: Grand Total&[ " << prnMoney( sumTotal) << " ] :: ]";
+		{
+			taxQTF << "[+70>* Taxable&[ " << prnMoney( sumTaxable) << " ] :: Non-Taxable&[ " << prnMoney( sumNontaxable);
+			taxQTF << " ] :: Sales Tax&[ " << prnMoney( sumTax) <<  " ] :: COGS&[ " << prnMoney( sumParts);
+			taxQTF << " ] :: Grand Total&[ " << prnMoney( sumTotal) << " ] :: ";
+		}
 		else
-			taxQTF << "[+60>* []&:: []&:: []&:: Taxable& [ " << prnMoney( sumTaxable) << " ] :: Non-Taxable&[ " << prnMoney( sumNontaxable) << " ] :: Sales Tax&[ " << 
-			prnMoney( sumTax ) << " ] :: Parts Cost&[ " << prnMoney( sumParts) << " ] :: Grand Total&[ " << prnMoney( sumTotal) << " ] :: ]";
-		
-		taxQTF << "[ :: Fed/State Income:: :: " << prnMoney( sumTotal - sumTax ) << " ] }}"; // was income1040 instead of sumTotal
+		{
+			taxQTF << "[+60>* Taxable&[ " << prnMoney( sumTaxable) << " ] :: Non-Taxable&[ " << prnMoney( sumNontaxable);
+			taxQTF << " ] :: Sales Tax&[ " << prnMoney( sumTax) <<  " ] :: COGS&[ " << prnMoney( sumParts);
+			taxQTF << " ] :: Grand Total&[ " << prnMoney( sumTotal) << " ] :: ";
+		}
+		taxQTF << " :: [ Fed/State Income:: " << prnMoney( sumTotal - sumTax ) << " ] }}"; // was income1040 instead of sumTotal
 			
-		taxQTF << "[+80< &&Remember to deduct parts cost from income on Schedule C (Not done here) ]";
+		taxQTF << "[+80<@R &&Remember to deduct parts cost from income on Schedule C (Not done here) ]";
 		Report report;
+	
 		// report.SetStdFont ( SansSerif (12) );
-		report.Header ( headertext ).Footer ( "Page $$P" );
+		report.Header ( headertext ).NoFooter(); //.Footer ( "Page $$P of " ) ;
 		report << taxQTF;
 
 		Perform ( report );
