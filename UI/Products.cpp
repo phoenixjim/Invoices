@@ -35,9 +35,9 @@ ProductsWindow::ProductsWindow() {
 	ProductArray.AddColumn(PRODNAME, "Name");
 	ProductArray.AddColumn(PRODDESCRIPTION, "Description");
 	ProductArray.AddColumn(DATEPURCHASED, "Date Purchased").SetConvert(DateIntConvert());
-	ProductArray.AddColumn(COST, "Cost").SetConvert(ConvDouble());
-	ProductArray.AddColumn(INVOICEID, "Invoice#");
-	ProductArray.ColumnWidths("100 100 40 30 30");
+	ProductArray.AddColumn(COST, "Cost").SetConvert(ConvDouble()).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight();
+	ProductArray.AddColumn(INVOICEID, "Invoice#").SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight();
+	ProductArray.ColumnWidths("80 120 40 30 30");
 	ProductArray.SetOrderBy(PROD_ID).Appending().Removing();
 	ProductArray.Query();
 

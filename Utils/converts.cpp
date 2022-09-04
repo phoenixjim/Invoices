@@ -3,12 +3,35 @@
 struct ConvDoubleCls : Convert
 {
 	virtual Value Format ( const Value &q ) const;
+	virtual Value Scan ( const Value &q ) const;
 };
 
-Value ConvDoubleCls::Format ( const Value &q ) const
-	{
-		return q.IsNull() ? Null : UPP::Format("%2!,n", q);
+Value ConvDoubleCls::Format ( const Value &q ) const // int to string, formatted
+{
+	// return q.IsNull() ? Null : UPP::Format("%2!,n", q);
+	double currency;
+	int money = q;
+	if (money < 0) {
+		currency = (double)abs(money) / 100.0;
+		return UPP::Format("$(%2!,n)", currency);
 	}
+	else {
+		currency = (double)money / 100.0;
+		return (money == 0) ? "$0.00" : UPP::Format("$%2!,n", currency);
+	}
+}
+	
+Value ConvDoubleCls::Scan (const Value &q ) const // string to int
+{
+	String text = q;
+	if (text[0] == '$') text.Remove(0);
+	if (text[0] == '(') {
+		text.Set(0,'-');
+		text.TrimLast();
+	}
+	double currency = StrDbl(text.ToString());
+	return (int) (currency * 100);
+}
 
 Convert& ConvDouble()
 {
@@ -60,52 +83,88 @@ struct ConvLineItemCls : Convert
 	virtual Value Format (const Value &q) const;
 };
 
-Value ConvLineItemCls::Format ( const Value &q ) const
+Value ConvLineItemCls::Format ( const Value &q ) const // use typenum to return correct string
 	{
 	int idNum = q;
-	// idNum ++;
-	switch(idNum)
+	SQL * Select(TYPENUM, TYPENAME).From(TYPES);
+	
+	while (SQL.Fetch())
 	{
-		case 1:
-			return "Service";
-			break;
-		case 2:
-			return "Part";
-			break;
-		case 3:
-			return "Refund";
-			break;
-		case 4:
-			return "Tip";
-			break;
-		case 5:
-			return "Note";
-			break;
-		default:
-			return "Service";
+		if (q == SQL[TYPENUM])
+			return SQL[TYPENAME];
 	}
+	return "Service"; // if no type matching num
+	
 }
 
-Value ConvLineItemCls::Scan(const Value &q) const
+Value ConvLineItemCls::Scan(const Value &q) const // use typename to return type num
 {
 	String text = q;
 	if(text.IsEmpty()) return Null;
-	if (text.IsEqual("Service"))
-		return 1;
-	else if (text.IsEqual("Part"))
-		return 2;
-	else if (text.IsEqual("Refund"))
-		return 3;
-	else if (text.IsEqual("Tip"))
-		return 4;
-	else if (text.IsEqual("Note"))
-		return 5;
-	else return 1;
+	SQL * Select(TYPENUM, TYPENAME).From(TYPES);
+	
+	while (SQL.Fetch())
+	{
+		if (text.IsEqual(SQL[TYPENAME]))
+			return SQL[TYPENUM];
+	}
+	return 1;
 }
 
 Convert& ConvLineItem()
 {
 	return Single<ConvLineItemCls>();
+}
+
+struct ConvCurrencyCls : Convert
+{
+	virtual Value Scan ( const Value &q ) const;
+	virtual Value Format (const Value &q ) const;
+};
+
+Value ConvCurrencyCls::Format( const Value &q ) const // return formatted string %xx.xx
+{
+	double money = q;
+	if (money < 0.00) {
+		money = abs(money);
+		return UPP::Format("$(%2!,n)", money);
+	}
+	else
+		return UPP::Format("$%2!,n", money);
+}
+
+Value ConvCurrencyCls::Scan( const Value &q ) const // return unformatted int
+{
+	String text = q;
+	if (text[0] == '$') text.Remove(0);
+	if (text[0] == '(') {
+		text.Set(0,'-');
+		text.TrimLast();
+	}
+	double currency = StrDbl(text.ToString());
+	return currency;
+}
+
+Convert& ConvCurrency()
+{
+	return Single<ConvCurrencyCls>();
+}
+
+String prnMoney( int money )
+{
+	double currency;
+	if (money < 0) {
+		currency = (double)abs(money) / 100.0;
+		return UPP::Format("$(%2!,n)", currency);
+	}
+	else {
+		currency = (double)money / 100.0;
+		return (money == 0) ? "$0.00" : UPP::Format("$%2!,n", currency);
+	}
+}
+double taxMoney ( int money )
+{
+	return ((double) money / 100.0);
 }
 
 double round(double d, int n) {

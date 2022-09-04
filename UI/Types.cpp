@@ -29,10 +29,10 @@ TypesWindow::TypesWindow() {
 		
 	TypeArray.AddColumn(TYPENAME, "Name");
 	TypeArray.AddColumn(TYPEDESCR, "Description");
-	TypeArray.AddColumn(TYPECOST, "Cost").SetConvert(ConvDouble());
-	TypeArray.AddColumn(TYPEQUANT, "Quantity");
-	TypeArray.AddColumn(TYPETAXABLE, "Tax?");
-	TypeArray.ColumnWidths("100 100 40 30 30");
+	TypeArray.AddColumn(TYPECOST, "Cost").SetConvert(ConvCurrency()).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight();
+	TypeArray.AddColumn(TYPEQUANT, "Quantity").SetDisplay ( StdCenterDisplay() ).HeaderTab().AlignCenter();
+	TypeArray.AddColumn(TYPETAXABLE, "Tax?").SetDisplay ( StdCenterDisplay() ).HeaderTab().AlignCenter();
+	TypeArray.ColumnWidths("65 135 40 20 20");
 	TypeArray.SetOrderBy(TYPENUM).Appending().Removing();
 	TypeArray.Query();
 

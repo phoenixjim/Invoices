@@ -25,7 +25,7 @@ AddLineItem::AddLineItem()
 		(TOTAL, txtTotal)
 		(ISTAXABLE, optProdTaxable)
 	;
-	// cbProducts.SetConvert(ConvLineItem());
+
 	cbProducts.Add("Service");
 	cbProducts.Add("Part");
 	cbProducts.Add("Tip");
@@ -79,9 +79,7 @@ void AddLineItem::ProdChanged()
 			optProdTaxable.Set(true);
 			break;
 			
-		case Gift:
-		case Weekly:
-		case Daily:
+		default:
 				optProdTaxable.Set(false);
 			break;
 	}
@@ -97,12 +95,12 @@ LineItemsWindow::LineItemsWindow() {
 	//LineItemsArray.Join(BOOK_ID, book); // joins id from other db to this id
 	LineItemsArray.AddColumn(PRODUCTNAME, "Product Name");
 	LineItemsArray.AddColumn(DESCRIPTION, "Description");
-	LineItemsArray.AddColumn(PRICE, "Price").SetConvert(ConvDouble());
+	LineItemsArray.AddColumn(PRICE, "Price").SetConvert(ConvDouble()).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight();
 	LineItemsArray.AddColumn(QTY, "Qty");
-	LineItemsArray.AddColumn(TOTAL, "Total").SetConvert(ConvDouble());
+	LineItemsArray.AddColumn(TOTAL, "Total").SetConvert(ConvDouble()).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight();
 	LineItemsArray.AddColumn(INVOICEIDNUMBER, "Invoice#");
 	LineItemsArray.AddColumn(ISTAXABLE, "Taxable?");
-	//LineItemsArray.ColumnWidths("5 5 10 12 5 5 5 5 5 5");
+	LineItemsArray.ColumnWidths("50 175 25 15 25 20 20");
 	// LineItemsArray.Appending().Removing();
 	LineItemsArray.SetOrderBy(LINEITEM_ID);
 	

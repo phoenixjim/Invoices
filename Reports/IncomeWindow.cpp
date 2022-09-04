@@ -11,7 +11,7 @@ IncomeWindow::IncomeWindow() {
 	sqlTaxReport.AddColumn ( NONTAXABLESUB, "Non-Taxable", 80 ).SetConvert ( ConvDouble() ).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight();
 	sqlTaxReport.AddColumn ( TAX, "Sales Tax", 80 ).SetConvert ( ConvDouble() ).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight();
 	sqlTaxReport.AddColumn ( COST, "My Parts Cost", 80 ).SetConvert ( ConvDouble() ).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight(); // PARTS COST FOR THIS INVOICE
-	sqlTaxReport.AddColumn ( GRANDTOTAL, "Total", 80 ).SetConvert ( ConvDouble() ).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight();
+	sqlTaxReport.AddColumn ( AMTPAID, "Total", 80 ).SetConvert ( ConvDouble() ).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight();
 	
 	dateStart.SetConvert ( DateIntConvert() );
 	dateEnd.SetConvert ( DateIntConvert() );
@@ -33,8 +33,7 @@ double IncomeWindow::GetPartsCost ( int invId )
 {
 	SQL * Select ( SqlSum ( COST ) ).From ( PRODUCTS ).Where ( INVOICEID == invId );
 	SQL.Fetch();
-	double parts;
-	parts = IsNull(SQL[0]) ? 0.00 : round(SQL[0], 2);
+	double parts = IsNull(SQL[0]) ? 0.00 : round(SQL[0], 2);
 	return parts;
 }
 
@@ -70,15 +69,15 @@ void IncomeWindow::okPressed()
 		sqlTaxReport.Add ( sql[INVOICENUMBER],
 						   sql[DATEPAID],
 						   GetCustomerName ( idNum ),
-						   round ( sql[TAXABLESUB], 2 ),
-						   round ( sql[NONTAXABLESUB], 2 ),
-						   round ( sql[TAX], 2 ),
+						   (double)sql[TAXABLESUB], //100.0,
+						   (double)sql[NONTAXABLESUB], //100.0,
+						   (double)sql[TAX], //100.0,
 						   GetPartsCost ( sql[INVOICENUMBER] ),
-						   round ( sql[GRANDTOTAL], 2 ));
+						   (double)sql[AMTPAID]); //100.0);
 	}
 }
 
-void IncomeWindow::ExportQTF()
+void IncomeWindow::ExportQTF() // LINUX ONLY - FIX THIS
 {
 	SaveFile("/home/james/Desktop/TaxReportAnon.qtf", sqlTaxReport.AsQtf());
 }
@@ -91,36 +90,34 @@ void IncomeWindow::CreateReport(String start, String end)
 		
 		String s = ::Format(Date( 1970, 1, 1) + StrInt(start));
 		String e = ::Format(Date( 1970, 1, 1) + StrInt(end));
-		headertext << "Tax Report " << s << " to " << e << " for " << myConfig.data.companyname << "and customer: " << sqlTaxReport.Get( 0, CUSTNAME );
+		headertext << "Tax Report " << s << " to " << e << " for " << myConfig.data.companyname << " and customer: " << sqlTaxReport.Get( 0, CUSTNAME );
 		
-		// {{153:153:0:215:123:122:123:123:123@L [* #Inv NO.#:: #Date Paid#:: #Cust. No.#:: #Customer Name#:: #Taxable#:: #Non-Taxable#:: #Sales Tax#:: #My Parts Cost#:: #Total#::@W ]
-		// {{170:171:111:0:136:137:136:137:137@L
 		taxQTF = "{{153:153:123:122:123:123:123@L [+60>* Inv NO.:: Date Paid:: Taxable:: Non-Taxable:: Sales Tax:: Total:: Parts Cost::@W ][+40> ";
 		int rowcount = sqlTaxReport.GetCount();
 		for ( int i = 0; i < rowcount; i++ )
 		{
 			taxQTF << sqlTaxReport.Get( i, INVOICENUMBER ) << ":: " << 
 			::Format(Date( 1970, 1, 1) + sqlTaxReport.Get( i, DATEPAID ))  << ":: " << 
-			Format("%2!nl", sqlTaxReport.Get ( i, TAXABLESUB )) << ":: " << 
-			Format("%2!nl", sqlTaxReport.Get ( i, NONTAXABLESUB )) << ":: " << 
-			Format("%2!nl", sqlTaxReport.Get ( i, TAX )) << ":: " << 
-			Format("%2!nl", sqlTaxReport.Get ( i, GRANDTOTAL )) << ":: " << 
-			Format("%2!nl", (IsNull(sqlTaxReport.Get ( i, COST ))) ? 0.0 : ( double ) sqlTaxReport.Get ( i, COST ));
+			prnMoney(sqlTaxReport.Get ( i, TAXABLESUB )) << ":: " << 
+			prnMoney(sqlTaxReport.Get ( i, NONTAXABLESUB )) << ":: " << 
+			prnMoney(sqlTaxReport.Get ( i, TAX )) << ":: " << 
+			prnMoney(sqlTaxReport.Get ( i, AMTPAID )) << ":: " << 
+			prnMoney(sqlTaxReport.Get ( i, COST ));
 			if ((i % 2 == 0 )&& (i < rowcount - 1)) taxQTF << " ::@L ][+40> ";
 			else if (i < rowcount - 1) taxQTF << " ::@W ][+40> ";
 			else taxQTF << ":: ]";
 
-			sumTaxable += ( double ) sqlTaxReport.Get ( i, TAXABLESUB );
-			sumNontaxable += ( double ) sqlTaxReport.Get ( i, NONTAXABLESUB );
-			sumTax += ( double ) sqlTaxReport.Get ( i, TAX );
-			sumTotal += ( double ) sqlTaxReport.Get ( i, GRANDTOTAL );
-			sumParts += (IsNull(sqlTaxReport.Get ( i, COST ))) ? 0.0 : ( double ) sqlTaxReport.Get ( i, COST );
+			sumTaxable += (double)sqlTaxReport.Get ( i, TAXABLESUB );
+			sumNontaxable += (double)sqlTaxReport.Get ( i, NONTAXABLESUB );
+			sumTax += (double)sqlTaxReport.Get ( i, TAX );
+			sumTotal += (double)sqlTaxReport.Get ( i, AMTPAID );
+			sumParts += (double)sqlTaxReport.Get ( i, COST );
 		}
 		double income1040 = sumTaxable + sumNontaxable;
 		taxQTF << "[+40>* :: :: Taxable:: Non-Taxable:: Sales Tax:: Grand Total:: Parts Cost:: ][+60>* Totals:: :: ";
-		taxQTF << Format("%2!nl", round(sumTaxable)) << ":: " << Format("%2!nl", round(sumNontaxable)) << ":: " << 
-			Format( "%2!nl", sumTax ) << ":: " << Format("%2!nl", sumTotal) << ":: " << Format("%2!nl", sumParts) <<  "][+60>* :: Fed/State Income :: :: :: :: " << 
-			Format( "%2!nl", income1040 ) << ":: :: ] }}";
+		taxQTF << prnMoney(sumTaxable) << ":: " << prnMoney(sumNontaxable) << ":: " << 
+			prnMoney( sumTax ) << ":: " << prnMoney( sumTotal) << ":: " << prnMoney( sumParts) <<  "][+60>* :: Fed/State Income :: :: :: :: " << 
+			prnMoney( income1040 ) << ":: :: ] }}";
 		taxQTF << "[+80< &&Remember parts cost was not deducted from income on last line.]";
 		Report report;
 		report.Header ( headertext ).Footer ( "Page $$P" );

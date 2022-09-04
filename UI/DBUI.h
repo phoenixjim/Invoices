@@ -25,6 +25,7 @@ enum pNames
 	Daily,
 	SemiWeekly
 };
+
 /*
 enum Status
 	{
@@ -167,7 +168,7 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 	
 	MenuBar		mainmenu;
 	// added 'save and mark paid' on create invoice window
-	String version = "1.5.0.3";
+	String version = "1.5.2.0";
 public:
 	Invoices();
 	void Paint(Draw& w) {

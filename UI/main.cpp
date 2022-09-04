@@ -33,7 +33,7 @@ void Invoices::MainMenu(Bar& bar)
 	bar.Sub(t_("Management"), [=] ( Bar& bar ) {
 		ManagementMenu( bar ); });
 	bar.Add(t_("About"), [=]{ 
-		String about = "Invoices and Reports \n Version: " << version;
+		String about = "Invoices and Reports \n Version: " << version << "\n Now with more crunch!";
 		PromptOK(DeQtf(about));
 	});
 	bar.Add(t_("Exit"), [=] {

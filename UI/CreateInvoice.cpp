@@ -14,13 +14,19 @@ CreateInvoiceWindow::CreateInvoiceWindow()
 	btnPrintSave << [=] { PrintInvoice(); };
  	cancel << [=] { CancelInvoice(); };
  	btnUpdate.Hide();
+ 	/*
+ 	txtTaxable.SetConvert(ConvDouble());
+ 	txtNonTaxable.SetConvert(ConvDouble());
+ 	txtSalesTax.SetConvert(ConvDouble());
+	txtGrandtotal.SetConvert(ConvDouble());
+	*/
 	
  	arrayLineItems.AddColumn(PRODUCTNAME, "Name", 40);
  	arrayLineItems.AddColumn(DESCRIPTION, "Description", 80);
- 	arrayLineItems.AddColumn(PRICE, "Price", 20).SetConvert(ConvDouble());
+ 	arrayLineItems.AddColumn(PRICE, "Price", 20).SetConvert(ConvCurrency()).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight(); //.SetConvert(ConvDouble()).
  	arrayLineItems.AddColumn(QTY, "Qty", 15);
  	arrayLineItems.AddColumn(ISTAXABLE, "Tax?", 15);
- 	arrayLineItems.AddColumn(TOTAL, "Total", 20).SetConvert(ConvDouble());
+ 	arrayLineItems.AddColumn(TOTAL, "Total", 20).SetConvert(ConvCurrency()).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight(); //.SetConvert(ConvDouble())
  	arrayLineItems.Appending() .Removing();
  
  	SQL * Select(CUST_ID, CUSTNAME).From(CUSTOMERS);
@@ -87,25 +93,25 @@ void CreateInvoiceWindow::SaveInvoice()
 		PromptOK("Are you missing something? (Customer, Date or items)");
 		return;
 	}
-	double nonTaxable = 0.0, taxable = 0.0, salestax = 0.0, grandTotal = 0.0;
+	int nonTaxable = 0, taxable = 0, salestax = 0, grandTotal = 0;
 
 	for (int i = 0; i < idNum; i++)
 	{
 		if (optCustTaxable.Get() == true && arrayLineItems.Get(i, ISTAXABLE)  == 1) {
-			taxable += round((double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY), 2);
+			taxable += (int)((double)arrayLineItems.Get(i, PRICE) * 100) * (int)arrayLineItems.Get(i, QTY);
 		}
-		else 	nonTaxable += round((double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY), 2);
+		else 	nonTaxable += (double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY) * 100.0;
 		
 		SQL * Insert(LINEITEMS)
 		(PRODUCTNAME, arrayLineItems.Get(i,PRODUCTNAME))
 		(DESCRIPTION, arrayLineItems.Get(i, DESCRIPTION))
-		(PRICE, (double)arrayLineItems.Get(i, PRICE))
+		(PRICE, (double)arrayLineItems.Get(i, PRICE)*100.0)
 		(QTY, (int)arrayLineItems.Get(i, QTY))
-		(TOTAL, (double)arrayLineItems.Get(i, TOTAL))
+		(TOTAL, (double)arrayLineItems.Get(i, TOTAL)*100.0)
 		(INVOICEIDNUMBER, (int64)txtInvoice)
 		(ISTAXABLE, (int)arrayLineItems.Get(i, ISTAXABLE));
 	}
-	if (optCustTaxable.Get() == true) salestax = round(taxable * (double)txtTaxRate, 2);
+	if (optCustTaxable.Get() == true) salestax = (int)round(taxable * (double)txtTaxRate, 0);
 	else salestax = 0.0;
 	
 	grandTotal += salestax + nonTaxable + taxable;
@@ -143,7 +149,7 @@ void CreateInvoiceWindow::MarkAsPaid()
 	// edbPayment.SetData(SQL[GRANDTOTAL]);
 	status = 2;
 	
-	SQL * SqlUpdate(INVOICES)(AMTPAID,round((double)SQL[GRANDTOTAL], 2))(DATEPAID,SQL[TRANSACTIONDATE])(STATUS, status).Where(INVOICE_ID == pInvoice);
+	SQL * SqlUpdate(INVOICES)(AMTPAID,SQL[GRANDTOTAL])(DATEPAID,SQL[TRANSACTIONDATE])(STATUS, status).Where(INVOICE_ID == pInvoice);
 }
 
 void CreateInvoiceWindow::PrintInvoice()
@@ -193,19 +199,19 @@ void CreateInvoiceWindow::PrintInvoice()
 	{
 		if (linenumber % 2) invoiceQTF << "[ [ {{729:2603:1666:1666:1666:1670@L|1 [ ";
 		else invoiceQTF << "[ [ {{729:2603:1666:1666:1666:1670@W|1 [ ";
-		invoiceQTF << ++linenumber << "]:: [ " << linesSQL[PRODUCTNAME] << "]:: [> " << Format("$%2!nl",linesSQL[PRICE]) <<
+		invoiceQTF << ++linenumber << "]:: [ " << linesSQL[PRODUCTNAME] << "]:: [> " << prnMoney(linesSQL[PRICE]) <<
 			"]:: [> " << linesSQL[QTY] << "]:: [> "<< ( linesSQL[ISTAXABLE] ? "T" : "" ) << "]::|1 [> " << 
-			Format("$%2!nl",linesSQL[TOTAL]) << "]:: [ ]::-3 [ " << linesSQL[DESCRIPTION] << "]::-2 [ ]::-1 [ ]:: [ ]:: [ ]}}]]&";
+			prnMoney(linesSQL[TOTAL]) << "]:: [ ]::-3 [ " << linesSQL[DESCRIPTION] << "]::-2 [ ]::-1 [ ]:: [ ]:: [ ]}}]]&";
 	}
 	
 	// Minor adjustment needed to align dollar column
 	double amtPaid = (IsNull(invoiceSQL[AMTPAID]) ?  (double)0.00 : (double)invoiceSQL[AMTPAID]);
-	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Taxable Sub:]::a4/15 [> " << Format("$%2!nl",invoiceSQL[TAXABLESUB]) << "]}}]]&";
-	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ NonTaxable Sub:]::a4/15 [> " << Format("$%2!nl",invoiceSQL[NONTAXABLESUB]) << "]}}]]&";
-	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Tax:]::a4/15 [> " << Format("$%2!nl",invoiceSQL[TAX]) << "]}}]]&";
-	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Total:]::a4/15 [> " << Format("$%2!nl",invoiceSQL[GRANDTOTAL]) << "]}}]]&";
-	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Amount Paid:]::a4/15 [> " << Format("$%2!nl", amtPaid) << "]}}]]&";
-	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Balance Due:]::a4/15 [> " << Format("$%2!nl",(double)invoiceSQL[GRANDTOTAL] - amtPaid) << "]}}]]&";
+	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Taxable Sub:]::a4/15 [> " << prnMoney(invoiceSQL[TAXABLESUB]) << "]}}]]&";
+	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ NonTaxable Sub:]::a4/15 [> " << prnMoney(invoiceSQL[NONTAXABLESUB]) << "]}}]]&";
+	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Tax:]::a4/15 [> " << prnMoney(invoiceSQL[TAX]) << "]}}]]&";
+	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Total:]::a4/15 [> " << prnMoney(invoiceSQL[GRANDTOTAL]) << "]}}]]&";
+	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Amount Paid:]::a4/15 [> " << prnMoney(amtPaid) << "]}}]]&";
+	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Balance Due:]::a4/15 [> " << prnMoney((int)invoiceSQL[GRANDTOTAL] - (int)amtPaid) << "]}}]]&";
 
 	myInvoice.Header(header).Footer(footer);
 	
@@ -276,13 +282,13 @@ void CreateInvoiceWindow::CalcInvoiceTotal()
 		else 	nonTaxable += round((double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY), 2);
 	}
 	if (optCustTaxable.Get() == true) salestax = round( taxable * txtTaxRate, 2);
-	else salestax = 0.0;
+	else salestax = 0.00;
 	
 	grandtotal = nonTaxable + taxable + salestax;
-	txtNonTaxable.SetText(Format("%2!nl",nonTaxable)); // .SetData
-	txtTaxable.SetText(Format("%2!nl",taxable));
-	txtSalesTax.SetText(Format("%2!nl",salestax));
-	txtGrandtotal.SetText(Format("%2!nl",grandtotal));
+	txtNonTaxable.SetText(Format("$%2!nl",nonTaxable)); // .SetData
+	txtTaxable.SetText(Format("$%2!nl",taxable));
+	txtSalesTax.SetText(Format("$%2!nl",salestax));
+	txtGrandtotal.SetText(Format("$%2!nl",grandtotal));
 }
 
 void CreateInvoiceWindow::DeleteRow()

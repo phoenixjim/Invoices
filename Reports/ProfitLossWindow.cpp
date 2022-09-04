@@ -62,9 +62,9 @@ void ProfitLossWindow::okPressed()
 
 	while ( sql.Fetch() )
 	{
-		nowTaxable += (double) sql[TAXABLESUB];
-		nowNontaxable += (double) sql[NONTAXABLESUB];
-		nowParts += round((double)GetPartsCost(sql[INVOICENUMBER]), 2);
+		nowTaxable += (double) sql[TAXABLESUB] / 100.0;
+		nowNontaxable += (double) sql[NONTAXABLESUB] / 100.0;
+		nowParts += round((double)GetPartsCost(sql[INVOICENUMBER]), 2) / 100.0;
 	}
 
 	double nowGross = nowTaxable + nowNontaxable;
@@ -79,9 +79,9 @@ void ProfitLossWindow::okPressed()
 
 	while ( oldsql.Fetch() )
 	{
-		thenTaxable += (double) oldsql[TAXABLESUB];
-		thenNontaxable += (double) oldsql[NONTAXABLESUB];
-		thenParts += round((double)GetPartsCost(oldsql[INVOICENUMBER]), 2);
+		thenTaxable += (double) oldsql[TAXABLESUB] / 100.0;
+		thenNontaxable += (double) oldsql[NONTAXABLESUB] / 100.0;
+		thenParts += round((double)GetPartsCost(oldsql[INVOICENUMBER]), 2) / 100.0;
 	}
 	
 	thenGross = thenTaxable + thenNontaxable;
