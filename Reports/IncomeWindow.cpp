@@ -92,7 +92,7 @@ void IncomeWindow::CreateReport(String start, String end)
 		String e = ::Format(Date( 1970, 1, 1) + StrInt(end));
 		headertext << "Tax Report " << s << " to " << e << " for " << myConfig.data.companyname << " and customer: " << sqlTaxReport.Get( 0, CUSTNAME );
 		
-		taxQTF = "{{153:153:123:122:123:123:123@L [+60>* Inv NO.:: Date Paid:: Taxable:: Non-Taxable:: Sales Tax:: Total:: Parts Cost::@W ][+40> ";
+		taxQTF = "{{110:153:123:122:123:123:123@L [+70>* Inv NO.:: Date Paid:: Taxable:: Non-Taxable:: Sales Tax:: Total:: Parts Cost::@W ][+80> ";
 		int rowcount = sqlTaxReport.GetCount();
 		for ( int i = 0; i < rowcount; i++ )
 		{
@@ -103,8 +103,8 @@ void IncomeWindow::CreateReport(String start, String end)
 			prnMoney(sqlTaxReport.Get ( i, TAX )) << ":: " << 
 			prnMoney(sqlTaxReport.Get ( i, AMTPAID )) << ":: " << 
 			prnMoney(sqlTaxReport.Get ( i, COST ));
-			if ((i % 2 == 0 )&& (i < rowcount - 1)) taxQTF << " ::@L ][+40> ";
-			else if (i < rowcount - 1) taxQTF << " ::@W ][+40> ";
+			if ((i % 2 == 0 )&& (i < rowcount - 1)) taxQTF << " ::@L ][+80> ";
+			else if (i < rowcount - 1) taxQTF << " ::@W ][+80> ";
 			else taxQTF << ":: ]";
 
 			sumTaxable += (double)sqlTaxReport.Get ( i, TAXABLESUB );
@@ -113,10 +113,10 @@ void IncomeWindow::CreateReport(String start, String end)
 			sumTotal += (double)sqlTaxReport.Get ( i, AMTPAID );
 			sumParts += (double)sqlTaxReport.Get ( i, COST );
 		}
-		double income1040 = sumTaxable + sumNontaxable;
-		taxQTF << "[+40>* :: :: Taxable:: Non-Taxable:: Sales Tax:: Grand Total:: Parts Cost:: ][+60>* Totals:: :: ";
+		double income1040 = sumTaxable + sumNontaxable - sumTax;
+		taxQTF << "[+70>* :: :: Taxable:: Non-Taxable:: Sales Tax:: Grand Total:: Parts Cost:: ][+80>* Totals:: :: ";
 		taxQTF << prnMoney(sumTaxable) << ":: " << prnMoney(sumNontaxable) << ":: " << 
-			prnMoney( sumTax ) << ":: " << prnMoney( sumTotal) << ":: " << prnMoney( sumParts) <<  "][+60>* :: Fed/State Income :: :: :: :: " << 
+			prnMoney( sumTax ) << ":: " << prnMoney( sumTotal) << ":: " << prnMoney( sumParts) <<  "][+70>* :: Fed/State Income :: :: :: :: " << 
 			prnMoney( income1040 ) << ":: :: ] }}";
 		taxQTF << "[+80< &&Remember parts cost was not deducted from income on last line.]";
 		Report report;
