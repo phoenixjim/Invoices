@@ -14,13 +14,7 @@ CreateInvoiceWindow::CreateInvoiceWindow()
 	btnPrintSave << [=] { PrintInvoice(); };
  	cancel << [=] { CancelInvoice(); };
  	btnUpdate.Hide();
- 	/*
- 	txtTaxable.SetConvert(ConvDouble());
- 	txtNonTaxable.SetConvert(ConvDouble());
- 	txtSalesTax.SetConvert(ConvDouble());
-	txtGrandtotal.SetConvert(ConvDouble());
-	*/
-	
+ 	
  	arrayLineItems.AddColumn(PRODUCTNAME, "Name", 40);
  	arrayLineItems.AddColumn(DESCRIPTION, "Description", 80);
  	arrayLineItems.AddColumn(PRICE, "Price", 20).SetConvert(ConvCurrency()).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight(); //.SetConvert(ConvDouble()).

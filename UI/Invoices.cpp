@@ -79,7 +79,7 @@ void InvoicesWindow::btnPrintClicked()
 
 	custSQL * SelectAll().From( CUSTOMERS ).Where( CUST_ID == invoiceSQL[CUSTOMERID]);
 	linesSQL * SelectAll().From( LINEITEMS ).Where( INVOICEIDNUMBER == invoiceSQL[INVOICENUMBER]);
-	String taxexempt = ((custSQL[TAXABLE] == 1) ? "" : "Tax exempt form on file");
+	String taxexempt = ((custSQL[TAXABLE] == 1) ? "" : "Tax exempt form on file, if required");
 
 	invoiceQTF = "[ [ &][@6 &][ {{4821:95:482:1266:1666:1670f0;g0; [ " << 
 		custSQL[CUSTNAME] << " ]:: [@6 ]:: [@6 ]:: [@6 ]:: [ Invoice No.:]:: [> " << invoiceSQL[INVOICENUMBER] << " ]:: [ " << 

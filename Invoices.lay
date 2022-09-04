@@ -145,7 +145,7 @@ LAYOUT(ProductAddLayout, 360, 360)
 	ITEM(Upp::EditDouble, txtProductCost, SetFont(Upp::SansSerifZ(16)).SetFrame(Upp::FieldFrame()).LeftPosZ(108, 244).TopPosZ(292, 19))
 	ITEM(Upp::Button, ok, SetLabel(t_("Ok")).LeftPosZ(44, 56).TopPosZ(332, 15))
 	ITEM(Upp::Button, cancel, SetLabel(t_("Cancel")).LeftPosZ(252, 56).TopPosZ(332, 15))
-	ITEM(Upp::StaticText, dv___12, SetText(t_("Enter all payments x 100 \nso 140.00 = 14000\nLeave blank for payment in full")).SetAlign(Upp::ALIGN_CENTER).LeftPosZ(188, 160).TopPosZ(8, 36))
+	ITEM(Upp::StaticText, dv___12, SetText(t_("Enter all payments x 100 \nso 140.00 = 14000\n")).SetAlign(Upp::ALIGN_CENTER).LeftPosZ(188, 160).TopPosZ(8, 36))
 END_LAYOUT
 
 LAYOUT(TypesAddLayout, 360, 284)
@@ -182,6 +182,6 @@ LAYOUT(LineItemAddLayout, 292, 220)
 	ITEM(Upp::Option, optProdTaxable, SetLabel(t_("Taxable?")).LeftPosZ(8, 60).TopPosZ(160, 16))
 	ITEM(Upp::Button, ok, SetLabel(t_("Save")).SetFont(Upp::SansSerifZ(12)).LeftPosZ(8, 56).TopPosZ(196, 15))
 	ITEM(Upp::Button, cancel, SetLabel(t_("Cancel")).LeftPosZ(228, 56).TopPosZ(196, 15))
-	ITEM(Upp::StaticText, dv___16, SetText(t_("Enter all payments x 100 \nso 140.00 = 14000\nLeave blank for payment in full")).SetAlign(Upp::ALIGN_CENTER).LeftPosZ(66, 160).TopPosZ(68, 36))
+	ITEM(Upp::StaticText, dv___16, SetText(t_("Enter all payments x 100 \nso 140.00 = 14000\n")).SetAlign(Upp::ALIGN_CENTER).LeftPosZ(66, 160).TopPosZ(68, 36))
 END_LAYOUT
 
