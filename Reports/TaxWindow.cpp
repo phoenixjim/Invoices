@@ -31,8 +31,6 @@ TaxWindow::TaxWindow()
 				  };
 	btnReport << [=] { CreateReport(dateStart.GetData().ToString(), dateEnd.GetData().ToString());
 					 };
-	btnExport.Hide(); // only for testing
-	btnExport << [=] { ExportQTF(); };
 }
 
 double TaxWindow::GetPartsCost ( int invId )
@@ -94,8 +92,8 @@ void TaxWindow::CreateReport(String start, String end)
 		String e = ::Format(Date( 1970, 1, 1) + StrInt(end));
 		headertext << "Tax Report " << s << " to " << e << " for " << myConfig.data.companyname;
 		if (anon.Get() == 1)
-			taxQTF = "{{110:171:111:0:136:137:136:137:137@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+60> ";
-		else taxQTF = "{{110:153:0:205:123:132:123:123:123@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+60> ";
+			taxQTF = "{{110:171:111:0:136:137:136:137:137@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+90> ";
+		else taxQTF = "{{110:153:0:205:123:132:123:123:123@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+90> ";
 		int rowcount = sqlTaxReport.GetCount();
 		int custID;
 		for ( int i = 0; i < rowcount; i++ )
@@ -110,8 +108,8 @@ void TaxWindow::CreateReport(String start, String end)
 				prnMoney(sqlTaxReport.Get ( i, TAX )) << ":: " << 
 				prnMoney(sqlTaxReport.Get ( i, COST )) << ":: " << 
 				prnMoney(sqlTaxReport.Get ( i, AMTPAID ));
-			if ((i % 2 == 0 )&& (i < rowcount - 1)) taxQTF << " ::@L ][+60> ";
-			else if (i < rowcount - 1) taxQTF << " ::@W ][+60> ";
+			if ((i % 2 == 0 )&& (i < rowcount - 1)) taxQTF << " ::@L ][+90> ";
+			else if (i < rowcount - 1) taxQTF << " ::@W ][+90> ";
 			else taxQTF << " :: ] }} {{110:153:205:123:132:123:123:123@L ";
 
 			sumTaxable += (double)sqlTaxReport.Get ( i, TAXABLESUB );
@@ -141,7 +139,7 @@ void TaxWindow::CreateReport(String start, String end)
 		// report.SetStdFont ( SansSerif (12) );
 		report.Header ( headertext ).NoFooter(); //.Footer ( "Page $$P of " ) ;
 		report << taxQTF;
-
+		// report.Margins(400,400);
 		Perform ( report );
 	}
 }

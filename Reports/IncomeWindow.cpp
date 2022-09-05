@@ -29,8 +29,6 @@ IncomeWindow::IncomeWindow() {
 	ok << [=] { okPressed(); };
 	cancel << [=] { cancelPressed(); };
 	btnReport << [=] { CreateReport(dateStart.GetData().ToString(), dateEnd.GetData().ToString()); };
-	btnExport.Hide(); // only for testing
-	btnExport << [=] { ExportQTF(); };
 }
 
 double IncomeWindow::GetPartsCost ( int invId )
@@ -96,7 +94,7 @@ void IncomeWindow::CreateReport(String start, String end)
 		String e = ::Format(Date( 1970, 1, 1) + StrInt(end));
 		headertext << "Tax Report " << s << " to " << e << " for " << myConfig.data.companyname << " and customer: " << sqlTaxReport.Get( 0, CUSTNAME );
 		
-		taxQTF = "{{110:153:123:122:123:123:123@L [+70>* Inv NO.:: Date Paid:: Taxable:: Non-Taxable:: Sales Tax:: Total:: Parts Cost::@W ][+80> ";
+		taxQTF = "{{110:153:123:122:123:123:123@L [+70>* Inv NO.:: Date Paid:: Taxable:: Non-Taxable:: Sales Tax:: Total:: Parts Cost::@W ][+90> ";
 		int rowcount = sqlTaxReport.GetCount();
 		for ( int i = 0; i < rowcount; i++ )
 		{
@@ -107,8 +105,8 @@ void IncomeWindow::CreateReport(String start, String end)
 			prnMoney(sqlTaxReport.Get ( i, TAX )) << ":: " << 
 			prnMoney(sqlTaxReport.Get ( i, AMTPAID )) << ":: " << 
 			prnMoney(sqlTaxReport.Get ( i, COST ));
-			if ((i % 2 == 0 )&& (i < rowcount - 1)) taxQTF << " ::@L ][+80> ";
-			else if (i < rowcount - 1) taxQTF << " ::@W ][+80> ";
+			if ((i % 2 == 0 )&& (i < rowcount - 1)) taxQTF << " ::@L ][+90> ";
+			else if (i < rowcount - 1) taxQTF << " ::@W ][+90> ";
 			else taxQTF << " ] }} {{110:153:205:123:132:123:123:123@L ";
 
 			sumTaxable += (double)sqlTaxReport.Get ( i, TAXABLESUB );
@@ -128,7 +126,7 @@ void IncomeWindow::CreateReport(String start, String end)
 		Report report;
 		report.Header ( headertext ).Footer ( "Page $$P" );
 		report << taxQTF;
-		// QtfReport((Size)(216,279), taxQTF, "", true); // no difference
+		// report.Margins(400,400);
 		Perform ( report );
 	}
 }
