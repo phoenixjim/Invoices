@@ -44,7 +44,9 @@ CreateInvoiceWindow::CreateInvoiceWindow()
 	txtInvoice = nextInvoice; // .SetText(IntStr64(nextInvoice));
 	cbCustomers.WhenAction << [=] { CustChanged(); };
 	cbProducts.WhenAction << [=] { ProdChanged(); };
+	Date now = GetSysDate();
 	dtpBillDate.SetConvert(DateIntConvert());
+	dtpBillDate.SetText( Format("%", now ).ToString() );
  }
  
 void CreateInvoiceWindow::CustChanged()
