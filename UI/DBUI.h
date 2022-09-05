@@ -14,6 +14,7 @@ using namespace Upp;
 #include "../Utils/converts.h"
 #include <Report/Report.h>
 
+/*
 enum pNames
 	{
 	Service=1,
@@ -26,7 +27,7 @@ enum pNames
 	SemiWeekly
 };
 
-/*
+
 enum Status
 	{
 	Void = 0,
@@ -34,6 +35,7 @@ enum Status
 	PaidInFull
 };
 */
+
 //Customers
 struct CustomersWindow : WithCustomersWindowLayout<TopWindow> {
 	Configs	myConfig;
@@ -168,7 +170,7 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 	
 	MenuBar		mainmenu;
 	// added 'save and mark paid' on create invoice window
-	String version = "2.0.0.0";
+	String version = "2.0.0.1";
 public:
 	Invoices();
 	void Paint(Draw& w) {

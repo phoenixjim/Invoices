@@ -19,7 +19,7 @@ LAYOUT(CompanyInfoWindowLayout, 360, 279)
 	ITEM(Upp::EditString, txtBusZip, SetFont(Upp::SansSerifZ(12)).LeftPosZ(136, 200).TopPosZ(136, 19))
 	ITEM(Upp::EditString, txtBusPhone, SetFont(Upp::SansSerifZ(12)).LeftPosZ(136, 200).TopPosZ(160, 19))
 	ITEM(Upp::EditString, txtBusEmail, SetFont(Upp::SansSerifZ(12)).LeftPosZ(136, 200).TopPosZ(186, 19))
-	ITEM(Upp::EditDoubleNotNull, txtTaxrate, SetFont(Upp::SansSerifZ(12)).LeftPosZ(135, 62).TopPosZ(211, 19))
+	ITEM(Upp::EditString, txtTaxrate, NotNull(true).SetFont(Upp::SansSerifZ(12)).LeftPosZ(135, 62).TopPosZ(211, 19))
 	ITEM(Upp::Button, ok, SetLabel(t_("Ok")).SetFont(Upp::SansSerifZ(12)).LeftPosZ(88, 56).TopPosZ(244, 15))
 	ITEM(Upp::Button, cancel, SetLabel(t_("Cancel")).SetFont(Upp::SansSerifZ(12)).LeftPosZ(212, 56).TopPosZ(244, 15))
 END_LAYOUT

@@ -168,7 +168,13 @@ double taxMoney ( int money )
 }
 
 double round(double d, int n) {
-	return floor(d * ipow10(n) + 0.5) / ipow10(n);
+	double param, fractpart, intpart;
+	int fixer = (int) (d * ipow10(n));
+	param = (double) fixer;
+	fractpart = modf (param , &intpart);
+
+	// return floor(intpart + 0.5) / ipow10(n);
+	return (intpart / ipow10(n));
 }
 
 double PercentFormat(double d) {

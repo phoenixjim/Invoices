@@ -3,7 +3,7 @@
 
 CompanyInfoWindow::CompanyInfoWindow()
 {
-	CtrlLayoutOKCancel(*this, "Create Invoice");
+	CtrlLayoutOKCancel(*this, "Set Company Info");
 	ok << [=] { Save(); Close();};
 	cancel << [=] { Cancel(); };
 
@@ -16,7 +16,7 @@ CompanyInfoWindow::CompanyInfoWindow()
 	txtBusZip.SetData(myConfig.data.companyzip);
 	txtBusPhone.SetData(myConfig.data.companyphone);
 	txtBusEmail.SetData(myConfig.data.companyemail);
-	txtTaxrate.SetData(myConfig.data.taxrate);
+	txtTaxrate.SetData(round(myConfig.data.taxrate,2));
 }
 
 void CompanyInfoWindow::Cancel()
@@ -26,7 +26,7 @@ void CompanyInfoWindow::Cancel()
 
 void CompanyInfoWindow::Save()
 {
-	myConfig.data.taxrate = txtTaxrate.GetData();
+	myConfig.data.taxrate = round(txtTaxrate.GetData(),2);
 	myConfig.data.companyname = ~txtBusName.GetData();
 	myConfig.data.companyowner = ~txtBusOwner.GetData();
 	myConfig.data.companyaddress = ~txtBusAddress.GetData();

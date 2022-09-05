@@ -26,13 +26,13 @@ AddLineItem::AddLineItem()
 		(ISTAXABLE, optProdTaxable)
 	;
 
-	cbProducts.Add("Service");
-	cbProducts.Add("Part");
-	cbProducts.Add("Tip");
-	cbProducts.Add("Refund");
-	cbProducts.Add("Note");
-	cbProducts.Add("Weekly");
-	cbProducts.Add("Daily");
+	SQL * Select(TYPENUM, TYPENAME).From(TYPES);
+	
+	while (SQL.Fetch())
+	{
+		cbProducts.Add(SQL[TYPENUM], SQL[TYPENAME]);
+	}
+	
 	Sql tempSql;
 	tempSql.Execute("Select MAX(INVOICENUMBER) From INVOICES");
 	tempSql.Fetch();
@@ -71,18 +71,9 @@ void AddLineItem::PriceChanged()
 void AddLineItem::ProdChanged()
 {
 	int idNum = cbProducts.GetIndex() + 1;
-	switch(idNum)
-	{
-		case Service:
-		case Part:
-		case Refund:
-			optProdTaxable.Set(true);
-			break;
-			
-		default:
-				optProdTaxable.Set(false);
-			break;
-	}
+	// max taxable id is 3 currently
+	if (idNum < 4) optProdTaxable.Set(true);
+	else optProdTaxable.Set(false);
 }
 
 LineItemsWindow::LineItemsWindow() {
