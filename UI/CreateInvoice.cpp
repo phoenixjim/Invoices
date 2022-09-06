@@ -4,7 +4,7 @@ CreateInvoiceWindow::CreateInvoiceWindow()
  { 
  	CtrlLayout(*this, "Create Invoice");
  	txtTerms.SetText("Due On Receipt");
- 	txtTaxRate.SetData(myConfig.data.taxrate);
+ 	txtTaxRate.SetData(myConfig.data.taxrate/10000);
  	pInvoice = 0;
 	optProdTaxable.WantFocus(true);
 	btnAdd << [=] { AddItem(); };
@@ -76,7 +76,7 @@ void CreateInvoiceWindow::AdjustPrice()
 {
 	if (IsNull(txtPrice)) return;
 	
-	double newPrice = round((double)txtPrice / ( 1 + myConfig.data.taxrate ), 2);
+	double newPrice = round((double)txtPrice / ( 1 + myConfig.data.taxrate / 10000), 2);
 	txtPreTax = newPrice;
 }
 

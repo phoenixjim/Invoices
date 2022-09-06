@@ -16,7 +16,7 @@ CompanyInfoWindow::CompanyInfoWindow()
 	txtBusZip.SetData(myConfig.data.companyzip);
 	txtBusPhone.SetData(myConfig.data.companyphone);
 	txtBusEmail.SetData(myConfig.data.companyemail);
-	txtTaxrate.SetData(round(myConfig.data.taxrate,2));
+	txtTaxrate.SetData(round((double)myConfig.data.taxrate)/10000);
 }
 
 void CompanyInfoWindow::Cancel()
@@ -26,7 +26,7 @@ void CompanyInfoWindow::Cancel()
 
 void CompanyInfoWindow::Save()
 {
-	myConfig.data.taxrate = round(txtTaxrate.GetData(),2);
+	myConfig.data.taxrate = round((double)txtTaxrate.GetData()*10000.00);
 	myConfig.data.companyname = ~txtBusName.GetData();
 	myConfig.data.companyowner = ~txtBusOwner.GetData();
 	myConfig.data.companyaddress = ~txtBusAddress.GetData();
