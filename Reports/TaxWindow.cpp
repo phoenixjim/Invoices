@@ -31,6 +31,9 @@ TaxWindow::TaxWindow()
 				  };
 	btnReport << [=] { CreateReport(dateStart.GetData().ToString(), dateEnd.GetData().ToString());
 					 };
+	lStart.SetInk(TXTCOLOR);
+	lEnd.SetInk(TXTCOLOR);
+	anon.SetColor(TXTCOLOR);
 }
 
 double TaxWindow::GetPartsCost ( int invId )

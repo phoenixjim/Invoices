@@ -47,6 +47,8 @@ InvoicesWindow::InvoicesWindow()
 	}
 	InvoicesArray.Query();
 
+	dv___7.SetInk(TXTCOLOR);
+	lInst.SetInk(TXTCOLOR);
 	
 }
 void InvoicesWindow::btnPrintClicked()

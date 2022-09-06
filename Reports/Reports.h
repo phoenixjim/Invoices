@@ -12,6 +12,9 @@ using namespace Upp;
 #include "../Utils/converts.h"
 #include "../Utils/configs.h"
 
+#define COLOR Color(102, 0, 102) // dark violet background, text should be white...
+#define TXTCOLOR Color(255,255,255)
+
 struct TaxWindow : WithTaxWindowLayout<TopWindow> {
 	Configs myConfig;
 	void okPressed();
@@ -26,7 +29,7 @@ struct TaxWindow : WithTaxWindowLayout<TopWindow> {
 public:
 	TaxWindow();
 	void Paint(Draw& w) {
-		w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
+		w.DrawRect(GetSize(), COLOR); // <= enter your background color here
     }
 };
 
@@ -44,7 +47,7 @@ struct IncomeWindow : WithIncomeByCustomerLayout<TopWindow> {
 public:
 	IncomeWindow();
 	void Paint(Draw& w) {
-        w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
+        w.DrawRect(GetSize(), COLOR); // <= enter your background color here
      }
 };
 
@@ -61,7 +64,7 @@ struct ProfitLossWindow : WithProfitLossWindowLayout<TopWindow> {
 public:
 	ProfitLossWindow();
 	void Paint(Draw& w) {
-		w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
+		w.DrawRect(GetSize(), COLOR); // <= enter your background color here
 	}
 };
 

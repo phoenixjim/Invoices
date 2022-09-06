@@ -5,6 +5,9 @@ class AddProduct : public WithProductAddLayout<TopWindow> {
 	public:
 		SqlCtrls ctrls;
 		AddProduct(String title);
+		virtual void Paint(Draw& w) {
+			w.DrawRect(GetSize(), COLOR); // <= enter your background color here
+    }
 };
 
 
@@ -20,6 +23,12 @@ AddProduct::AddProduct(String title)
 		(COST, txtProductCost)
 		;
 	dtpDatePurchased.SetConvert(DateIntConvert());
+	lName.SetInk(TXTCOLOR);
+	lDate.SetInk(TXTCOLOR);
+	lDes.SetInk(TXTCOLOR);
+	lCost.SetInk(TXTCOLOR);
+	lInvNo.SetInk(TXTCOLOR);
+	lInst.SetInk(TXTCOLOR);
 }
 
 ProductsWindow::ProductsWindow() {

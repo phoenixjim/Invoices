@@ -14,35 +14,16 @@ using namespace Upp;
 #include "../Utils/converts.h"
 #include <Report/Report.h>
 
-/*
-enum pNames
-	{
-	Service=1,
-	Part,
-	Gift,
-	Refund,
-	Note,
-	Weekly,
-	Daily,
-	SemiWeekly
-};
-
-
-enum Status
-	{
-	Void = 0,
-	Unpaid,
-	PaidInFull
-};
-*/
-
+//#define COLOR Color(204, 255, 255)
+#define COLOR Color(102, 0, 102) // dark violet background, text should be white...
+#define TXTCOLOR Color(255,255,255)
 //Customers
 struct CustomersWindow : WithCustomersWindowLayout<TopWindow> {
 	Configs	myConfig;
 public:
     CustomersWindow();
 	virtual void Paint(Draw& w) {
-        w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
+        w.DrawRect(GetSize(), COLOR); // <= enter your background color here
     }
 	void AddNewCustomer();
 	void EditRow();
@@ -71,7 +52,7 @@ public:
 	CreateInvoiceWindow();
 	CreateInvoiceWindow(int invoice);
 	void Paint(Draw& w) {
-        w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
+        w.DrawRect(GetSize(), COLOR); // <= enter your background color here
      }
 };
 
@@ -93,7 +74,7 @@ struct InvoicesWindow : WithInvoicesWindowLayout<TopWindow> {
 public:
 	InvoicesWindow();
 	virtual void Paint(Draw& w) {
-        w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
+        w.DrawRect(GetSize(), COLOR); // <= enter your background color here
     }
 };
 
@@ -109,7 +90,7 @@ struct LineItemsWindow : public WithLineItemsWindowLayout<TopWindow> {
 public:
 	LineItemsWindow();
 	void Paint(Draw& w) {
-        w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
+        w.DrawRect(GetSize(), COLOR); // <= enter your background color here
      }
 };
 
@@ -120,7 +101,7 @@ public:
 	SqlCtrls ctrls;
 	
 	virtual void Paint(Draw& w) {
-        w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
+        w.DrawRect(GetSize(), COLOR); // <= enter your background color here
     }
     void AddNewProduct();
 	void EditRow();
@@ -133,7 +114,7 @@ public:
 	SqlCtrls ctrls;
 	
 	virtual void Paint(Draw& w) {
-        w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
+        w.DrawRect(GetSize(), COLOR); // <= enter your background color here
     }
     void AddNewType();
 	void EditRow();
@@ -148,7 +129,7 @@ public:
 	Configs myConfig;
 	CompanyInfoWindow();
 	void Paint(Draw& w) {
-        w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
+        w.DrawRect(GetSize(), COLOR); // <= enter your background color here
     }
 };
 
@@ -174,7 +155,7 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 public:
 	Invoices();
 	void Paint(Draw& w) {
-		w.DrawRect(GetSize(), Color(204, 255, 255)); // <= enter your background color here
+		w.DrawRect(GetSize(), COLOR); // <= enter your background color here
 	}
 	// Menu definition
 	void		MainMenu(Bar& bar);

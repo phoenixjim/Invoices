@@ -7,6 +7,9 @@ class AddCustomer : public WithCustomerAddLayout<TopWindow> {
 	public:
 		SqlCtrls ctrls;
 		AddCustomer();
+		virtual void Paint(Draw& w) {
+			w.DrawRect(GetSize(), COLOR); // <= enter your background color here
+		}
 };
 
 AddCustomer::AddCustomer()
@@ -22,6 +25,14 @@ AddCustomer::AddCustomer()
 		(ZIP, txtCustZip)
 		(TAXABLE, chkTaxable)
 	;
+	lCustName.SetInk(TXTCOLOR);
+	lCustEmail.SetInk(TXTCOLOR);
+	lCustPhone.SetInk(TXTCOLOR);
+	lCustAddr.SetInk(TXTCOLOR);
+	lCustCity.SetInk(TXTCOLOR);
+	lCustState.SetInk(TXTCOLOR);
+	lCustZip.SetInk(TXTCOLOR);
+	chkTaxable.SetColor(TXTCOLOR);
 }
 
 

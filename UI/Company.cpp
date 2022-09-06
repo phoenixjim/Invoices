@@ -7,6 +7,16 @@ CompanyInfoWindow::CompanyInfoWindow()
 	ok << [=] { Save(); Close();};
 	cancel << [=] { Cancel(); };
 
+	lBusName.SetInk(TXTCOLOR);
+	lOwner.SetInk(TXTCOLOR);
+	lAddress.SetInk(TXTCOLOR);
+	lCity.SetInk(TXTCOLOR);
+	lState.SetInk(TXTCOLOR);
+	lZip.SetInk(TXTCOLOR);
+	lPhone.SetInk(TXTCOLOR);
+	lEmail.SetInk(TXTCOLOR);
+	lTaxRate.SetInk(TXTCOLOR);
+	
 	LoadFromJsonFile(myConfig.data);
 	txtBusName.SetData(myConfig.data.companyname);
 	txtBusOwner.SetData(myConfig.data.companyowner);

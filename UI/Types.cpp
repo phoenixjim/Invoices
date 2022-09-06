@@ -5,6 +5,9 @@ class AddType : public WithTypesAddLayout<TopWindow> {
 	public:
 		SqlCtrls ctrls;
 		AddType(String title);
+		virtual void Paint(Draw& w) {
+			w.DrawRect(GetSize(), COLOR); // <= enter your background color here
+    }
 };
 
 
@@ -19,6 +22,13 @@ AddType::AddType(String title)
 		(TYPEQUANT, txtTypeQuantity)
 		(TYPETAXABLE, optTaxable)
 		;
+	lName.SetInk(TXTCOLOR);
+	lDescript.SetInk(TXTCOLOR);
+	lQuant.SetInk(TXTCOLOR);
+	lCost.SetInk(TXTCOLOR);
+	lType.SetInk(TXTCOLOR);
+	lInstruct.SetInk(TXTCOLOR);
+	optTaxable.SetColor(TXTCOLOR);
 }
 
 TypesWindow::TypesWindow() {

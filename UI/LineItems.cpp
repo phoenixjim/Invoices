@@ -11,6 +11,9 @@ class AddLineItem : public WithLineItemAddLayout<TopWindow> {
 public:
 	SqlCtrls ctrls;
 	AddLineItem();
+	virtual void Paint(Draw& w) {
+		w.DrawRect(GetSize(), COLOR); // <= enter your background color here
+	}
 };
 
 AddLineItem::AddLineItem()
@@ -45,6 +48,15 @@ AddLineItem::AddLineItem()
 	txtPrice.WhenAction << [=] { PriceChanged(); };
 	txtQty.WhenAction << [=] { QtyChanged(); };
 	btnSubtract << [=] { AdjustPrice(); };
+
+	lDesc.SetInk(TXTCOLOR);
+	lPrice.SetInk(TXTCOLOR);
+	lQty.SetInk(TXTCOLOR);
+	lTotal.SetInk(TXTCOLOR);
+	lName.SetInk(TXTCOLOR);
+	lNumber.SetInk(TXTCOLOR);
+	optProdTaxable.SetColor(TXTCOLOR);
+	lInst.SetInk(TXTCOLOR);
 }
 
 void AddLineItem::AdjustPrice()

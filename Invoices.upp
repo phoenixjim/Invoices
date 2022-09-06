@@ -17,17 +17,17 @@ file
 	UI/Customers.cpp,
 	UI/Invoices.cpp,
 	UI/LineItems.cpp,
-	Invoices.lay readonly,
 	Utils/configs.cpp,
 	Utils/configs.h,
 	Utils/converts.cpp,
 	Utils/converts.h,
 	Reports/IncomeWindow.cpp,
+	Reports/TaxWindow.cpp,
 	Reports/ProfitLossWindow.cpp,
 	Reports/Reports.h,
-	Reports/Reports.lay,
-	Reports/TaxWindow.cpp,
-	UI/main.cpp;
+	UI/main.cpp,
+	Invoices.lay readonly,
+	Reports/Reports.lay;
 
 mainconfig
 	"" = "GUI";

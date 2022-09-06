@@ -47,6 +47,25 @@ CreateInvoiceWindow::CreateInvoiceWindow()
 	Date now = GetSysDate();
 	dtpBillDate.SetConvert(DateIntConvert());
 	dtpBillDate.SetText( Format("%", now ).ToString() );
+
+	lDesc.SetInk(TXTCOLOR);
+	lNTSub.SetInk(TXTCOLOR);
+	lTSub.SetInk(TXTCOLOR);
+	lTax.SetInk(TXTCOLOR);
+	lTotal.SetInk(TXTCOLOR);
+	lPrice.SetInk(TXTCOLOR);
+	lQty.SetInk(TXTCOLOR);
+	lLIName.SetInk(TXTCOLOR);
+	bCustDetails.SetInk(TXTCOLOR);
+	lInvNo.SetInk(TXTCOLOR);
+	lBillDate.SetInk(TXTCOLOR);
+	lRate.SetInk(TXTCOLOR);
+	lTerms.SetInk(TXTCOLOR);
+	lName.SetInk(TXTCOLOR);
+	bLineItem.SetInk(TXTCOLOR);
+	bLineItems.SetInk(TXTCOLOR);
+	bTotals.SetInk(TXTCOLOR);
+	lInst.SetInk(TXTCOLOR);
  }
  
 void CreateInvoiceWindow::CustChanged()

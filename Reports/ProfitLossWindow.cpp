@@ -24,6 +24,10 @@ ProfitLossWindow::ProfitLossWindow()
 	cancel << [=] { cancelPressed(); };
 	btnReport << [=] { CreateReport ( dateStart.GetData().ToString(), dateEnd.GetData().ToString() ); };
 	WhenClose = [=] { cleanup(); };
+
+	lStart.SetInk(TXTCOLOR);
+	lEnd.SetInk(TXTCOLOR);
+	lBetween.SetInk(TXTCOLOR);
 }
 void ProfitLossWindow::cleanup()
 {
