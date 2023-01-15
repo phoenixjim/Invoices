@@ -26,7 +26,7 @@ file
 	Reports/ProfitLossWindow.cpp,
 	Reports/Reports.h,
 	UI/main.cpp,
-	Invoices.lay readonly,
+	Invoices.lay,
 	Reports/Reports.lay;
 
 mainconfig
