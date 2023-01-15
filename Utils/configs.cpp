@@ -32,7 +32,7 @@ void Configs::Populate()
 {
 	if ( !FileExists ( ConfigFile(GetExeTitle() + ".json") ) )
 	{
-		data.taxrate = 800;
+		data.taxrate = 0.08;
 		data.companyname = "Company Name";
 		data.companyowner = "James Lefavour";
 		data.companyaddress = "0 Main Way";

@@ -63,7 +63,7 @@ void AddLineItem::AdjustPrice()
 {
 	if (IsNull(txtPrice)) return;
 	
-	double newPrice = round((double)txtPrice / ( 1 + myConfig.data.taxrate / 10000), 2);
+	double newPrice = round((double)txtPrice / ( 1 + myConfig.data.taxrate ), 2);
 	txtPrice = newPrice;
 	PriceChanged();
 }
@@ -232,7 +232,7 @@ void LineItemsWindow::CalcInvoiceTotal(long invoice)
 		}
 		else 	nonTaxable += round((double)tempLI[PRICE] * (double)tempLI[QTY], 2);
 	}
-	if (tempCust[TAXABLE] == 1) salestax = round( taxable * myConfig.data.taxrate / 10000, 2);
+	if (tempCust[TAXABLE] == 1) salestax = round( taxable * myConfig.data.taxrate, 2);
 	grandtotal = nonTaxable + taxable + salestax;
 	// String exestring = "Update INVOICES SET TAXABLESUB = " + DblStr(taxable) + "NONTAXABLESUB = " + DblStr( nonTaxable) + "TAX = " + DblStr(salestax) + "GRANDTOTAL = " + DblStr( grandtotal) + "Where INVOICENUMBER == " + IntStr64(invoice);
 	SQL * SqlUpdate(INVOICES)(TAXABLESUB, taxable)(NONTAXABLESUB, nonTaxable)(TAX, salestax)(GRANDTOTAL, grandtotal).Where(INVOICENUMBER == (int64)invoice);

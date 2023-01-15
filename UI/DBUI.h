@@ -151,7 +151,7 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 	
 	MenuBar		mainmenu;
 	// added 'save and mark paid' on create invoice window
-	String version = "2.0.0.2";
+	String version = "2.0.0.1";
 public:
 	Invoices();
 	void Paint(Draw& w) {
