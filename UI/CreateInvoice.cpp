@@ -74,6 +74,7 @@ void CreateInvoiceWindow::CustChanged()
 	idNum += cbCustomers.GetIndex();
 	if (IsNull(idNum) || idNum < 1)
 		return;
+	if (idNum == 5) PromptOK("Remember $40 discount per day until 04/28/2023");
 	optCustTaxable.Set(SQL % Select(TAXABLE).From(CUSTOMERS).Where(CUST_ID == idNum));
 }
 
