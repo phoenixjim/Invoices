@@ -57,7 +57,6 @@ void InvoicesWindow::btnPrintClicked()
 	String invoiceQTF;
 	Report myInvoice;
 	
-	// String header = "{{RW 100:100@W [+60< " + myConfig.companyname + ":: ]"; // Add paid message right aligned if paid
 	String header = "[ {{5000:5000f0;g0; [s0;%% " + myConfig.data.companyname + " ] :: [s0;>%% [@6 "; // Add paid message right aligned if paid
 	String footer = "[ $$0,0#00000000000000000000000000000000:Default] [ [s0;= [@5;0 Thank you for your business!]&][s0;= [@5;0 " <<
 		myConfig.data.companyname << " @$2022; " << myConfig.data.companyaddress << " @$2022; " << myConfig.data.companycity << ", " << myConfig.data.companystate <<

@@ -12,11 +12,11 @@ Value ConvDoubleCls::Format ( const Value &q ) const // int to string, formatted
 	double currency;
 	int money = q;
 	if (money < 0) {
-		currency = (double)abs(money) / 100.0;
+		currency = (double)abs(money) ;
 		return UPP::Format("$(%2!,n)", currency);
 	}
 	else {
-		currency = (double)money / 100.0;
+		currency = (double)money ;
 		return (money == 0) ? "$0.00" : UPP::Format("$%2!,n", currency);
 	}
 }
@@ -30,7 +30,7 @@ Value ConvDoubleCls::Scan (const Value &q ) const // string to int
 		text.TrimLast();
 	}
 	double currency = StrDbl(text.ToString());
-	return (int) (currency * 100);
+	return (int) (currency);
 }
 
 Convert& ConvDouble()
@@ -154,17 +154,17 @@ String prnMoney( int money )
 {
 	double currency;
 	if (money < 0) {
-		currency = (double)abs(money) / 100.0;
+		currency = (double)abs(money) ;
 		return UPP::Format("$(%2!,n)", currency);
 	}
 	else {
-		currency = (double)money / 100.0;
+		currency = (double)money ;
 		return (money == 0) ? "$0.00" : UPP::Format("$%2!,n", currency);
 	}
 }
 double taxMoney ( int money )
 {
-	return ((double) money / 100.0);
+	return ((double) money );
 }
 
 double round(double d, int n) {

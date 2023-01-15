@@ -113,16 +113,16 @@ void CreateInvoiceWindow::SaveInvoice()
 	for (int i = 0; i < idNum; i++)
 	{
 		if (optCustTaxable.Get() == true && arrayLineItems.Get(i, ISTAXABLE)  == 1) {
-			taxable += (int)((double)arrayLineItems.Get(i, PRICE) * 100) * (int)arrayLineItems.Get(i, QTY);
+			taxable += (int)((double)arrayLineItems.Get(i, PRICE) ) * (int)arrayLineItems.Get(i, QTY);
 		}
-		else 	nonTaxable += (double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY) * 100.0;
+		else 	nonTaxable += (double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY) ;
 		
 		SQL * Insert(LINEITEMS)
 		(PRODUCTNAME, arrayLineItems.Get(i,PRODUCTNAME))
 		(DESCRIPTION, arrayLineItems.Get(i, DESCRIPTION))
-		(PRICE, (double)arrayLineItems.Get(i, PRICE)*100.0)
+		(PRICE, (double)arrayLineItems.Get(i, PRICE))
 		(QTY, (int)arrayLineItems.Get(i, QTY))
-		(TOTAL, (double)arrayLineItems.Get(i, TOTAL)*100.0)
+		(TOTAL, (double)arrayLineItems.Get(i, TOTAL))
 		(INVOICEIDNUMBER, (int64)txtInvoice)
 		(ISTAXABLE, (int)arrayLineItems.Get(i, ISTAXABLE));
 	}
