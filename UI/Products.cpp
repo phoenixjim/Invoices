@@ -28,7 +28,6 @@ AddProduct::AddProduct(String title)
 	lDes.SetInk(TXTCOLOR);
 	lCost.SetInk(TXTCOLOR);
 	lInvNo.SetInk(TXTCOLOR);
-	lInst.SetInk(TXTCOLOR);
 }
 
 ProductsWindow::ProductsWindow() {

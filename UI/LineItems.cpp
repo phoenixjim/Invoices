@@ -56,7 +56,6 @@ AddLineItem::AddLineItem()
 	lName.SetInk(TXTCOLOR);
 	lNumber.SetInk(TXTCOLOR);
 	optProdTaxable.SetColor(TXTCOLOR);
-	lInst.SetInk(TXTCOLOR);
 }
 
 void AddLineItem::AdjustPrice()

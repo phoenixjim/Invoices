@@ -27,7 +27,6 @@ AddType::AddType(String title)
 	lQuant.SetInk(TXTCOLOR);
 	lCost.SetInk(TXTCOLOR);
 	lType.SetInk(TXTCOLOR);
-	lInstruct.SetInk(TXTCOLOR);
 	optTaxable.SetColor(TXTCOLOR);
 }
 
