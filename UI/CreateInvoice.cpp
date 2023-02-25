@@ -108,12 +108,12 @@ void CreateInvoiceWindow::SaveInvoice()
 		PromptOK("Are you missing something? (Customer, Date or items)");
 		return;
 	}
-	int nonTaxable = 0, taxable = 0, salestax = 0, grandTotal = 0;
+	double nonTaxable = 0.00, taxable = 0.00, salestax = 0.00, grandTotal = 0.00;
 
 	for (int i = 0; i < idNum; i++)
 	{
 		if (optCustTaxable.Get() == true && arrayLineItems.Get(i, ISTAXABLE)  == 1) {
-			taxable += (int)((double)arrayLineItems.Get(i, PRICE) ) * (int)arrayLineItems.Get(i, QTY);
+			taxable += ((double)arrayLineItems.Get(i, PRICE) ) * (int)arrayLineItems.Get(i, QTY);
 		}
 		else 	nonTaxable += (double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY) ;
 		
@@ -226,7 +226,7 @@ void CreateInvoiceWindow::PrintInvoice()
 	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Tax:]::a4/15 [> " << prnMoney(invoiceSQL[TAX]) << "]}}]]&";
 	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Total:]::a4/15 [> " << prnMoney(invoiceSQL[GRANDTOTAL]) << "]}}]]&";
 	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Amount Paid:]::a4/15 [> " << prnMoney(amtPaid) << "]}}]]&";
-	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Balance Due:]::a4/15 [> " << prnMoney((int)invoiceSQL[GRANDTOTAL] - (int)amtPaid) << "]}}]]&";
+	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Balance Due:]::a4/15 [> " << prnMoney((double)invoiceSQL[GRANDTOTAL] - (double)amtPaid) << "]}}]]&";
 
 	myInvoice.Header(header).Footer(footer);
 	

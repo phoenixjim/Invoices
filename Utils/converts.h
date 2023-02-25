@@ -17,7 +17,7 @@ Convert& ConvCurrency();
 
 double round(double d, int n);
 double PercentFormat(double d);
-String prnMoney( int money );
-double taxMoney ( int money );
+String prnMoney( double money );
+double taxMoney ( double money );
 
 #endif

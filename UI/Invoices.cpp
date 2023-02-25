@@ -16,7 +16,7 @@ InvoicesWindow::InvoicesWindow()
 	btnByVoided << [=] { btnByVoidedClicked(); };
 	btnAll << [=] { btnAllClicked(); };
 	
-	InvoicesArray.SetTable ( INVOICES, INVOICE_ID );
+	InvoicesArray.SetTable ( INVOICES, INVOICE_ID ).AllSorting();
 
 	// InvoicesArray.Join(BOOK_ID, book); // joins id from other db to this id
 	InvoicesArray.AddColumn ( INVOICENUMBER, "Invoice#" );

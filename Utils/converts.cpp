@@ -6,22 +6,22 @@ struct ConvDoubleCls : Convert
 	virtual Value Scan ( const Value &q ) const;
 };
 
-Value ConvDoubleCls::Format ( const Value &q ) const // int to string, formatted
+Value ConvDoubleCls::Format ( const Value &q ) const // double to string, formatted
 {
 	// return q.IsNull() ? Null : UPP::Format("%2!,n", q);
 	double currency;
 	int money = q;
 	if (money < 0) {
 		currency = (double)abs(money) ;
-		return UPP::Format("$(%2!,n)", currency);
+		return UPP::Format("$(%.2f)", currency);
 	}
 	else {
 		currency = (double)money ;
-		return (money == 0) ? "$0.00" : UPP::Format("$%2!,n", currency);
+		return (money == 0) ? "$0.00" : UPP::Format("$%.2f", currency);
 	}
 }
 	
-Value ConvDoubleCls::Scan (const Value &q ) const // string to int
+Value ConvDoubleCls::Scan (const Value &q ) const // string to double
 {
 	String text = q;
 	if (text[0] == '$') text.Remove(0);
@@ -30,7 +30,7 @@ Value ConvDoubleCls::Scan (const Value &q ) const // string to int
 		text.TrimLast();
 	}
 	double currency = StrDbl(text.ToString());
-	return (int) (currency);
+	return (double)(currency);
 }
 
 Convert& ConvDouble()
@@ -150,19 +150,19 @@ Convert& ConvCurrency()
 	return Single<ConvCurrencyCls>();
 }
 
-String prnMoney( int money )
+String prnMoney( double money )
 {
 	double currency;
 	if (money < 0) {
 		currency = (double)abs(money) ;
-		return UPP::Format("$(%2!,n)", currency);
+		return UPP::Format("$(%.2f)", currency);
 	}
 	else {
 		currency = (double)money ;
-		return (money == 0) ? "$0.00" : UPP::Format("$%2!,n", currency);
+		return (money == 0) ? "$0.00" : UPP::Format("$%.2f", currency);
 	}
 }
-double taxMoney ( int money )
+double taxMoney ( double money )
 {
 	return ((double) money );
 }
@@ -173,8 +173,8 @@ double round(double d, int n) {
 	param = (double) fixer;
 	fractpart = modf (param , &intpart);
 
-	// return floor(intpart + 0.5) / ipow10(n);
-	return (intpart / ipow10(n));
+	return floor(intpart + 0.5) / ipow10(n);
+	//return (intpart / ipow10(n));
 }
 
 double PercentFormat(double d) {
