@@ -56,7 +56,6 @@ AddLineItem::AddLineItem()
 	lName.SetInk(TXTCOLOR);
 	lNumber.SetInk(TXTCOLOR);
 	optProdTaxable.SetColor(TXTCOLOR);
-	lInst.SetInk(TXTCOLOR);
 }
 
 void AddLineItem::AdjustPrice()
@@ -206,9 +205,11 @@ void LineItemsWindow::DeleteItem()
 		liTmp * SelectAll().From(LINEITEMS).Where(INVOICEIDNUMBER == thisInvoice);
 		liTmp.Fetch();
 
+		/*
 		if (liTmp.GetRowsProcessed() < 2)
 			inv * SqlUpdate(INVOICES)(STATUS, 0).Where(INVOICENUMBER == thisInvoice); // Void = 0
 		else
+		*/
 			CalcInvoiceTotal( thisInvoice );
 	}
 	LineItemsArray.ReQuery();

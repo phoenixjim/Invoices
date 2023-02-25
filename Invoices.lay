@@ -109,7 +109,6 @@ LAYOUT(InvoicesWindowLayout, 1128, 584)
 	ITEM(Upp::Button, btnByDates, SetLabel(t_("Date Range")).LeftPosZ(12, 76).TopPosZ(240, 15))
 	ITEM(Upp::Button, btnByCustomer, SetLabel(t_("By Customer")).LeftPosZ(52, 80).TopPosZ(176, 15))
 	ITEM(Upp::Button, btnByVoided, SetLabel(t_("All Voided")).LeftPosZ(12, 76).TopPosZ(216, 15))
-	ITEM(Upp::StaticText, lInst, SetText(t_("Enter all payments x 100 \nso 140.00 = 14000\nLeave blank for payment in full")).SetAlign(Upp::ALIGN_CENTER).LeftPosZ(12, 160).TopPosZ(40, 36))
 END_LAYOUT
 
 LAYOUT(ProductAddLayout, 360, 360)
@@ -125,7 +124,6 @@ LAYOUT(ProductAddLayout, 360, 360)
 	ITEM(Upp::EditDouble, txtProductCost, SetFont(Upp::SansSerifZ(16)).SetFrame(Upp::FieldFrame()).LeftPosZ(108, 244).TopPosZ(292, 19))
 	ITEM(Upp::Button, ok, SetLabel(t_("Ok")).LeftPosZ(44, 56).TopPosZ(332, 15))
 	ITEM(Upp::Button, cancel, SetLabel(t_("Cancel")).LeftPosZ(252, 56).TopPosZ(332, 15))
-	ITEM(Upp::StaticText, lInst, SetText(t_("Enter all payments x 100 \nso 140.00 = 14000\n")).SetAlign(Upp::ALIGN_CENTER).LeftPosZ(188, 160).TopPosZ(8, 36))
 END_LAYOUT
 
 LAYOUT(TypesAddLayout, 360, 284)
@@ -134,7 +132,6 @@ LAYOUT(TypesAddLayout, 360, 284)
 	ITEM(Upp::Label, lQuant, SetLabel(t_("Quantity")).SetFont(Upp::SansSerifZ(16)).LeftPosZ(8, 88).TopPosZ(212, 32))
 	ITEM(Upp::Label, lCost, SetLabel(t_("Cost")).SetFont(Upp::SansSerifZ(16)).LeftPosZ(8, 88).TopPosZ(180, 32))
 	ITEM(Upp::Label, lType, SetLabel(t_("Type #")).SetFont(Upp::SansSerifZ(16)).LeftPosZ(8, 72).TopPosZ(8, 32))
-	ITEM(Upp::StaticText, lInstruct, SetText(t_("Cost must be decimal ie: 140.00")).HCenterPosZ(232, 48).TopPosZ(156, 19))
 	ITEM(Upp::Option, optTaxable, SetLabel(t_("Taxable?")).LeftPosZ(236, 92).TopPosZ(16, 16))
 	ITEM(Upp::EditIntSpin, txtTypeNo, Min(-1).SetFrame(Upp::FieldFrame()).LeftPosZ(104, 80).TopPosZ(16, 19))
 	ITEM(Upp::EditString, txtTypeName, SetFont(Upp::SansSerifZ(16)).SetFrame(Upp::FieldFrame()).LeftPosZ(108, 244).TopPosZ(56, 19))
@@ -162,7 +159,6 @@ LAYOUT(LineItemAddLayout, 292, 220)
 	ITEM(Upp::Label, lName, SetLabel(t_("Name")).SetFont(Upp::SansSerifZ(12)).LeftPosZ(132, 36).TopPosZ(8, 19))
 	ITEM(Upp::Label, lNumber, SetLabel(t_("Invoice#")).SetFont(Upp::SansSerifZ(12)).LeftPosZ(8, 56).TopPosZ(8, 19))
 	ITEM(Upp::Option, optProdTaxable, SetLabel(t_("Taxable?")).LeftPosZ(8, 60).TopPosZ(160, 16))
-	ITEM(Upp::StaticText, lInst, SetText(t_("Enter all payments x 100 \nso 140.00 = 14000\n")).SetAlign(Upp::ALIGN_CENTER).LeftPosZ(66, 160).TopPosZ(68, 36))
 END_LAYOUT
 
 LAYOUT(CustomerAddLayout, 436, 352)
