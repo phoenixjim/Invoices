@@ -10,7 +10,7 @@ Value ConvDoubleCls::Format ( const Value &q ) const // double to string, format
 {
 	// return q.IsNull() ? Null : UPP::Format("%2!,n", q);
 	double currency;
-	int money = q;
+	double money = q;
 	if (money < 0) {
 		currency = (double)abs(money) ;
 		return UPP::Format("$(%.2f)", currency);
