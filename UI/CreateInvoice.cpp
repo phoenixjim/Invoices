@@ -95,7 +95,7 @@ void CreateInvoiceWindow::AdjustPrice()
 {
 	if (IsNull(txtPrice)) return;
 	
-	double newPrice = round((double)txtPrice / ( 1 + myConfig.data.taxrate ), 2);
+	double newPrice = round((double)txtPrice / (double)( 1.00 + myConfig.data.taxrate ), 2);
 	txtPreTax = newPrice;
 }
 
@@ -115,7 +115,7 @@ void CreateInvoiceWindow::SaveInvoice()
 		if (optCustTaxable.Get() == true && arrayLineItems.Get(i, ISTAXABLE)  == 1) {
 			taxable += ((double)arrayLineItems.Get(i, PRICE) ) * (int)arrayLineItems.Get(i, QTY);
 		}
-		else 	nonTaxable += (double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY) ;
+		else 	nonTaxable += (double)arrayLineItems.Get(i, PRICE) * (int)arrayLineItems.Get(i, QTY) ;
 		
 		SQL * Insert(LINEITEMS)
 		(PRODUCTNAME, arrayLineItems.Get(i,PRODUCTNAME))
@@ -126,7 +126,7 @@ void CreateInvoiceWindow::SaveInvoice()
 		(INVOICEIDNUMBER, (int64)txtInvoice)
 		(ISTAXABLE, (int)arrayLineItems.Get(i, ISTAXABLE));
 	}
-	if (optCustTaxable.Get() == true) salestax = (int)round(taxable * (double)txtTaxRate, 0);
+	if (optCustTaxable.Get() == true) salestax = (double)round(taxable * (double)txtTaxRate, 0);
 	else salestax = 0.0;
 	
 	grandTotal += salestax + nonTaxable + taxable;
