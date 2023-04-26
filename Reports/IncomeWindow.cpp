@@ -29,10 +29,12 @@ IncomeWindow::IncomeWindow() {
 	ok << [=] { okPressed(); };
 	cancel << [=] { cancelPressed(); };
 	btnReport << [=] { CreateReport(dateStart.GetData().ToString(), dateEnd.GetData().ToString()); };
+	voided.WhenAction << [=] {voidedChanged(); };
 
 	dv___0.SetInk(TXTCOLOR);
 	dv___1.SetInk(TXTCOLOR);
 	dv___2.SetInk(TXTCOLOR);
+	voided.Set(1).SetColor(TXTCOLOR);
 }
 
 double IncomeWindow::GetPartsCost ( int invId )
@@ -67,6 +69,7 @@ void IncomeWindow::okPressed()
 	SqlBool where;
 	where = Between(DATEPAID, dateStart.GetData().ToString(), dateEnd.GetData().ToString());
 	where = where && CUSTOMERID == idNum && STATUS > 1;
+	if (voided.Get()== 0) where = where && AMTPAID > 0.00;
 	
 	sql * SelectAll().From(INVOICES).Where(where);
 
@@ -146,3 +149,7 @@ void IncomeWindow::CustChanged()
 	sqlTaxReport.Clear();
 }
 
+void IncomeWindow::voidedChanged()
+{
+	okPressed();
+}

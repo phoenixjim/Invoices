@@ -18,6 +18,7 @@ using namespace Upp;
 struct TaxWindow : WithTaxWindowLayout<TopWindow> {
 	Configs myConfig;
 	void okPressed();
+	void voidedChanged();
 	void cancelPressed();
 	void anonChanged();
 	double GetPartsCost(int invId);
@@ -36,6 +37,7 @@ public:
 struct IncomeWindow : WithIncomeByCustomerLayout<TopWindow> {
 	Configs myConfig;
 	void okPressed();
+	void voidedChanged();
 	void cancelPressed();
 	void CustChanged();
 	double GetPartsCost(int invId);

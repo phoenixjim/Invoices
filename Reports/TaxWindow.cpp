@@ -25,6 +25,8 @@ TaxWindow::TaxWindow()
 	anon.Set ( 1 );
 
 	anon.WhenAction << [=] { anonChanged(); };
+	voided.WhenAction << [=] {voidedChanged(); };
+	
 	ok << [=] { okPressed();
 			  };
 	cancel << [=] { cancelPressed();
@@ -34,6 +36,8 @@ TaxWindow::TaxWindow()
 	lStart.SetInk(TXTCOLOR);
 	lEnd.SetInk(TXTCOLOR);
 	anon.SetColor(TXTCOLOR);
+	
+	voided.Set(1).SetColor(TXTCOLOR);
 }
 
 double TaxWindow::GetPartsCost ( int invId )
@@ -62,6 +66,7 @@ void TaxWindow::okPressed()
 	Sql sql;
 	SqlBool where;
 	where = Between(DATEPAID,  dateStart.GetData().ToString(), dateEnd.GetData().ToString());
+	if (voided.Get()== 0) where = where && AMTPAID > 0.00;
 
 	sql * SelectAll().From(INVOICES).Where(where);
 
@@ -173,3 +178,7 @@ void TaxWindow::anonChanged()
 
 }
 
+void TaxWindow::voidedChanged()
+{
+	okPressed();
+}
