@@ -127,9 +127,9 @@ void IncomeWindow::CreateReport(String start, String end)
 		taxQTF << " ] :: Sales Tax&[ " << prnMoney( sumTax) <<  " ] :: COGS&[ " << prnMoney( sumParts);
 		taxQTF << " ] :: Grand Total&[ " << prnMoney( sumTotal) << " ] :: ";
 
-		taxQTF << " :: [ Fed/State Income:: " << prnMoney( sumTotal - sumTax ) << " ] }}"; // was income1040 instead of sumTotal
+		taxQTF << " [ Fed/State Gross:: " << prnMoney( sumTotal - sumTax ) << " ] :: NET& " << prnMoney( sumTotal - sumTax - sumParts ) << " }}"; // was income1040 instead of sumTotal
 			
-		taxQTF << "[+80< &&Remember parts cost was not deducted from income on last line.]";
+		taxQTF << "[+80< &&Remember use 'Fed/State Gross' for income, parts cost separate on Schedule C.]";
 		Report report;
 		report.Header ( headertext ).Footer ( "Page $$P" );
 		report << taxQTF;

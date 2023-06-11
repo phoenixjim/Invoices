@@ -100,7 +100,7 @@ void TaxWindow::CreateReport(String start, String end)
 		String e = ::Format(Date( 1970, 1, 1) + StrInt(end));
 		headertext << "Tax Report " << s << " to " << e << " for " << myConfig.data.companyname;
 		if (anon.Get() == 1)
-			taxQTF = "{{110:171:111:0:136:137:136:137:137@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+90> ";
+			taxQTF = "{{110:171:75:0:135:135:135:135:135@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+90> ";
 		else taxQTF = "{{110:153:0:205:123:132:123:123:123@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+90> ";
 		int rowcount = sqlTaxReport.GetCount();
 		int custID;
@@ -116,6 +116,7 @@ void TaxWindow::CreateReport(String start, String end)
 				prnMoney(sqlTaxReport.Get ( i, TAX )) << ":: " << 
 				prnMoney(sqlTaxReport.Get ( i, COST )) << ":: " << 
 				prnMoney(sqlTaxReport.Get ( i, AMTPAID ));
+			
 			if ((i % 2 == 0 )&& (i < rowcount - 1)) taxQTF << " ::@L ][+90> ";
 			else if (i < rowcount - 1) taxQTF << " ::@W ][+90> ";
 			else taxQTF << " :: ] }} {{110:153:205:123:132:123:123:123@L ";
@@ -126,7 +127,7 @@ void TaxWindow::CreateReport(String start, String end)
 			sumTotal += (double)sqlTaxReport.Get ( i, AMTPAID );
 			sumParts += (double)sqlTaxReport.Get ( i, COST );
 		}
-		// []&:: []&:: []&:: 
+		
 		if (anon.Get() == 1)
 		{
 			taxQTF << "[+70>* Taxable&[ " << prnMoney( sumTaxable) << " ] :: Non-Taxable&[ " << prnMoney( sumNontaxable);
@@ -139,9 +140,9 @@ void TaxWindow::CreateReport(String start, String end)
 			taxQTF << " ] :: Sales Tax&[ " << prnMoney( sumTax) <<  " ] :: COGS&[ " << prnMoney( sumParts);
 			taxQTF << " ] :: Grand Total&[ " << prnMoney( sumTotal) << " ] :: ";
 		}
-		taxQTF << " :: [ Fed/State Income:: " << prnMoney( sumTotal - sumTax ) << " ] }}"; // was income1040 instead of sumTotal
+		taxQTF << " [ Fed/State Gross:: " << prnMoney( sumTotal - sumTax ) << " ] :: NET Profit& " << prnMoney( sumTotal - sumTax - sumParts ) << " }}"; // was income1040 instead of sumTotal
 			
-		taxQTF << "[+80<@R &&Remember to deduct parts cost from income on Schedule C (Not done here) ]";
+		taxQTF << "[+80< &&Remember use 'Fed/State Gross' for income, parts cost separate on Schedule C.]";
 		Report report;
 	
 		// report.SetStdFont ( SansSerif (12) );
