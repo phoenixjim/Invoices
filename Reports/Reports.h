@@ -21,6 +21,7 @@ struct TaxWindow : WithTaxWindowLayout<TopWindow> {
 	void voidedChanged();
 	void cancelPressed();
 	void anonChanged();
+	void noCustChanged();
 	double GetPartsCost(int invId);
 	void CreateReport(String start, String end);
 	void ExportQTF();

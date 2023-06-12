@@ -25,7 +25,8 @@ TaxWindow::TaxWindow()
 	anon.Set ( 1 );
 
 	anon.WhenAction << [=] { anonChanged(); };
-	voided.WhenAction << [=] {voidedChanged(); };
+	voided.WhenAction << [=] { voidedChanged(); };
+	noCust.WhenAction << [=] { noCustChanged(); };
 	
 	ok << [=] { okPressed();
 			  };
@@ -36,8 +37,9 @@ TaxWindow::TaxWindow()
 	lStart.SetInk(TXTCOLOR);
 	lEnd.SetInk(TXTCOLOR);
 	anon.SetColor(TXTCOLOR);
+	noCust.SetColor(TXTCOLOR);
 	
-	voided.Set(1).SetColor(TXTCOLOR);
+	voided.Set(0).SetColor(TXTCOLOR);
 }
 
 double TaxWindow::GetPartsCost ( int invId )
@@ -99,9 +101,14 @@ void TaxWindow::CreateReport(String start, String end)
 		String s = ::Format(Date( 1970, 1, 1) + StrInt(start));
 		String e = ::Format(Date( 1970, 1, 1) + StrInt(end));
 		headertext << "Tax Report " << s << " to " << e << " for " << myConfig.data.companyname;
-		if (anon.Get() == 1)
-			taxQTF = "{{110:171:75:0:135:135:135:135:135@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+90> ";
-		else taxQTF = "{{110:153:0:205:123:132:123:123:123@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+90> ";
+		if ( noCust.Get() == 1 )
+			taxQTF = "{{110:171:0:0:145:145:145:145:145@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+90> ";
+			
+		else {
+			if ( anon.Get() == 1)
+				taxQTF = "{{110:171:75:0:135:135:135:135:135@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+90> ";
+			else taxQTF = "{{110:153:0:205:123:132:123:123:123@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+90> ";
+		}
 		int rowcount = sqlTaxReport.GetCount();
 		int custID;
 		for ( int i = 0; i < rowcount; i++ )
@@ -127,7 +134,7 @@ void TaxWindow::CreateReport(String start, String end)
 			sumTotal += (double)sqlTaxReport.Get ( i, AMTPAID );
 			sumParts += (double)sqlTaxReport.Get ( i, COST );
 		}
-		
+		// if ( noCust.Get() == 1 )
 		if (anon.Get() == 1)
 		{
 			taxQTF << "[+70>* Taxable&[ " << prnMoney( sumTaxable) << " ] :: Non-Taxable&[ " << prnMoney( sumNontaxable);
@@ -177,6 +184,23 @@ void TaxWindow::anonChanged()
 		return;
 	}
 
+}
+
+void TaxWindow::noCustChanged()
+{
+	if (noCust.Get() == 1)
+	{
+		// use cust Number
+		sqlTaxReport.HeaderTab ( CUSTOMERID ).Show ( false ); // .ColumnWidths("150 200 65 1 150 150 150 200 200");
+		sqlTaxReport.HeaderTab ( CUSTNAME ).Show ( false );
+		anon.Disable();
+		return;
+	}
+	else
+	{
+		anon.Enable(true);
+		anonChanged();
+	}
 }
 
 void TaxWindow::voidedChanged()
