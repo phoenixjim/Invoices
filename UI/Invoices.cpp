@@ -126,7 +126,7 @@ void InvoicesWindow::btnApplyPaymentClicked()
 	int status;
 	SQL * SelectAll().From(INVOICES).Where(INVOICE_ID == thisInvoice);
 	SQL.Fetch();
-	if (SQL[STATUS] != 1) return;
+	if (SQL[STATUS] == 0) return;
 	if (IsNull(edbPayment)) {
 		edbPayment.SetData(SQL[GRANDTOTAL]);
 		status = 2;
