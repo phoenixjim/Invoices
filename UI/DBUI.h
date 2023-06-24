@@ -135,6 +135,7 @@ public:
 
 #include "../Reports/Reports.h"
 
+
 class Invoices : public WithInvoicesLayout<TopWindow> {
 	Configs myConfig;
 	
@@ -144,14 +145,15 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 	CreateInvoiceWindow createinvoicewin;
 	TaxWindow taxreportwin;
 	IncomeWindow incomewin;
-	ProfitLossWindow profitwin;
+	YearToYearWindow year2yearwin;
+	PandLWindow pandlwin;
 	CompanyInfoWindow setcompanywin;
 	InvoicesWindow invoiceswin;
 	LineItemsWindow listlineitemswin;
 	
 	MenuBar		mainmenu;
 	// added 'save and mark paid' on create invoice window
-	String version = "2.0.0.8";
+	String version = "2.1.0.2"; // added new report, renamed old profit and loss to yeartoyear
 public:
 	Invoices();
 	void Paint(Draw& w) {

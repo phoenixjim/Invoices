@@ -71,7 +71,8 @@ void Invoices::ReportsMenu(Bar& bar)
 {
 	bar.Add(t_("Income / Sales Tax"), [=]{ if(!taxreportwin.IsOpen()) taxreportwin.Open(this); });
 	bar.Add(t_("Income by Customer"), [=]{ if(!incomewin.IsOpen()) incomewin.Open(this); });
-	bar.Add(t_("Profit / Loss"), [=]{ if(!profitwin.IsOpen()) profitwin.Open(this); });
+	bar.Add(t_("Year by Year compare"), [=]{ if(!year2yearwin.IsOpen()) year2yearwin.Open(this); });
+	bar.Add(t_("Profit & Loss Statement"), [=] { if (!pandlwin.IsOpen()) pandlwin.Open(this); });
 }
 
 void Invoices::ManagementMenu(Bar& bar)

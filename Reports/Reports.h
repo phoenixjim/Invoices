@@ -54,7 +54,7 @@ public:
      }
 };
 
-struct ProfitLossWindow : WithProfitLossWindowLayout<TopWindow> {
+struct YearToYearWindow : WithYearToYearWindowLayout<TopWindow> {
 	Configs myConfig;
 	Date prevDateStart, prevDateEnd;
 	String prevStart, prevEnd;
@@ -65,10 +65,24 @@ struct ProfitLossWindow : WithProfitLossWindowLayout<TopWindow> {
 	void CreateReport(String start, String end);
 	double GetPartsCost(int invId);
 public:
-	ProfitLossWindow();
+	YearToYearWindow();
 	void Paint(Draw& w) {
 		w.DrawRect(GetSize(), COLOR); // <= enter your background color here
 	}
+};
+
+struct PandLWindow : public WithPandLWindowLayout<TopWindow> {
+	Configs myConfig;
+	void okPressed();
+	void cancelPressed();
+	void CreateReport(String start, String end);
+	double GetPartsCost ( int invId );
+	void refreshAll();
+	public:
+		PandLWindow();
+	/* void Paint(Draw& w) {
+		w.DrawRect(GetSize(), COLOR); // <= enter your background color here
+	} */
 };
 
 #endif

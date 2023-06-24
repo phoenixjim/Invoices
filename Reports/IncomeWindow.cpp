@@ -29,7 +29,7 @@ IncomeWindow::IncomeWindow() {
 	ok << [=] { okPressed(); };
 	cancel << [=] { cancelPressed(); };
 	btnReport << [=] { CreateReport(dateStart.GetData().ToString(), dateEnd.GetData().ToString()); };
-	voided.WhenAction << [=] {voidedChanged(); };
+	voided.WhenAction << [=] { voidedChanged(); };
 
 	dv___0.SetInk(TXTCOLOR);
 	dv___1.SetInk(TXTCOLOR);
