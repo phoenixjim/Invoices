@@ -4,6 +4,7 @@
 TaxWindow::TaxWindow()
 {
 	CtrlLayoutOKCancel ( *this, "Select date range for report:" );
+	Sizeable(true);
 
 	sqlTaxReport.AddColumn ( INVOICENUMBER, "Inv NO.", 100 );
 	sqlTaxReport.AddColumn ( DATEPAID, "Date Paid", 100 ).SetConvert ( DateIntConvert() );
@@ -97,70 +98,103 @@ void TaxWindow::CreateReport(String start, String end)
 	{
 		double sumTaxable = 0.0, sumNontaxable = 0.0, sumTax = 0.0, sumTotal = 0.0, sumParts = 0.0;
 		String headertext;
+		int rowcount = sqlTaxReport.GetCount();
+		int custID;
 		
 		String s = ::Format(Date( 1970, 1, 1) + StrInt(start));
 		String e = ::Format(Date( 1970, 1, 1) + StrInt(end));
-		headertext << "Tax Report " << s << " to " << e << " for " << myConfig.data.companyname;
-		if ( noCust.Get() == 1 )
-			taxQTF = "{{110:171:0:0:145:145:145:145:145@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+90> ";
-			
-		else {
-			if ( anon.Get() == 1)
-				taxQTF = "{{110:171:75:0:135:135:135:135:135@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+90> ";
-			else taxQTF = "{{110:153:0:205:123:132:123:123:123@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+90> ";
-		}
-		int rowcount = sqlTaxReport.GetCount();
-		int custID;
-		for ( int i = 0; i < rowcount; i++ )
-		{
+headertext << "Tax Report " << s << " to " << e << " for " << myConfig.data.companyname;
 
-			taxQTF << sqlTaxReport.Get( i, INVOICENUMBER ) << ":: " << 
-				::Format(Date( 1970, 1, 1) + sqlTaxReport.Get( i, DATEPAID ))  << ":: " << 
-				sqlTaxReport.Get( i, CUSTOMERID )  << ":: " << 
-				sqlTaxReport.Get( i, CUSTNAME )  << ":: " << 
-				prnMoney(sqlTaxReport.Get ( i, TAXABLESUB )) << ":: " << 
-				prnMoney(sqlTaxReport.Get ( i, NONTAXABLESUB )) << ":: " << 
-				prnMoney(sqlTaxReport.Get ( i, TAX )) << ":: " << 
-				prnMoney(sqlTaxReport.Get ( i, COST )) << ":: " << 
-				prnMoney(sqlTaxReport.Get ( i, AMTPAID ));
-			
-			if ((i % 2 == 0 )&& (i < rowcount - 1)) taxQTF << " ::@L ][+90> ";
-			else if (i < rowcount - 1) taxQTF << " ::@W ][+90> ";
-			else taxQTF << " :: ] }} {{110:153:205:123:132:123:123:123@L ";
+if ( SalesTax.Get() == 0 )
+{
+	if ( noCust.Get() == 1 )
+		taxQTF = "{{110:171:0:0:145:145:145:145:145@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+90> ";
 
-			sumTaxable += (double)sqlTaxReport.Get ( i, TAXABLESUB );
-			sumNontaxable += (double)sqlTaxReport.Get ( i, NONTAXABLESUB );
-			sumTax += (double)sqlTaxReport.Get ( i, TAX );
-			sumTotal += (double)sqlTaxReport.Get ( i, AMTPAID );
-			sumParts += (double)sqlTaxReport.Get ( i, COST );
-		}
-		// if ( noCust.Get() == 1 )
-		if (anon.Get() == 1)
-		{
-			taxQTF << "[+70>* Taxable&[ " << prnMoney( sumTaxable) << " ] :: Non-Taxable&[ " << prnMoney( sumNontaxable);
-			taxQTF << " ] :: Sales Tax&[ " << prnMoney( sumTax) <<  " ] :: COGS&[ " << prnMoney( sumParts);
-			taxQTF << " ] :: Grand Total&[ " << prnMoney( sumTotal) << " ] :: ";
-		}
+	else
+	{
+		if ( anon.Get() == 1 )
+			taxQTF = "{{110:171:75:0:135:135:135:135:135@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+90> ";
 		else
-		{
-			taxQTF << "[+60>* Taxable&[ " << prnMoney( sumTaxable) << " ] :: Non-Taxable&[ " << prnMoney( sumNontaxable);
-			taxQTF << " ] :: Sales Tax&[ " << prnMoney( sumTax) <<  " ] :: COGS&[ " << prnMoney( sumParts);
-			taxQTF << " ] :: Grand Total&[ " << prnMoney( sumTotal) << " ] :: ";
-		}
-		taxQTF << " [ Fed/State Gross:: " << prnMoney( sumTotal - sumTax ) << " ] :: NET Profit& " << prnMoney( sumTotal - sumTax - sumParts ) << " }}"; // was income1040 instead of sumTotal
-			
-		taxQTF << "[+80< &&Remember use 'Fed/State Gross' for income, parts cost separate on Schedule C.]";
-		Report report;
-	
-		// report.SetStdFont ( SansSerif (12) );
-		report.Header ( headertext ).NoFooter(); //.Footer ( "Page $$P of " ) ;
-		report << taxQTF;
-		// report.Margins(400,400);
-		Perform ( report );
+			taxQTF = "{{110:153:0:205:123:132:123:123:123@L [+60>* Inv NO.:: Date Paid:: Cust NO.:: Customer Name:: Taxable:: Non-Taxable:: Sales Tax:: Parts Cost:: Grand Total::@W ][+90> ";
 	}
+}
+// else taxQTF = "{{110:171:75:0:135:135:135:135@1 [+90>* ";
+// else taxQTF = "{{1:1:1:0:1:1:1:1@1 [+90>* ";
+
+for ( int i = 0; i < rowcount; i++ )
+{
+
+	if ( SalesTax.Get() == 0 )
+	{
+		taxQTF << sqlTaxReport.Get ( i, INVOICENUMBER ) << ":: " <<
+		::Format ( Date ( 1970, 1, 1 ) + sqlTaxReport.Get ( i, DATEPAID ) )  << ":: " <<
+		sqlTaxReport.Get ( i, CUSTOMERID )  << ":: " <<
+		sqlTaxReport.Get ( i, CUSTNAME )  << ":: " <<
+		prnMoney ( sqlTaxReport.Get ( i, TAXABLESUB ) ) << ":: " <<
+		prnMoney ( sqlTaxReport.Get ( i, NONTAXABLESUB ) ) << ":: " <<
+		prnMoney ( sqlTaxReport.Get ( i, TAX ) ) << ":: " <<
+		prnMoney ( sqlTaxReport.Get ( i, COST ) ) << ":: " <<
+		prnMoney ( sqlTaxReport.Get ( i, AMTPAID ) );
+
+		if ( ( i % 2 == 0 ) && ( i < rowcount - 1 ) )
+			taxQTF << " ::@L ][+90> ";
+		else
+			if ( i < rowcount - 1 )
+				taxQTF << " ::@W ][+90> ";
+			else
+				taxQTF << " :: ] }} {{110:153:205:123:132:123:123:123@L [+90>* ";
+	}
+
+	// else
+
+	sumTaxable += ( double ) sqlTaxReport.Get ( i, TAXABLESUB );
+
+	sumNontaxable += ( double ) sqlTaxReport.Get ( i, NONTAXABLESUB );
+
+	sumTax += ( double ) sqlTaxReport.Get ( i, TAX );
+
+	sumTotal += ( double ) sqlTaxReport.Get ( i, AMTPAID );
+
+	sumParts += ( double ) sqlTaxReport.Get ( i, COST );
+}
+
+// if ( noCust.Get() == 1 )
+if ( SalesTax.Get() == 1 ) {
+	taxQTF << " {{110:153:140:123:123:162:123@1 ";
+	taxQTF << " [+70>* Taxable&[ " << prnMoney ( sumTaxable ) << " ] :: Non-Taxable&[ " << prnMoney ( sumNontaxable );
+	taxQTF << " ] :: Sales Tax&[ " << prnMoney ( sumTax ) <<  " ] :: COGS&[ " << prnMoney ( sumParts );
+	taxQTF << " ] :: Grand Total&[ " << prnMoney ( sumTotal ) << " ] :: ";
+}
+
+else if ( anon.Get() == 1 )
+{
+	taxQTF << " [+70>* Taxable&[ " << prnMoney ( sumTaxable ) << " ] :: Non-Taxable&[ " << prnMoney ( sumNontaxable );
+	taxQTF << " ] :: Sales Tax&[ " << prnMoney ( sumTax ) <<  " ] :: COGS&[ " << prnMoney ( sumParts );
+	taxQTF << " ] :: Grand Total&[ " << prnMoney ( sumTotal ) << " ] :: ";
+}
+
+else
+{
+	taxQTF << "[+60>* Taxable&[ " << prnMoney ( sumTaxable ) << " ] :: Non-Taxable&[ " << prnMoney ( sumNontaxable );
+	taxQTF << " ] :: Sales Tax&[ " << prnMoney ( sumTax ) <<  " ] :: COGS&[ " << prnMoney ( sumParts );
+	taxQTF << " ] :: Grand Total&[ " << prnMoney ( sumTotal ) << " ] :: ";
+}
+
+taxQTF << " [ Fed/State Gross& " << prnMoney ( sumTotal - sumTax ) << " ] :: NET Profit& " << prnMoney ( sumTotal - sumTax - sumParts ) << " }}";
+if ( SalesTax.Get() == 0 ) 
+	taxQTF << "[+80< &&Remember use 'Fed/State Gross' for income, parts cost separate on Schedule C.]";
+Report report;
+
+// report.SetStdFont ( SansSerif (12) );
+report.Header ( headertext ).NoFooter(); //.Footer ( "Page $$P of " ) ;
+report << taxQTF;
+// report.Margins(400,400);
+Perform ( report );
+}
 }
 
 void TaxWindow::cancelPressed()
+
 {
 	// bye
 	Close();
