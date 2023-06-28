@@ -16,7 +16,7 @@ InvoicesWindow::InvoicesWindow()
 	btnByVoided << [=] { btnByVoidedClicked(); };
 	btnAll << [=] { btnAllClicked(); };
 	
-	InvoicesArray.SetTable ( INVOICES, INVOICE_ID ).AllSorting();
+	InvoicesArray.SetTable ( INVOICES, INVOICENUMBER ).AllSorting(); // INVOICENUMBER CHANGED FROM INVOICEID
 
 	// InvoicesArray.Join(BOOK_ID, book); // joins id from other db to this id
 	InvoicesArray.AddColumn ( INVOICENUMBER, "Invoice#" );
@@ -70,7 +70,7 @@ void InvoicesWindow::btnPrintClicked()
 	Sql linesSQL;
 	Sql invoiceSQL;
 
-	invoiceSQL * SelectAll().From( INVOICES ).Where( INVOICE_ID == thisInvoice );
+	invoiceSQL * SelectAll().From( INVOICES ).Where( INVOICENUMBER == thisInvoice ); // INVOICENUMBER CHANGED FROM INVOICEID
 	
 	if ((int)invoiceSQL[STATUS] < 2) // if not Paid In Full
 		header <<  "]]}}]";
@@ -124,7 +124,7 @@ void InvoicesWindow::btnApplyPaymentClicked()
 	if (IsNull(thisInvoice))
 		return;
 	int status;
-	SQL * SelectAll().From(INVOICES).Where(INVOICE_ID == thisInvoice);
+	SQL * SelectAll().From(INVOICES).Where(INVOICENUMBER == thisInvoice); // INVOICENUMBER CHANGED FROM INVOICEID
 	SQL.Fetch();
 	if (SQL[STATUS] == 0) return;
 	if (IsNull(edbPayment)) {
@@ -134,7 +134,7 @@ void InvoicesWindow::btnApplyPaymentClicked()
 	else {
 		status = (SQL[GRANDTOTAL] <= edbPayment.GetData()) ? 2 : 1;
 	}
-	SQL * SqlUpdate(INVOICES)(AMTPAID,edbPayment.GetData())(DATEPAID,SQL[TRANSACTIONDATE])(STATUS, status).Where(INVOICE_ID == thisInvoice);
+	SQL * SqlUpdate(INVOICES)(AMTPAID,edbPayment.GetData())(DATEPAID,SQL[TRANSACTIONDATE])(STATUS, status).Where(INVOICENUMBER == thisInvoice); // INVOICENUMBER CHANGED FROM INVOICEID
 	InvoicesArray.ReQuery();
 	InvoicesArray.FindSetCursor(thisInvoice);
 }
@@ -147,7 +147,7 @@ void InvoicesWindow::btnVoidClicked()
 	if (IsNull(thisInvoice))
 		return;
 	Sql inv;
-	inv * SelectAll().From(INVOICES).Where(INVOICE_ID == thisInvoice);
+	inv * SelectAll().From(INVOICES).Where(INVOICENUMBER == thisInvoice); // INVOICENUMBER CHANGED FROM INVOICEID
 	inv.Fetch();
 	if ((double)inv[AMTPAID] > 0.0) {
 		Exclamation("Can't void after receiving payment");
@@ -155,7 +155,7 @@ void InvoicesWindow::btnVoidClicked()
 	}
 	if (PromptOKCancel("Are you sure? This can't be undone...")) {
 		long invoice = (int64)inv[INVOICENUMBER];
-		inv * SqlUpdate(INVOICES)(STATUS, 0).Where(INVOICE_ID == thisInvoice); // Void = 0
+		inv * SqlUpdate(INVOICES)(STATUS, 0).Where(INVOICENUMBER == thisInvoice); // Void = 0,  // INVOICENUMBER CHANGED FROM INVOICEID
 		Sql li;
 		li * Delete(LINEITEMS).Where(INVOICEIDNUMBER == (int64)invoice);
 		InvoicesArray.ReQuery();
@@ -173,12 +173,12 @@ void InvoicesWindow::btnFixDateClicked()
 	if (IsNull(thisInvoice))
 		return;
 	Sql inv;
-	inv * SelectAll().From(INVOICES).Where(INVOICE_ID == thisInvoice);
+	inv * SelectAll().From(INVOICES).Where(INVOICENUMBER == thisInvoice); // INVOICENUMBER CHANGED FROM INVOICEID
 	inv.Fetch();
 	inv[TRANSACTIONDATE] = ddFixDate.GetData();
 	if (!IsNull(inv[DATEPAID])) 
-		inv * SqlUpdate(INVOICES)(TRANSACTIONDATE, ddFixDate.GetData())(DATEPAID, ddFixDate.GetData()).Where(INVOICE_ID == thisInvoice);
-	else inv * SqlUpdate(INVOICES)(TRANSACTIONDATE, ddFixDate.GetData()).Where(INVOICE_ID == thisInvoice);
+		inv * SqlUpdate(INVOICES)(TRANSACTIONDATE, ddFixDate.GetData())(DATEPAID, ddFixDate.GetData()).Where(INVOICENUMBER == thisInvoice); // INVOICENUMBER CHANGED FROM INVOICEID
+	else inv * SqlUpdate(INVOICES)(TRANSACTIONDATE, ddFixDate.GetData()).Where(INVOICENUMBER == thisInvoice); // INVOICENUMBER CHANGED FROM INVOICEID
 	
 	InvoicesArray.ReQuery();
 	InvoicesArray.FindSetCursor(thisInvoice);

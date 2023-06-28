@@ -159,12 +159,12 @@ void CreateInvoiceWindow::MarkAsPaid()
 		return;
 	}
 	int status;
-	SQL * SelectAll().From(INVOICES).Where(INVOICE_ID == pInvoice);
+	SQL * SelectAll().From(INVOICES).Where(INVOICENUMBER == pInvoice); // INVOICENUMBER CHANGED FROM INVOICEID
 	SQL.Fetch();
 	// edbPayment.SetData(SQL[GRANDTOTAL]);
 	status = 2;
 	
-	SQL * SqlUpdate(INVOICES)(AMTPAID,SQL[GRANDTOTAL])(DATEPAID,SQL[TRANSACTIONDATE])(STATUS, status).Where(INVOICE_ID == pInvoice);
+	SQL * SqlUpdate(INVOICES)(AMTPAID,SQL[GRANDTOTAL])(DATEPAID,SQL[TRANSACTIONDATE])(STATUS, status).Where(INVOICENUMBER == pInvoice); // CHANGED FROM INVOICEID
 }
 
 void CreateInvoiceWindow::PrintInvoice()
@@ -190,7 +190,7 @@ void CreateInvoiceWindow::PrintInvoice()
 		myConfig.data.companyname << " @$2022; " << myConfig.data.companyaddress << " @$2022; " << myConfig.data.companycity << ", " << myConfig.data.companystate <<
 		" "  << myConfig.data.companyzip << " @$2022; " << myConfig.data.companyphone << " @$2022; " << myConfig.data.companyemail << "]]]";
 	
-	invoiceSQL * SelectAll().From( INVOICES ).Where( INVOICE_ID == pInvoice );
+	invoiceSQL * SelectAll().From( INVOICES ).Where( INVOICENUMBER == pInvoice ); //CHANGED FROM INVOICEID
 	
 	if ((int)invoiceSQL[STATUS] < 2)
 		header <<  "]]}}]";
