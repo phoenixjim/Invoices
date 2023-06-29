@@ -18,7 +18,7 @@ using namespace Upp;
 #define COLOR Color(102, 0, 102) // dark violet background, text should be white...
 #define TXTCOLOR Color(255,255,255)
 //Customers
-struct CustomersWindow : WithCustomersWindowLayout<TopWindow> {
+class CustomersWindow : public WithCustomersWindowLayout<TopWindow> {
 	Configs	myConfig;
 public:
     CustomersWindow();
@@ -30,7 +30,7 @@ public:
 };
 	
 // CreateInvoice
-struct CreateInvoiceWindow : WithCreateInvoiceWindowLayout<TopWindow> {
+class CreateInvoiceWindow : public WithCreateInvoiceWindowLayout<TopWindow> {
 	Configs myConfig;
 	long nextInvoice;
 	int pInvoice;
@@ -57,7 +57,7 @@ public:
 };
 
 // ListInvoices
-struct InvoicesWindow : WithInvoicesWindowLayout<TopWindow> {
+class InvoicesWindow : public WithInvoicesWindowLayout<TopWindow> {
 	Configs myConfig;
 	
 	void btnPrintClicked();
@@ -79,7 +79,7 @@ public:
 };
 
 // ListLineItems
-struct LineItemsWindow : public WithLineItemsWindowLayout<TopWindow> {
+class LineItemsWindow : public WithLineItemsWindowLayout<TopWindow> {
 	Configs myConfig;
 	void EditRow();
 	void AddNewItem();
@@ -95,7 +95,7 @@ public:
 };
 
 // Products
-struct ProductsWindow : WithProductsWindowLayout<TopWindow> {
+class ProductsWindow : public WithProductsWindowLayout<TopWindow> {
 public:
 	ProductsWindow();
 	SqlCtrls ctrls;
@@ -108,7 +108,7 @@ public:
 };
 
 // Types
-struct TypesWindow : WithTypesWindowLayout<TopWindow> {
+class TypesWindow : public WithTypesWindowLayout<TopWindow> {
 public:
 	TypesWindow();
 	SqlCtrls ctrls;
@@ -120,7 +120,7 @@ public:
 	void EditRow();
 };
 
-struct CompanyInfoWindow : WithCompanyInfoWindowLayout<TopWindow> {
+class CompanyInfoWindow : public WithCompanyInfoWindowLayout<TopWindow> {
 	void Save();
 	void Cancel();
 public:
@@ -153,7 +153,7 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 	
 	MenuBar		mainmenu;
 	// added 'save and mark paid' on create invoice window
-	String version = "2.1.0.2"; // added new report, renamed old profit and loss to yeartoyear
+	String version = "2.1.0.3";
 public:
 	Invoices();
 	void Paint(Draw& w) {
@@ -162,7 +162,7 @@ public:
 	// Menu definition
 	void		MainMenu(Bar& bar);
 
-	void		TransactionsMenu(Bar& bar);
+	void		FileMenu(Bar& bar);
 	void		ReportsMenu(Bar& bar);
 	void		ManagementMenu(Bar& bar);
 };

@@ -32,6 +32,7 @@ AddType::AddType(String title)
 
 TypesWindow::TypesWindow() {
 	CtrlLayout(*this, "Types");	
+	MinimizeBox();
 	btnAddType << [=] { AddNewType(); };
 
 	TypeArray.SetTable(TYPES, TYPENUM);

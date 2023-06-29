@@ -4,6 +4,7 @@
 YearToYearWindow::YearToYearWindow()
 {
 	CtrlLayoutOKCancel(*this, "Year by Year Report"); 
+	MinimizeBox();
 	
 	sqlTaxReport.AddColumn("Accounts", 50);
 	sqlTaxReport.AddColumn("Current", 50).SetConvert(ConvDouble());

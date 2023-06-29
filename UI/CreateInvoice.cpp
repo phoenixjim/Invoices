@@ -3,6 +3,8 @@
 CreateInvoiceWindow::CreateInvoiceWindow()
  { 
  	CtrlLayout(*this, "Create Invoice");
+	MinimizeBox(); //
+
  	txtTerms.SetText("Due On Receipt");
  	txtTaxRate.SetData(myConfig.data.taxrate);
  	pInvoice = 0;

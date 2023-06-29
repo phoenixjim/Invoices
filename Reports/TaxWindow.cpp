@@ -4,7 +4,7 @@
 TaxWindow::TaxWindow()
 {
 	CtrlLayoutOKCancel ( *this, "Select date range for report:" );
-	Sizeable(true);
+	MinimizeBox();
 
 	sqlTaxReport.AddColumn ( INVOICENUMBER, "Inv NO.", 100 );
 	sqlTaxReport.AddColumn ( DATEPAID, "Date Paid", 100 ).SetConvert ( DateIntConvert() );

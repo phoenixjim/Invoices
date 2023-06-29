@@ -3,6 +3,7 @@
 
 IncomeWindow::IncomeWindow() {
 	CtrlLayoutOKCancel ( *this, "Select date range and Customer for report:" );
+	MinimizeBox();
 
 	sqlTaxReport.AddColumn ( INVOICENUMBER, "Inv NO.", 100 );
 	sqlTaxReport.AddColumn ( DATEPAID, "Date Paid", 100 ).SetConvert ( DateIntConvert() );

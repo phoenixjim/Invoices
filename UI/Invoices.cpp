@@ -4,6 +4,7 @@
 InvoicesWindow::InvoicesWindow()
 {
 	CtrlLayout ( *this, "List Invoices" );
+	MinimizeBox();
 
 	btnPrint << [=] { btnPrintClicked(); };
 	btnApplyPayment << [=] { btnApplyPaymentClicked(); };

@@ -4,6 +4,7 @@
 PandLWindow::PandLWindow()
 {
 	CtrlLayoutOKCancel(*this, "Profit & Loss"); 
+	MinimizeBox();
 	
 	/*
 

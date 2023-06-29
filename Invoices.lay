@@ -1,4 +1,4 @@
-LAYOUT(InvoicesLayout, 460, 116)
+LAYOUT(InvoicesLayout, 280, 81)
 END_LAYOUT
 
 LAYOUT(CompanyInfoWindowLayout, 360, 279)

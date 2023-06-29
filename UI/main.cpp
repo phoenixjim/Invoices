@@ -5,29 +5,8 @@
 #undef MODEL
 void Invoices::MainMenu(Bar& bar)
 {
-	bar.Add(t_("Customers"),  [=]{
-		if(!custwin.IsOpen()) {
-			custwin.CustArray.ReQuery();
-		 	custwin.Open(this); 
-			}
-		});
-
-    bar.Add(t_("Products"), [=]{ 
-    	if(!prodwin.IsOpen()) {
-    		prodwin.ProductArray.ReQuery();
-    		prodwin.Open(this); 
-    		}
-    	});
-	
-    bar.Add(t_("Types"), [=]{ 
-    	if(!typewin.IsOpen()) {
-    		typewin.TypeArray.ReQuery();
-    		typewin.Open(this); 
-    		}
-    	});
-	
-	bar.Sub(t_("Transactions"), [=] ( Bar& bar ) {
-		TransactionsMenu( bar ); });
+	bar.Sub(t_("File"), [=] (Bar& bar ) {
+		FileMenu( bar ); });
 	bar.Sub(t_("Reports"), [=] (Bar& bar) {
 		ReportsMenu( bar );; });
 	bar.Sub(t_("Management"), [=] ( Bar& bar ) {
@@ -44,9 +23,9 @@ void Invoices::MainMenu(Bar& bar)
 		Close(); });
 }
 
-void Invoices::TransactionsMenu(Bar& bar)
+void Invoices::FileMenu(Bar& bar)
 {
-	bar.Add(t_("Create Invoice"), [=]{ if(!createinvoicewin.IsOpen()) {
+	bar.Add(t_("New Invoice"), [=]{ if(!createinvoicewin.IsOpen()) {
 		createinvoicewin.ActiveFocus(createinvoicewin.cbCustomers);
 		createinvoicewin.Open(this);
 		}
@@ -58,6 +37,26 @@ void Invoices::TransactionsMenu(Bar& bar)
 			invoiceswin.Open(this);
 			}
 		});
+	bar.Add(t_("List Customers"),  [=]{
+		if(!custwin.IsOpen()) {
+			custwin.CustArray.ReQuery();
+		 	custwin.Open(this); 
+			}
+		});
+
+    bar.Add(t_("List Products"), [=]{ 
+    	if(!prodwin.IsOpen()) {
+    		prodwin.ProductArray.ReQuery();
+    		prodwin.Open(this); 
+    		}
+    	});
+	
+    bar.Add(t_("List Types"), [=]{ 
+    	if(!typewin.IsOpen()) {
+    		typewin.TypeArray.ReQuery();
+    		typewin.Open(this); 
+    		}
+    	});
 	bar.Add(t_("List Line Items"), [=]{
 		if(!listlineitemswin.IsOpen())	{
 			listlineitemswin.LineItemsArray.ReQuery();
@@ -85,7 +84,8 @@ void Invoices::ManagementMenu(Bar& bar)
 Invoices::Invoices()
 {
 	CtrlLayout(*this, "Invoices");
-
+	MinimizeBox(); // 	
+	
 	AddFrame(mainmenu);
 	mainmenu.Set( [=] ( Bar& bar ) {
 		MainMenu( bar ); });
