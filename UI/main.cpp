@@ -85,7 +85,7 @@ Invoices::Invoices()
 {
 	CtrlLayout(*this, "Invoices");
 	MinimizeBox(); // 	
-	
+
 	AddFrame(mainmenu);
 	mainmenu.Set( [=] ( Bar& bar ) {
 		MainMenu( bar ); });
@@ -97,6 +97,7 @@ Invoices::Invoices()
 GUI_APP_MAIN
 {
 	Configs myConfig;
+	
 	int unpaid = 0;
 	String notpaid = "";
 

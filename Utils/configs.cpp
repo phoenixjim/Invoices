@@ -30,7 +30,18 @@ void Configs::SelectDB()
 
 void Configs::Populate()
 {
-	if ( !FileExists ( ConfigFile(GetExeTitle() + ".json") ) )
+	// force config file to CWD
+	String cfg = GetExeFilePath();
+	// cfg << ".json"; //"\" << ConfigFile( GetExeTitle() + ".json" );
+	
+	#ifdef PLATFORM_WIN32
+	cfg << "-W.json";
+	#else
+	cfg << "-L.json";
+	#endif
+	
+	if (!FileExists ( cfg ) )
+	// if ( !FileExists ( ConfigFile(GetExeTitle() + ".json") ) )
 	{
 		data.taxrate = 0.08;
 		data.companyname = "Company Name";
@@ -47,11 +58,27 @@ void Configs::Populate()
 
 Configs::Configs()
 {
+	// force config file to CWD
+	String cfg = GetExeFilePath();
+	#ifdef PLATFORM_WIN32
+	cfg << "-W.json";
+	#else
+	cfg << "-L.json";
+	#endif
+	
 	Populate();
-	LoadFromJsonFile ( data );
+	LoadFromJsonFile ( data,  cfg );
 }
 
 void Configs::SaveSettings()
 {
-	StoreAsJsonFile(data);
+	// force config file to CWD
+	String cfg = GetExeFilePath();
+	#ifdef PLATFORM_WIN32
+	cfg << "-W.json";
+	#else
+	cfg << "-L.json";
+	#endif
+	
+	StoreAsJsonFile( data, cfg );
 }
