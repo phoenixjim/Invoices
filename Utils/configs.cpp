@@ -31,13 +31,13 @@ void Configs::SelectDB()
 void Configs::Populate()
 {
 	// force config file to CWD
-	String cfg = GetExeFilePath();
+	
 	// cfg << ".json"; //"\" << ConfigFile( GetExeTitle() + ".json" );
 	
 	#ifdef PLATFORM_WIN32
-	cfg << "-W.json";
+	String cfg = GetCurrentDirectory() << "Invoices-W.json";
 	#else
-	cfg << "-L.json";
+	String cfg = GetExeFilePath() << "-L.json";
 	#endif
 	
 	if (!FileExists ( cfg ) )
@@ -59,11 +59,10 @@ void Configs::Populate()
 Configs::Configs()
 {
 	// force config file to CWD
-	String cfg = GetExeFilePath();
 	#ifdef PLATFORM_WIN32
-	cfg << "-W.json";
+	String cfg = GetCurrentDirectory() << "Invoices-W.json";
 	#else
-	cfg << "-L.json";
+	String cfg = GetExeFilePath() << "-L.json";
 	#endif
 	
 	Populate();
@@ -73,11 +72,10 @@ Configs::Configs()
 void Configs::SaveSettings()
 {
 	// force config file to CWD
-	String cfg = GetExeFilePath();
 	#ifdef PLATFORM_WIN32
-	cfg << "-W.json";
+	String cfg = GetCurrentDirectory() << "Invoices-W.json";
 	#else
-	cfg << "-L.json";
+	String cfg = GetExeFilePath() << "-L.json";
 	#endif
 	
 	StoreAsJsonFile( data, cfg );
