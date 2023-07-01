@@ -23,7 +23,7 @@ file
 	Utils/converts.h,
 	Reports/IncomeWindow.cpp,
 	Reports/TaxWindow.cpp,
-	Reports/PandL.cpp,
+	PandL.cpp,
 	Reports/YearToYear.cpp,
 	Reports/Reports.h,
 	UI/main.cpp,

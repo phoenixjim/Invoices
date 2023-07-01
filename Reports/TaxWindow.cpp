@@ -39,7 +39,6 @@ TaxWindow::TaxWindow()
 	lEnd.SetInk(TXTCOLOR);
 	anon.SetColor(TXTCOLOR);
 	noCust.SetColor(TXTCOLOR);
-	SalesTax.SetColor(TXTCOLOR);
 	
 	voided.Set(0).SetColor(TXTCOLOR);
 }
