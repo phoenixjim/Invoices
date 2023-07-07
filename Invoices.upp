@@ -21,6 +21,7 @@ file
 	Utils/configs.h,
 	Utils/converts.cpp,
 	Utils/converts.h,
+	Utils/lookups.h,
 	Reports/IncomeWindow.cpp,
 	Reports/TaxWindow.cpp,
 	PandL.cpp,

@@ -97,7 +97,13 @@ void InvoicesWindow::btnPrintClicked()
 	{
 		if (linenumber % 2) invoiceQTF << "[ [ {{729:2603:1666:1666:1666:1670@L|1 [ ";
 		else invoiceQTF << "[ [ {{729:2603:1666:1666:1666:1670@W|1 [ ";
-		invoiceQTF << ++linenumber << "]:: [ " << linesSQL[PRODUCTNAME] << "]:: [> " << prnMoney(linesSQL[PRICE]) <<
+
+		SQL * Select(TYPENAME).From(TYPES).Where(TYPENUM == (int)(linesSQL[PRODUCTNAME] ) ); // TYPENUM);
+		String name = SQL[TYPENAME].ToString();
+
+		invoiceQTF << ++linenumber << "]:: [ " << 
+			//linesSQL[PRODUCTNAME] << 
+			name << "]:: [> " << prnMoney(linesSQL[PRICE]) <<
 			"]:: [> " << linesSQL[QTY] << "]:: [> "<< ( linesSQL[ISTAXABLE] ? "T" : "" ) << "]::|1 [> " << 
 			prnMoney(linesSQL[TOTAL]) << "]:: [ ]::-3 [ " << linesSQL[DESCRIPTION] << "]::-2 [ ]::-1 [ ]:: [ ]:: [ ]}}]]&";
 	}

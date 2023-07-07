@@ -4,6 +4,7 @@ CreateInvoiceWindow::CreateInvoiceWindow()
  { 
  	CtrlLayout(*this, "Create Invoice");
 	MinimizeBox(); //
+	DropList mytypes;
 
  	txtTerms.SetText("Due On Receipt");
  	txtTaxRate.SetData(myConfig.data.taxrate);
@@ -17,7 +18,7 @@ CreateInvoiceWindow::CreateInvoiceWindow()
  	cancel << [=] { CancelInvoice(); };
  	btnUpdate.Hide();
  	
- 	arrayLineItems.AddColumn(PRODUCTNAME, "Name", 40);
+ 	arrayLineItems.AddColumn(PRODUCTNAME, "Name", 40).SetConvert(Single<Lookup(TYPES,TYPENUM,TYPENAME)>()).Edit(mytypes);
  	arrayLineItems.AddColumn(DESCRIPTION, "Description", 80);
  	arrayLineItems.AddColumn(PRICE, "Price", 20).SetConvert(ConvCurrency()).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight(); //.SetConvert(ConvDouble()).
  	arrayLineItems.AddColumn(QTY, "Qty", 15);
@@ -198,7 +199,6 @@ void CreateInvoiceWindow::PrintInvoice()
 		header <<  "]]}}]";
 	else header << "Paid in Full, Thank you!]]}}]";
 	custSQL * SelectAll().From( CUSTOMERS ).Where( CUST_ID == invoiceSQL[CUSTOMERID]);
-	linesSQL * SelectAll().From( LINEITEMS ).Where( INVOICEIDNUMBER == invoiceSQL[INVOICENUMBER]);
 	String taxexempt = ((custSQL[TAXABLE] == 1) ? "" : "Tax exempt form on file");
 	// Need date format!
 	invoiceQTF = "[ [ &][@6 &][ {{4821:95:482:1266:1666:1670f0;g0; [ " << 
@@ -212,11 +212,19 @@ void CreateInvoiceWindow::PrintInvoice()
 	invoiceQTF << "[ [ {{729:2603:1666:1666:1666:1670@L|1 [ Item]:: [ Name]:: [> Price]:: [> Quantity]:: [> Taxable]::|1 [> Subtotal]:: [ ]::-3 [ Description]::-2 [ ]::-1 [ ]:: [ ]:: [ ]}}]]&";
 	int linenumber = 0;
 
+	linesSQL * SelectAll().From( LINEITEMS ).Where( INVOICEIDNUMBER == invoiceSQL[INVOICENUMBER]);
+
 	while (linesSQL.Fetch())
 	{
 		if (linenumber % 2) invoiceQTF << "[ [ {{729:2603:1666:1666:1666:1670@L|1 [ ";
 		else invoiceQTF << "[ [ {{729:2603:1666:1666:1666:1670@W|1 [ ";
-		invoiceQTF << ++linenumber << "]:: [ " << linesSQL[PRODUCTNAME] << "]:: [> " << prnMoney(linesSQL[PRICE]) <<
+		
+		SQL * Select(TYPENAME).From(TYPES).Where(TYPENUM == (int)(linesSQL[PRODUCTNAME] ) ); // TYPENUM);
+		String name = SQL[TYPENAME].ToString();
+		
+		invoiceQTF << ++linenumber << "]:: [ " << 
+			// linesSQL[PRODUCTNAME] << 
+			name << "]:: [> " << prnMoney(linesSQL[PRICE]) <<
 			"]:: [> " << linesSQL[QTY] << "]:: [> "<< ( linesSQL[ISTAXABLE] ? "T" : "" ) << "]::|1 [> " << 
 			prnMoney(linesSQL[TOTAL]) << "]:: [ ]::-3 [ " << linesSQL[DESCRIPTION] << "]::-2 [ ]::-1 [ ]:: [ ]:: [ ]}}]]&";
 	}
@@ -250,8 +258,8 @@ void CreateInvoiceWindow::AddItem()
 		return;
 	SQL * Select(TYPENAME).From(TYPES).Where(idNum == TYPENUM);
 	String name = SQL[TYPENAME];
-	arrayLineItems.Add(// cbProducts.GetData().ToString(),
-		name,
+	arrayLineItems.Add( cbProducts.GetData(),
+		// name,
 		txtDescription.GetText().ToString(),
 		StrDbl(txtPrice.GetText().ToString()),
 		StrInt(txtQty.GetText().ToString()), 

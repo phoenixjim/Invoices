@@ -180,3 +180,5 @@ double round(double d, int n) {
 double PercentFormat(double d) {
 	return floor(d * ipow10(4) + 0.5) / ipow10(2);
 }
+
+LookupSrc(TYPES,TYPENUM,TYPENAME);

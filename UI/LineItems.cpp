@@ -91,11 +91,12 @@ LineItemsWindow::LineItemsWindow() {
 	CtrlLayout(*this, "List Line Items");
 	btnAddItem << [=] { AddNewItem(); };
 	btnDelItem << [=] { DeleteItem(); };
+	DropList mytypes;
 	
 	LineItemsArray.SetTable(LINEITEMS, LINEITEM_ID);
 		
 	//LineItemsArray.Join(BOOK_ID, book); // joins id from other db to this id
-	LineItemsArray.AddColumn(PRODUCTNAME, "Product Name");
+	LineItemsArray.AddColumn(PRODUCTNAME, "Product Name").SetConvert(Single<Lookup(TYPES,TYPENUM,TYPENAME)>()).Edit(mytypes);
 	LineItemsArray.AddColumn(DESCRIPTION, "Description");
 	LineItemsArray.AddColumn(PRICE, "Price").SetConvert(ConvDouble()).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight();
 	LineItemsArray.AddColumn(QTY, "Qty");
@@ -122,7 +123,6 @@ void LineItemsWindow::EditRow()
 
 	AddLineItem dlg;
 	dlg.Title("Edit Item");
-
 	SQL * Select(dlg.ctrls).From(LINEITEMS).Where(LINEITEM_ID == idNum);
 	
 	dlg.txtInvoiceNum.WantFocus(false).Enable(false);
@@ -132,6 +132,14 @@ void LineItemsWindow::EditRow()
 	if(!dlg.ctrls.Fetch(SQL))
 		return;
 	
+
+	SQL * Select(TYPENUM, TYPENAME).From(TYPES);
+	
+	while (SQL.Fetch())
+	{
+		dlg.cbProducts.Add(SQL[TYPENUM], SQL[TYPENAME]);
+	}
+
 	Sql invSql;
 	invSql * Select(STATUS, INVOICENUMBER).From(INVOICES).Where(INVOICENUMBER == (int64)dlg.txtInvoiceNum.GetData());
 	if (invSql[STATUS] == 0) return;
