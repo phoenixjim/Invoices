@@ -36,6 +36,7 @@ InvoicesWindow::InvoicesWindow()
 
 	InvoicesArray.SetOrderBy ( INVOICENUMBER );
 	InvoicesArray.WhenLeftDouble = [=] { btnPrintClicked(); };
+	InvoicesArray.WhenEnterKey = [=] { btnPrintClicked(); };
 	
 	ddFixDate.SetConvert ( DateIntConvert() );
 	ddRange1.SetConvert ( DateIntConvert() );

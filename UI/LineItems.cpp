@@ -108,6 +108,7 @@ LineItemsWindow::LineItemsWindow() {
 	LineItemsArray.SetOrderBy(LINEITEM_ID).Appending().Removing();
 	
 	LineItemsArray.WhenLeftDouble = [=] { EditRow(); };
+	LineItemsArray.WhenEnterKey = [=] { EditRow(); };
 
 	LineItemsArray.Query();
 	};

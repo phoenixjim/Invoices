@@ -37,6 +37,13 @@ void Invoices::FileMenu(Bar& bar)
 			invoiceswin.Open(this);
 			}
 		});
+	bar.Add(t_("List Line Items"), [=]{
+		if(!listlineitemswin.IsOpen())	{
+			listlineitemswin.LineItemsArray.ReQuery();
+			listlineitemswin.LineItemsArray.GoEnd();
+			listlineitemswin.Open(this);
+			}
+		});
 	bar.Add(t_("List Customers"),  [=]{
 		if(!custwin.IsOpen()) {
 			custwin.CustArray.ReQuery();
@@ -57,13 +64,6 @@ void Invoices::FileMenu(Bar& bar)
     		typewin.Open(this); 
     		}
     	});
-	bar.Add(t_("List Line Items"), [=]{
-		if(!listlineitemswin.IsOpen())	{
-			listlineitemswin.LineItemsArray.ReQuery();
-			listlineitemswin.LineItemsArray.GoEnd();
-			listlineitemswin.Open(this);
-			}
-		});
 }
 
 void Invoices::ReportsMenu(Bar& bar)
