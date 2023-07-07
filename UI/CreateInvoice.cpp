@@ -256,8 +256,8 @@ void CreateInvoiceWindow::AddItem()
 	int idNum = cbProducts.GetIndex() + 1;
 	if (IsNull(idNum) || IsNull(txtDescription) || IsNull(txtPrice) || IsNull(txtQty))
 		return;
-	SQL * Select(TYPENAME).From(TYPES).Where(idNum == TYPENUM);
-	String name = SQL[TYPENAME];
+	// SQL * Select(TYPENAME).From(TYPES).Where(idNum == TYPENUM);
+	// String name = SQL[TYPENAME];
 	arrayLineItems.Add( cbProducts.GetData(),
 		// name,
 		txtDescription.GetText().ToString(),

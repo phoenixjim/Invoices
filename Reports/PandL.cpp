@@ -1,4 +1,4 @@
-#include "Reports/Reports.h"
+#include "Reports.h"
 #include <Report/Report.h>
 
 PandLWindow::PandLWindow()

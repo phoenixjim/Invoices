@@ -105,7 +105,7 @@ LineItemsWindow::LineItemsWindow() {
 	LineItemsArray.AddColumn(ISTAXABLE, "Taxable?");
 	LineItemsArray.ColumnWidths("50 175 25 15 25 20 20");
 	// LineItemsArray.Appending().Removing();
-	LineItemsArray.SetOrderBy(LINEITEM_ID);
+	LineItemsArray.SetOrderBy(LINEITEM_ID).Appending().Removing();
 	
 	LineItemsArray.WhenLeftDouble = [=] { EditRow(); };
 

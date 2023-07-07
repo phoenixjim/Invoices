@@ -32,8 +32,9 @@ InvoicesWindow::InvoicesWindow()
 	InvoicesArray.AddColumn ( DATEPAID, "Date Paid" ).SetConvert ( DateIntConvert() ).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignCenter();
 	InvoicesArray.AddColumn ( STATUS, "Status" );
 	InvoicesArray.ColumnWidths("15 15 20 30 25 20 20 20 20 20 10");
+	InvoicesArray.Appending().Removing();
 
-	InvoicesArray.SetOrderBy ( Descending(INVOICENUMBER) );
+	InvoicesArray.SetOrderBy ( INVOICENUMBER );
 	InvoicesArray.WhenLeftDouble = [=] { btnPrintClicked(); };
 	
 	ddFixDate.SetConvert ( DateIntConvert() );
