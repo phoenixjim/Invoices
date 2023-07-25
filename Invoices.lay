@@ -145,6 +145,7 @@ END_LAYOUT
 LAYOUT(LineItemAddLayout, 292, 220)
 	ITEM(Upp::Button, btnSubtract, SetLabel(t_("Subtract Sales Tax")).LeftPosZ(8, 116).TopPosZ(112, 15))
 	ITEM(Upp::EditInt64Spin, txtInvoiceNum, LeftPosZ(64, 60).TopPosZ(8, 19))
+	ITEM(Upp::EditInt64Spin, txtLineItemId, LeftPosZ(114, 60).TopPosZ(251, 19))
 	ITEM(Upp::DropList, cbProducts, LeftPosZ(176, 108).TopPosZ(8, 19))
 	ITEM(Upp::EditString, txtDescription, LeftPosZ(88, 196).TopPosZ(36, 19))
 	ITEM(Upp::EditDouble, txtPrice, LeftPosZ(64, 64).TopPosZ(136, 19))

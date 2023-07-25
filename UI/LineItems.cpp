@@ -20,6 +20,7 @@ AddLineItem::AddLineItem()
 {
 	CtrlLayoutOKCancel(*this, "Add Item");
 	ctrls
+		(LINEITEM_ID, txtLineItemId)
 		(INVOICEIDNUMBER, txtInvoiceNum)
 		(PRODUCTNAME, cbProducts)
 		(DESCRIPTION, txtDescription)
@@ -95,7 +96,6 @@ LineItemsWindow::LineItemsWindow() {
 	
 	LineItemsArray.SetTable(LINEITEMS, LINEITEM_ID);
 		
-	//LineItemsArray.Join(BOOK_ID, book); // joins id from other db to this id
 	LineItemsArray.AddColumn(PRODUCTNAME, "Product Name").SetConvert(Single<Lookup(TYPES,TYPENUM,TYPENAME)>()).Edit(mytypes);
 	LineItemsArray.AddColumn(DESCRIPTION, "Description");
 	LineItemsArray.AddColumn(PRICE, "Price").SetConvert(ConvDouble()).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight();
@@ -126,7 +126,7 @@ void LineItemsWindow::EditRow()
 	dlg.Title("Edit Item");
 	SQL * Select(dlg.ctrls).From(LINEITEMS).Where(LINEITEM_ID == idNum);
 	
-	dlg.txtInvoiceNum.WantFocus(false).Enable(false);
+	dlg.txtInvoiceNum.WantFocus(false);
     dlg.txtPrice.SetData(0.0);
     dlg.txtQty.SetData(0);
     dlg.txtTotal.SetData(0.0);
@@ -161,11 +161,22 @@ void LineItemsWindow::AddNewItem()
     AddLineItem dlg;
     dlg.Title("New Item");
     dlg.txtInvoiceNum.WantFocus(true).Enable(true);
-    Sql tempSql;
+    Sql tempSql, lineSql;
+
+	int maxLI = 0;
+	// lineSql.Execute("Select MAX(LINEITEM_ID) from LINEITEMS)");
+	lineSql * Select(LINEITEM_ID).From(LINEITEMS).OrderBy(Descending( LINEITEM_ID ) ); // MAX( LINEITEM_ID )
+	lineSql.Fetch();
+	
+	if (IsNull(lineSql[0])) return;
+	maxLI = (int)lineSql[0];
+	dlg.txtLineItemId.SetData( maxLI + 1 );
+
 	tempSql.Execute("Select MAX(INVOICENUMBER) From INVOICES Where STATUS != 0");
 	tempSql.Fetch();
 	if (IsNull(tempSql[0])) return;
 	int maxInv = (int)tempSql[0];
+
 	tempSql.Execute("Select MIN(INVOICENUMBER) From INVOICES Where STATUS != 0");
 	tempSql.Fetch();
 	int minInv = (int)tempSql[0];
@@ -173,6 +184,8 @@ void LineItemsWindow::AddNewItem()
     dlg.txtPrice.SetData(0.0);
     dlg.txtQty.SetData(0);
     dlg.txtTotal.SetData(0.0);
+    dlg.txtLineItemId.SetData(maxLI + 1);
+    
     if(dlg.Run() != IDOK)
         return;
 	
@@ -182,8 +195,19 @@ void LineItemsWindow::AddNewItem()
 		Exclamation("Editing Voided Invoice is Not allowed.");
 		return;
 	}
-
+	
     SQL * dlg.ctrls.Insert(LINEITEMS);
+    /* SQL * Insert(LINEITEMS)
+    	// (LINEITEM_ID, maxLI + 1)
+    	(PRODUCTNAME, (int)dlg.cbProducts.Get() + 1 )
+		(DESCRIPTION, dlg.txtDescription.GetData().ToString())
+		(PRICE, (double)dlg.txtPrice.GetData())
+		(QTY, (int)dlg.txtQty.GetData())
+		(TOTAL, (double)dlg.txtTotal)
+		(INVOICEIDNUMBER, (int64)dlg.txtInvoiceNum)
+		(ISTAXABLE, (int)dlg.optProdTaxable);
+	*/
+		
 	int id = SQL.GetInsertedId();
 	CalcInvoiceTotal(invoice);
 	LineItemsArray.ReQuery();

@@ -147,7 +147,7 @@ void CreateInvoiceWindow::SaveInvoice()
 		(GRANDTOTAL, (double)grandTotal)
 		(AMTPAID, 0.0)
 		(STATUS, 1);
-	pInvoice = SQL.GetInsertedId();
+	pInvoice = (int64)txtInvoice;
 	ClearItem();
 	txtInvoice = StrInt(txtInvoice.GetData().ToString()) + 1;
 }
