@@ -129,7 +129,7 @@ void CreateInvoiceWindow::SaveInvoice()
 		(INVOICEIDNUMBER, (int64)txtInvoice)
 		(ISTAXABLE, (int)arrayLineItems.Get(i, ISTAXABLE));
 	}
-	if (optCustTaxable.Get() == true) salestax = (double)round(taxable * (double)txtTaxRate, 0);
+	if (optCustTaxable.Get() == true) salestax = (double)round(taxable * (double)txtTaxRate, 2);
 	else salestax = 0.0;
 	
 	grandTotal += salestax + nonTaxable + taxable;
