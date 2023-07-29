@@ -86,7 +86,7 @@ class LineItemsWindow : public WithLineItemsWindowLayout<TopWindow> {
 	void CalcInvoiceTotal(long invoice);
 	double CalcItemTotal(int itemnumber);
 	void DeleteItem();
-	
+	void btnInvoice();	
 public:
 	LineItemsWindow();
 	void Paint(Draw& w) {
@@ -154,7 +154,7 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 	MenuBar		mainmenu;
 	// added 'save and mark paid' on create invoice window
 
-	String version = "2.1.1.2 & Corrected line items editing."; // added new report, renamed old profit and loss to yeartoyear
+	String version = "2.1.2.4 & Added invoice number selection on line items list."; // added new report, renamed old profit and loss to yeartoyear
 
 public:
 	Invoices();

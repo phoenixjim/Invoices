@@ -49,7 +49,6 @@ AddLineItem::AddLineItem()
 	txtPrice.WhenAction << [=] { PriceChanged(); };
 	txtQty.WhenAction << [=] { QtyChanged(); };
 	btnSubtract << [=] { AdjustPrice(); };
-
 	lDesc.SetInk(TXTCOLOR);
 	lPrice.SetInk(TXTCOLOR);
 	lQty.SetInk(TXTCOLOR);
@@ -93,7 +92,7 @@ LineItemsWindow::LineItemsWindow() {
 	btnAddItem << [=] { AddNewItem(); };
 	btnDelItem << [=] { DeleteItem(); };
 	DropList mytypes;
-	
+	cbInvoice.WhenAction << [=] { btnInvoice(); };
 	LineItemsArray.SetTable(LINEITEMS, LINEITEM_ID);
 		
 	LineItemsArray.AddColumn(PRODUCTNAME, "Product Name").SetConvert(Single<Lookup(TYPES,TYPENUM,TYPENAME)>()).Edit(mytypes);
@@ -110,8 +109,27 @@ LineItemsWindow::LineItemsWindow() {
 	LineItemsArray.WhenLeftDouble = [=] { EditRow(); };
 	LineItemsArray.WhenEnterKey = [=] { EditRow(); };
 
+	Sql tempSql;
+	tempSql.Execute("Select MAX(INVOICEIDNUMBER) From LINEITEMS");
+	tempSql.Fetch();
+	int maxInv = (int)tempSql[0]; // stol(SQL[0].ToString().ToStd()) + 1;
+	tempSql.Execute("Select MIN(INVOICEIDNUMBER) From LINEITEMS Where INVOICEIDNUMBER > 0");
+	tempSql.Fetch();
+	int minInv = (int)tempSql[0]; // stol(SQL[0].ToString().ToStd()) + 1;
+
+	int i = 0, invNum = minInv;
+
+	cbInvoice.Add(i, "All");
+	while (invNum <= maxInv)
+ 	{
+ 		cbInvoice.Add( ++i, IntStr(invNum++) );
+ 	}
+ 	cbInvoice.SetData(0);
+	lblInvoice.SetInk(TXTCOLOR);
+
 	LineItemsArray.Query();
 	};
+
 
 void LineItemsWindow::EditRow()
 {
@@ -246,6 +264,18 @@ void LineItemsWindow::DeleteItem()
 			CalcInvoiceTotal( thisInvoice );
 	}
 	LineItemsArray.ReQuery();
+}
+
+void LineItemsWindow::btnInvoice()
+{
+	int idNum = cbInvoice.GetIndex();
+
+	if (IsNull(idNum) || idNum < 0)
+		return;
+	if (idNum == 0)
+		LineItemsArray.ReQuery(INVOICEIDNUMBER > 0);
+	else
+		LineItemsArray.ReQuery( INVOICEIDNUMBER == cbInvoice.GetValue() );
 }
 
 void LineItemsWindow::CalcInvoiceTotal(long invoice)

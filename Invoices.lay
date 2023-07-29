@@ -25,7 +25,9 @@ LAYOUT(CompanyInfoWindowLayout, 360, 279)
 END_LAYOUT
 
 LAYOUT(LineItemsWindowLayout, 808, 576)
-	ITEM(Upp::Button, btnAddItem, SetLabel(t_("New Line Item")).SetFont(Upp::SansSerifZ(12)).LeftPosZ(252, 112).TopPosZ(544, 19))
+	ITEM(Upp::Button, btnAddItem, SetLabel(t_("New Line Item")).SetFont(Upp::SansSerifZ(12)).LeftPosZ(224, 112).TopPosZ(548, 19))
+	ITEM(Upp::Label, lblInvoice, SetLabel(t_("Invoice #:")).SetAlign(Upp::ALIGN_RIGHT).SetFont(Upp::StdFontZ(12).Bold()).LeftPosZ(12, 72).TopPosZ(548, 19))
+	ITEM(Upp::DropList, cbInvoice, LeftPosZ(104, 64).TopPosZ(548, 19))
 	ITEM(SqlArray, LineItemsArray, SetFrame(Upp::ThinInsetFrame()).LeftPosZ(4, 800).TopPosZ(4, 528))
 	ITEM(Upp::Button, btnDelItem, SetLabel(t_("Delete Line Item")).SetFont(Upp::SansSerifZ(12)).LeftPosZ(440, 112).TopPosZ(544, 19))
 END_LAYOUT
