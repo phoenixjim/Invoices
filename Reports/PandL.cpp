@@ -6,16 +6,6 @@ PandLWindow::PandLWindow()
 	CtrlLayoutOKCancel(*this, "Profit & Loss"); 
 	MinimizeBox();
 	
-	/*
-
-	btnReport << [=] { CreateReport ( dateStart.GetData().ToString(), dateEnd.GetData().ToString() ); };
-	WhenClose = [=] { cleanup(); };
-
-	lStart.SetInk(TXTCOLOR);
-	lEnd.SetInk(TXTCOLOR);
-	lBetween.SetInk(TXTCOLOR);
-	*/
-
 	ok << [=] { okPressed(); };
 	cancel << [=] { cancelPressed(); };
 	Date thisdate = GetSysDate();
@@ -67,7 +57,7 @@ void PandLWindow::CreateReport(String start, String end)
 	String e = ::Format(Date( 1970, 1, 1) + StrInt(end));
 	
 	Report profit;
-	String header = "{{4878:243:4879f0;g0; [ CUSTOMER NAME ]:: [ ]:: [ STATEMENT REPORT  ]:: [*4 Jim`'s Tech Services ]:: :: [ {{4597:804:4599 [* STARTING DATE ] :: [ to ]:: [* ENDING DATE ]:: [ " << s << " ]:: [ ]:: [ " << e << " ]  }} }}" ; 
+	String header = "{{4878:243:4879f0;g0; [ CUSTOMER NAME ]:: [ ]:: [ STATEMENT REPORT  ]:: [*4 " << myConfig.data.companyname << " ]:: :: [ {{4597:804:4599 [* STARTING DATE ] :: [ to ]:: [* ENDING DATE ]:: [ " << s << " ]:: [ ]:: [ " << e << " ]  }} }}" ; 
 	// outer table opened for revenue and expenses
 	plQTF = "{{4878:243:4879f0;g0; [ [* REVENUE ]]:: [* ]:: [ [* EXPENSES ]]::";
 	plQTF << " [ {{10000f0;g0; [ [2 Includes deductions for returns `& discounts ] ]:: ";

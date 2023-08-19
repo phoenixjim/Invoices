@@ -24,6 +24,7 @@ struct TaxWindow : WithTaxWindowLayout<TopWindow> {
 	void noCustChanged();
 	double GetPartsCost(int invId);
 	void CreateReport(String start, String end);
+	void CreateSalesTaxReport(String start, String end);
 	void ExportQTF();
 	
 	String taxQTF;
@@ -80,9 +81,9 @@ struct PandLWindow : public WithPandLWindowLayout<TopWindow> {
 	void refreshAll();
 	public:
 		PandLWindow();
-	/* void Paint(Draw& w) {
+	void Paint(Draw& w) {
 		w.DrawRect(GetSize(), COLOR); // <= enter your background color here
-	} */
+	}
 };
 
 #endif
