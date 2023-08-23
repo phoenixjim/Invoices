@@ -154,7 +154,7 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 	MenuBar		mainmenu;
 	// added 'save and mark paid' on create invoice window
 
-	String version = "2.1.2.4 & Added invoice number selection on line items list."; // added new report, renamed old profit and loss to yeartoyear
+	String version = "2.1.3.5 & More complete sales tax report, &added 'Counties' to database and customers"; // added new report, renamed old profit and loss to yeartoyear
 
 public:
 	Invoices();

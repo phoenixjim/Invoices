@@ -26,7 +26,8 @@ struct TaxWindow : WithTaxWindowLayout<TopWindow> {
 	void CreateReport(String start, String end);
 	void CreateSalesTaxReport(String start, String end);
 	void ExportQTF();
-	
+	String getCountyNameFromNumber(int cnumber);
+	int getCountyNumberFromInvoice(int invoiceId);
 	String taxQTF;
 	String GetCustomerName(int custId);
 public:

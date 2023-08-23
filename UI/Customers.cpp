@@ -24,7 +24,15 @@ AddCustomer::AddCustomer()
 		(STATE, txtCustState)
 		(ZIP, txtCustZip)
 		(TAXABLE, chkTaxable)
+		(CTY_NUM, cbCounties)
 	;
+	
+	SQL * Select(COUNTY_NUM, COUNTY_NAME).From(COUNTIES);
+ 	while (SQL.Fetch())
+ 	{
+ 		cbCounties.Add(SQL[COUNTY_NUM], SQL[COUNTY_NAME]);
+ 	}
+	
 	lCustName.SetInk(TXTCOLOR);
 	lCustEmail.SetInk(TXTCOLOR);
 	lCustPhone.SetInk(TXTCOLOR);
@@ -32,6 +40,7 @@ AddCustomer::AddCustomer()
 	lCustCity.SetInk(TXTCOLOR);
 	lCustState.SetInk(TXTCOLOR);
 	lCustZip.SetInk(TXTCOLOR);
+	lCounty.SetInk(TXTCOLOR);
 	chkTaxable.SetColor(TXTCOLOR);
 }
 
@@ -51,11 +60,12 @@ CustomersWindow::CustomersWindow() {
 	CustArray.AddColumn(STATE, "State");
 	CustArray.AddColumn(ZIP, "Zip");
 	CustArray.AddColumn(TAXABLE, "Taxable?");
-	CustArray.ColumnWidths("40 40 20 50 20 15 10 5");
+	CustArray.AddColumn(CTY_NUM, "County").SetConvert( ConvCounty() );
+	CustArray.ColumnWidths("40 40 20 50 20 15 10 5 30");
 	CustArray.Appending().NoRemoving();
 	CustArray.SetOrderBy(CUST_ID);
 	
-	CustArray.Query();
+		CustArray.Query();
 	
 	CustArray.WhenLeftDouble = [=] { EditRow(); };
 	
@@ -81,6 +91,7 @@ void CustomersWindow::EditRow()
 	CustArray.ReQuery();
 	CustArray.FindSetCursor(idNum);
 }
+
 void CustomersWindow::AddNewCustomer()
 {
     AddCustomer dlg;
