@@ -14,6 +14,7 @@ using namespace Upp;
 Convert& DateIntConvert();
 Convert& ConvDouble();
 Convert& ConvLineItem();
+Convert& ConvCounty();
 Convert& ConvCurrency();
 
 double round(double d, int n);
@@ -23,5 +24,6 @@ double taxMoney ( double money );
 
 // From sergeynikitin @ https://www.ultimatepp.org/forums/index.php?t=usrinfo&id=538&
 LookupHdr(TYPES,TYPENUM,TYPENAME);
+LookupHdr(COUNTIES,COUNTY_NUM,COUNTY_NAME);
 
 #endif

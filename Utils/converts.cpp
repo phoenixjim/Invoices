@@ -181,4 +181,44 @@ double PercentFormat(double d) {
 	return floor(d * ipow10(4) + 0.5) / ipow10(2);
 }
 
+struct ConvCountyCls : Convert
+{
+	virtual Value Scan ( const Value &q ) const;
+	virtual Value Format (const Value &q) const;
+};
+
+Value ConvCountyCls::Format ( const Value &q ) const // use typenum to return correct string
+	{
+	int idNum = q;
+	SQL * Select(COUNTY_NUM, COUNTY_NAME).From(COUNTIES);
+	
+	while (SQL.Fetch())
+	{
+		if (q == SQL[COUNTY_NUM])
+			return SQL[COUNTY_NAME];
+	}
+	return "Columbia"; // if no type matching num
+	
+}
+
+Value ConvCountyCls::Scan(const Value &q) const // use typename to return type num
+{
+	String text = q;
+	if(text.IsEmpty()) return Null;
+	SQL * Select(COUNTY_NUM, COUNTY_NAME).From(COUNTIES);
+	
+	while (SQL.Fetch())
+	{
+		if (text.IsEqual(SQL[COUNTY_NAME]))
+			return SQL[COUNTY_NUM];
+	}
+	return 1;
+}
+
+Convert& ConvCounty()
+{
+	return Single<ConvCountyCls>();
+}
+
 LookupSrc(TYPES,TYPENUM,TYPENAME);
+LookupSrc(COUNTIES,COUNTY_NUM,COUNTY_NAME);

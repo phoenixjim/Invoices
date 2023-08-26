@@ -47,6 +47,27 @@ TaxWindow::TaxWindow()
 	SalesTax.SetColor(TXTCOLOR);	
 	voided.Set(0).SetColor(TXTCOLOR);
 }
+String TaxWindow::getCountyNameFromNumber(int cnumber)
+{
+
+	Sql cntyName;
+	cntyName * Select(COUNTY_NAME).From(COUNTIES).Where(COUNTY_NUM == cnumber);
+	return (String) cntyName[0];
+}
+
+
+
+int TaxWindow::getCountyNumberFromInvoice(int invoiceId)
+{
+	Sql inv;
+	inv  * Select(CUSTOMERID).From(INVOICES).Where(INVOICENUMBER == invoiceId);
+	inv.Fetch();
+
+	Sql getCounty;
+	getCounty * Select(CTY_NUM).From(CUSTOMERS).Where(CUST_ID == inv[CUSTOMERID]);
+	
+	return (int) getCounty[0];
+}
 
 void TaxWindow::CreateSalesTaxReport(String start, String end)
 {
@@ -61,11 +82,17 @@ void TaxWindow::CreateSalesTaxReport(String start, String end)
 		<< " ]:: :: [ {{4597:804:4599 [* STARTING DATE ] :: [ ]:: [* ENDING DATE ]:: [ " << s << " ]:: [ ]:: [ " << e << " ]  }} }}"; 
 
 	// outer table opened for revenue and sales tax collected
-	// plQTF = "{{4878:243:4879f0;g0; [ [* REVENUE ]]:: [* ]:: [ [* SALES TAX COLLECTED ]]:: }}";
-	double nowTaxable = 0.0, nowNontaxable = 0.0, nowTax = 0.0, calcTax = 0.0;
+	plQTF = "{{5000:5000f0;g0; [ [* REVENUE ] ]:: [* ]:: [ [* SALES TAX COLLECTED ] ] }}";
+
+	SQL.Execute("Select MAX(COUNTY_NUM) From COUNTIES");
+	SQL.Fetch();
+	int numCounties = (int)SQL[0];
 	
-	plQTF = "{{5000:500:5000f0;g0 [* REVENUE{{5000:5000 [* TAXABLE ]:: [ ";
+	double nowTaxable[numCounties], taxableTotal = 0.00, nowNontaxable = 0.0, nowTax[numCounties], calcTax = 0.0, totTax = 0.0;
+	for (int i = 0; i < numCounties; i++) nowTaxable[i] = nowTax[i] = 0.00;
 	
+	// plQTF = "{{5000:250:5000f0;g0 [* REVENUE ]:: [* ]:: [* SALES TAX ] }}";
+
 	Sql sql;
 	SqlBool where;
 	where = Between(DATEPAID, dateStart.GetData().ToString(), dateEnd.GetData().ToString()) && STATUS > 0;
@@ -74,18 +101,28 @@ void TaxWindow::CreateSalesTaxReport(String start, String end)
 
 	while ( sql.Fetch() )
 	{
-		nowTaxable += (double) sql[TAXABLESUB];
+		int cnumber = getCountyNumberFromInvoice( sql[INVOICENUMBER] );
+		
+		nowTaxable[ cnumber - 1] += (double) sql[TAXABLESUB];
 		nowNontaxable += (double) sql[NONTAXABLESUB];
-		nowTax += (double) sql[TAX];
+		nowTax[ cnumber - 1 ] += (double) sql[TAX];
 	}
-	calcTax = nowTaxable * 0.08;
+	plQTF = "{{8500:2500:7000:2000 ";
+	for (int i = 0; i < numCounties; i++) {
+		calcTax += nowTaxable[i] * myConfig.data.taxrate;
+		totTax += nowTax[i];
+		taxableTotal += nowTaxable[i];
 	
-	plQTF << prnMoney( nowTaxable ) << " ] }} {{5000:5000 [* TAX EXEMPT ]:: [ ";
-	plQTF << prnMoney( nowNontaxable ) << " ] }} {{5000:5000 [ NET ]:: [ ";
-	plQTF << prnMoney( nowTaxable + nowNontaxable ) << " ] }} ]:: [  ]:: [* SALES TAX COLLECTED {{5000:5000 [* TOTAL ]:: [ ";
-	plQTF << prnMoney( ( nowTax > calcTax ) ? nowTax : calcTax ) << " ] }} {{5000:5000 [* CHARGED ]:: [ ";
-	plQTF << prnMoney( nowTax ) << " ] }}  {{5000:5000 [ Calculated ]:: [ ";
-	plQTF << prnMoney( calcTax ) << " ] }} }}";
+		plQTF << " [* TAXABLE - " << getCountyNameFromNumber( i + 1 ) << " @ " << DblStr ( myConfig.data.taxrate ) << " ]:: [+70>* ";
+		plQTF << prnMoney( nowTaxable[ i ] ) << " ]:: [* TAX COLLECTED ]:: [+70>* " << prnMoney( nowTax[ i ] ) << " ]:: ";
+		plQTF << " [ ]:: [ ]:: [* CALCULATED ON TOTAL: ]:: [+70>* " << prnMoney( nowTaxable[i] * myConfig.data.taxrate ) << " ]::";
+		// if (i < ( numCounties - 1 ) ) plQTF << "::";
+	}
+	
+	// plQTF << " }} {{7500:2500:7500:2500 " ;
+	plQTF << " [* TAX EXEMPT RECEIVED ]:: [+70>* " << prnMoney( nowNontaxable ) << " ]:: [* TOTAL TAXES PAYABLE ]:: [+70>* ";
+	plQTF << prnMoney( totTax > calcTax ? totTax : calcTax ) << " ]:: ";
+	plQTF << "[* TOTAL RECEIVED ]:: [+70>* " << prnMoney( taxableTotal + nowNontaxable ) << " ]:: [ ]:: }} ";
 
 	salesTax.Header(header);
 	salesTax << plQTF;
