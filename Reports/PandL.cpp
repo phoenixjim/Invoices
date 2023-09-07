@@ -52,14 +52,14 @@ void PandLWindow::CreateReport(String start, String end)
 {
 	if (!(startDate.IsNotNull() && endDate.IsNotNull())) return;
 	
-	String plQTF;
+	String plQTF, pl2QTF;
 	String s = ::Format(Date( 1970, 1, 1) + StrInt(start));
 	String e = ::Format(Date( 1970, 1, 1) + StrInt(end));
 	
 	Report profit;
-	String header = "{{4878:243:4879f0;g0; [ CUSTOMER NAME ]:: [ ]:: [ STATEMENT REPORT  ]:: [*4 " << myConfig.data.companyname << " ]:: :: [ {{4597:804:4599 [* STARTING DATE ] :: [ to ]:: [* ENDING DATE ]:: [ " << s << " ]:: [ ]:: [ " << e << " ]  }} }}" ; 
+	plQTF = "{{4878:243:4879f0;g0; [ CUSTOMER NAME ]:: [ ]:: [ STATEMENT REPORT  ]:: [*4 " << myConfig.data.companyname << " ]:: :: [ {{4597:804:4599 [* STARTING DATE ] :: [ to ]:: [* ENDING DATE ]:: [ " << s << " ]:: [ ]:: [ " << e << " ]  }} }} " ; 
 	// outer table opened for revenue and expenses
-	plQTF = "{{4878:243:4879f0;g0; [ [* REVENUE ]]:: [* ]:: [ [* EXPENSES ]]::";
+	plQTF << "{{4878:243:4879f0;g0; [ [* REVENUE ]]:: [* ]:: [ [* EXPENSES ]]::";
 	plQTF << " [ {{10000f0;g0; [ [2 Includes deductions for returns `& discounts ] ]:: ";
 	plQTF << "[ {{5000:5000 [ [2 Sales Revenue ] ]:: [< `$ 0.00 ] :: [2 Other Revenue ] :: [< `$ ";
 	
@@ -72,13 +72,18 @@ void PandLWindow::CreateReport(String start, String end)
 	where = Between(DATEPAID, startDate.GetData().ToString(), endDate.GetData().ToString()) && STATUS > 0;
 	
 	sql * SelectAll().From(INVOICES).Where(where);
-
+	int first = 0, last = 0;
 	while ( sql.Fetch() )
 	{
+		if (first == 0) first = sql[INVOICENUMBER];
 		nowTaxable += (double) sql[TAXABLESUB];
 		nowNontaxable += (double) sql[NONTAXABLESUB];
 		nowParts += round((double)GetPartsCost(sql[INVOICENUMBER]), 2);
+		last = sql[INVOICENUMBER];
 	}
+	
+	String test = " first " << IntStr(first) << " Last " << IntStr( last );
+	PromptOK(test);
 	plQTF << DblStr( nowTaxable + nowNontaxable ) << " ]:: [ [c$1 Gross Revenue] ]:: [ `$ ";
 	plQTF << DblStr( nowTaxable + nowNontaxable ) << " ]}}&][  ]}}&][  &][  &]";
 	plQTF << "[ {{10000f0;g0; &[ [* COST OF GOODS SOLD ] ]:: [ {{5000:5000 [ [c$1 Total COGS]  ]:: [ `$ ";
@@ -111,14 +116,31 @@ void PandLWindow::CreateReport(String start, String end)
 	
 	total = nowTaxable + nowNontaxable - debits - nowParts;
 	// Begin gross profit table
-	plQTF << " [ &][ & ] [ &] [ &] ";
+	plQTF << " [ & ][ & ] ";
 	plQTF << " [ {{10000f0;g0; [c$1* Net Income ] :: [ ";
 	plQTF << "{{5454:4546 [/2 Gross profit minus total expenses ] :: [ `$ ";
 	plQTF << DblStr ( total ) << " ] }} ] }} ]";
-	plQTF << " }}"; // close outer table.
+	plQTF << " }} "; // close outer table.
 
-	profit.Header(header);
-	profit << plQTF;
+if (nowParts > 0.00) {
+		// add additional table items
+		Sql partssql;
+		SqlBool where;
+		where = Between(INVOICEID, first, last + 1);
+		
+		pl2QTF << " {{25:50:100:50:75 [ Inv # ] :: [ Product Name ] :: [ Description ] :: [ Date Purchased ] :: [ Cost ] ";
+
+		partssql * SelectAll().From(PRODUCTS).Where(where);
+		
+		while ( partssql.Fetch() )
+		{
+			pl2QTF << " :: [ " << IntStr( partssql[INVOICEID] ) << "] :: [ " << partssql[PRODNAME]  << " ] :: [ " << partssql[PRODDESCRIPTION] << " ] :: [ " << ::Format(Date( 1970, 1, 1) + partssql[DATEPURCHASED] ) <<  " ] :: [ " << prnMoney( partssql[COST] ) << " ] ";
+		}
+		pl2QTF << " }} &";
+	}
+	
+	// profit.Header(header);
+	profit << plQTF << pl2QTF;
 	Perform( profit );
 	
 }
