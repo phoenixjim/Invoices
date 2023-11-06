@@ -98,7 +98,7 @@ LineItemsWindow::LineItemsWindow() {
 	LineItemsArray.AddColumn(PRODUCTNAME, "Product Name").SetConvert(Single<Lookup(TYPES,TYPENUM,TYPENAME)>()).Edit(mytypes);
 	LineItemsArray.AddColumn(DESCRIPTION, "Description");
 	LineItemsArray.AddColumn(PRICE, "Price").SetConvert(ConvDouble()).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight();
-	LineItemsArray.AddColumn(QTY, "Qty");
+	LineItemsArray.AddColumn(QTY, "Qty").SetConvert(ConvDbl());
 	LineItemsArray.AddColumn(TOTAL, "Total").SetConvert(ConvDouble()).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight();
 	LineItemsArray.AddColumn(INVOICEIDNUMBER, "Invoice#");
 	LineItemsArray.AddColumn(ISTAXABLE, "Taxable?");
@@ -146,7 +146,7 @@ void LineItemsWindow::EditRow()
 	
 	dlg.txtInvoiceNum.WantFocus(false);
     dlg.txtPrice.SetData(0.0);
-    dlg.txtQty.SetData(0);
+    dlg.txtQty.SetData(0.0);
     dlg.txtTotal.SetData(0.0);
 	if(!dlg.ctrls.Fetch(SQL))
 		return;
@@ -200,7 +200,7 @@ void LineItemsWindow::AddNewItem()
 	int minInv = (int)tempSql[0];
     dlg.txtInvoiceNum.Max(maxInv).Min(minInv).SetData(maxInv);
     dlg.txtPrice.SetData(0.0);
-    dlg.txtQty.SetData(0);
+    dlg.txtQty.SetData(0.0);
     dlg.txtTotal.SetData(0.0);
     dlg.txtLineItemId.SetData(maxLI + 1);
     
@@ -220,7 +220,7 @@ void LineItemsWindow::AddNewItem()
     	(PRODUCTNAME, (int)dlg.cbProducts.Get() + 1 )
 		(DESCRIPTION, dlg.txtDescription.GetData().ToString())
 		(PRICE, (double)dlg.txtPrice.GetData())
-		(QTY, (int)dlg.txtQty.GetData())
+		(QTY, (double)dlg.txtQty.GetData())
 		(TOTAL, (double)dlg.txtTotal)
 		(INVOICEIDNUMBER, (int64)dlg.txtInvoiceNum)
 		(ISTAXABLE, (int)dlg.optProdTaxable);

@@ -95,6 +95,8 @@ void InvoicesWindow::btnPrintClicked()
 	invoiceQTF << "[ [ {{729:2603:1666:1666:1666:1670@L|1 [ Item]:: [ Name]:: [> Price]:: [> Quantity]:: [> Taxable]::|1 [> Subtotal]:: [ ]::-3 [ Description]::-2 [ ]::-1 [ ]:: [ ]:: [ ]}}]]&";
 	int linenumber = 0;
 
+	double nonTaxable = 0.0, taxable = 0.0, salestax = 0.0, grandtotal = 0.0;
+
 	while (linesSQL.Fetch())
 	{
 		if (linenumber % 2) invoiceQTF << "[ [ {{729:2603:1666:1666:1666:1670@L|1 [ ";
@@ -106,11 +108,23 @@ void InvoicesWindow::btnPrintClicked()
 		invoiceQTF << ++linenumber << "]:: [ " << 
 			//linesSQL[PRODUCTNAME] << 
 			name << "]:: [> " << prnMoney(linesSQL[PRICE]) <<
-			"]:: [> " << linesSQL[QTY] << "]:: [> "<< ( linesSQL[ISTAXABLE] ? "T" : "" ) << "]::|1 [> " << 
+			"]:: [> " << prnQty(linesSQL[QTY]) << "]:: [> "<< ( linesSQL[ISTAXABLE] ? "T" : "" ) << "]::|1 [> " << 
 			prnMoney(linesSQL[TOTAL]) << "]:: [ ]::-3 [ " << linesSQL[DESCRIPTION] << "]::-2 [ ]::-1 [ ]:: [ ]:: [ ]}}]]&";
+		if (custSQL[TAXABLE] == 1 && linesSQL[ISTAXABLE] == 1) { // calc sales tax, add totals to taxablesub
+			taxable += round((double)linesSQL[PRICE] * (double)linesSQL[QTY], 2);
+		}
+		else {
+			nonTaxable += round((double)linesSQL[PRICE] * (double)linesSQL[QTY], 2);
+		}
 	}
+	if (custSQL[TAXABLE] == 1) salestax = round( taxable * myConfig.data.taxrate, 2);
+	else salestax = 0.00;
+	grandtotal = nonTaxable + taxable + salestax;
 	
-	// Minor adjustment needed to align dollar column
+	SQL * SqlUpdate(INVOICES)(TAXABLESUB,taxable)(NONTAXABLESUB,nonTaxable)(TAX, salestax)(GRANDTOTAL,grandtotal).Where(INVOICENUMBER == thisInvoice); // INVOICENUMBER CHANGED FROM INVOICEID
+	InvoicesArray.ReQuery();
+	
+	// Need to recalc values below...
 	double amtPaid = (IsNull(invoiceSQL[AMTPAID]) ?  (double)0.00 : (double)invoiceSQL[AMTPAID]);
 	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Taxable Sub:]::a4/15 [> " << prnMoney(invoiceSQL[TAXABLESUB]) << "]}}]]&";
 	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ NonTaxable Sub:]::a4/15 [> " << prnMoney(invoiceSQL[NONTAXABLESUB]) << "]}}]]&";

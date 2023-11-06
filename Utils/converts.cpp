@@ -38,6 +38,43 @@ Convert& ConvDouble()
 	return Single<ConvDoubleCls>();
 }
 
+struct ConvDblCls : Convert
+{
+	virtual Value Format ( const Value &q ) const;
+	virtual Value Scan ( const Value &q ) const;
+};
+
+Value ConvDblCls::Format ( const Value &q ) const // double to string, formatted
+{
+	// return q.IsNull() ? Null : UPP::Format("%2!,n", q);
+	double toreal;
+	double real = q;
+	if (real < 0) {
+		toreal = (double)abs(real) ;
+		return UPP::Format("(%.2f)", toreal);
+	}
+	else {
+		toreal = (double)real ;
+		return (real == 0) ? "0.00" : UPP::Format("%.2f", toreal);
+	}
+}
+	
+Value ConvDblCls::Scan (const Value &q ) const // string to double
+{
+	String text = q;
+	if (text[0] == '(') {
+		text.Set(0,'-');
+		text.TrimLast();
+	}
+	double real = StrDbl(text.ToString());
+	return (double)(real);
+}
+
+Convert& ConvDbl()
+{
+	return Single<ConvDblCls>();
+}
+
 struct DateIntConvertCls : ConvertDate {
     virtual Value Format(const Value& q) const;
     virtual Value Scan(const Value& text) const;
@@ -162,6 +199,17 @@ String prnMoney( double money )
 		return (money == 0) ? "$0.00" : UPP::Format("$%.2f", currency);
 	}
 }
+
+String prnQty( double qty )
+{
+	if (qty < 0) {
+		return UPP::Format("(%.2f)", 0.00);
+	}
+	else {
+		return (qty == 0) ? "0.00" : UPP::Format("%.2f", qty);
+	}
+}
+
 double taxMoney ( double money )
 {
 	return ((double) money );

@@ -13,6 +13,7 @@ using namespace Upp;
 
 Convert& DateIntConvert();
 Convert& ConvDouble();
+Convert& ConvDbl();
 Convert& ConvLineItem();
 Convert& ConvCounty();
 Convert& ConvCurrency();
@@ -20,6 +21,7 @@ Convert& ConvCurrency();
 double round(double d, int n);
 double PercentFormat(double d);
 String prnMoney( double money );
+String prnQty( double qty );
 double taxMoney ( double money );
 
 // From sergeynikitin @ https://www.ultimatepp.org/forums/index.php?t=usrinfo&id=538&

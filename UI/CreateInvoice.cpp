@@ -116,15 +116,15 @@ void CreateInvoiceWindow::SaveInvoice()
 	for (int i = 0; i < idNum; i++)
 	{
 		if (optCustTaxable.Get() == true && arrayLineItems.Get(i, ISTAXABLE)  == 1) {
-			taxable += ((double)arrayLineItems.Get(i, PRICE) ) * (int)arrayLineItems.Get(i, QTY);
+			taxable += ((double)arrayLineItems.Get(i, PRICE) ) * (double)arrayLineItems.Get(i, QTY);
 		}
-		else 	nonTaxable += (double)arrayLineItems.Get(i, PRICE) * (int)arrayLineItems.Get(i, QTY) ;
+		else 	nonTaxable += (double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY) ;
 		
 		SQL * Insert(LINEITEMS)
 		(PRODUCTNAME, arrayLineItems.Get(i,PRODUCTNAME))
 		(DESCRIPTION, arrayLineItems.Get(i, DESCRIPTION))
 		(PRICE, (double)arrayLineItems.Get(i, PRICE))
-		(QTY, (int)arrayLineItems.Get(i, QTY))
+		(QTY, (double)arrayLineItems.Get(i, QTY))
 		(TOTAL, (double)arrayLineItems.Get(i, TOTAL))
 		(INVOICEIDNUMBER, (int64)txtInvoice)
 		(ISTAXABLE, (int)arrayLineItems.Get(i, ISTAXABLE));
@@ -225,7 +225,7 @@ void CreateInvoiceWindow::PrintInvoice()
 		invoiceQTF << ++linenumber << "]:: [ " << 
 			// linesSQL[PRODUCTNAME] << 
 			name << "]:: [> " << prnMoney(linesSQL[PRICE]) <<
-			"]:: [> " << linesSQL[QTY] << "]:: [> "<< ( linesSQL[ISTAXABLE] ? "T" : "" ) << "]::|1 [> " << 
+			"]:: [> " << prnQty(linesSQL[QTY]) << "]:: [> "<< ( linesSQL[ISTAXABLE] ? "T" : "" ) << "]::|1 [> " << 
 			prnMoney(linesSQL[TOTAL]) << "]:: [ ]::-3 [ " << linesSQL[DESCRIPTION] << "]::-2 [ ]::-1 [ ]:: [ ]:: [ ]}}]]&";
 	}
 	
@@ -262,9 +262,9 @@ void CreateInvoiceWindow::AddItem()
 		// name,
 		txtDescription.GetText().ToString(),
 		StrDbl(txtPrice.GetText().ToString()),
-		StrInt(txtQty.GetText().ToString()), 
+		StrDbl(txtQty.GetText().ToString()), 
 		optProdTaxable.Get(),
-		StrDbl(txtPrice.GetText().ToString()) * StrInt(txtQty.GetText().ToString()));
+		StrDbl(txtPrice.GetText().ToString()) * StrDbl(txtQty.GetText().ToString()));
 	CalcInvoiceTotal();
 }
 
@@ -274,7 +274,7 @@ void CreateInvoiceWindow::ClearItem()
 	txtPrice.SetText("");
 	txtQty.SetText("");
 	cbProducts.SetIndex(0);
-	cbCustomers.SetIndex(4);
+	cbCustomers.SetIndex(17);
 	optProdTaxable.Set(0);
 	arrayLineItems.Clear();
 	CalcInvoiceTotal();
@@ -282,9 +282,9 @@ void CreateInvoiceWindow::ClearItem()
 
 double CreateInvoiceWindow::CalcItemTotal(int itemnumber)
 {
-	if (IsNull(arrayLineItems.GetColumn(itemnumber, StrInt(~PRICE))) || IsNull(arrayLineItems.GetColumn(itemnumber, StrInt(~QTY))))
+	if (IsNull(arrayLineItems.GetColumn(itemnumber, StrDbl(~PRICE))) || IsNull(arrayLineItems.GetColumn(itemnumber, StrDbl(~QTY))))
 		return 0.0;
-	return round((double)arrayLineItems.GetColumn(itemnumber, StrInt(~PRICE)) * (double)arrayLineItems.GetColumn(itemnumber, StrInt(~QTY)), 2);
+	return round((double)arrayLineItems.GetColumn(itemnumber, StrDbl(~PRICE)) * (double)arrayLineItems.GetColumn(itemnumber, StrDbl(~QTY)), 2);
 }
 
 void CreateInvoiceWindow::CalcInvoiceTotal()
