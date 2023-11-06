@@ -15,7 +15,6 @@ CompanyInfoWindow::CompanyInfoWindow()
 	lZip.SetInk(TXTCOLOR);
 	lPhone.SetInk(TXTCOLOR);
 	lEmail.SetInk(TXTCOLOR);
-	lTaxRate.SetInk(TXTCOLOR);
 	
 	LoadFromJsonFile(myConfig.data);
 	txtBusName.SetData(myConfig.data.companyname);
@@ -26,7 +25,6 @@ CompanyInfoWindow::CompanyInfoWindow()
 	txtBusZip.SetData(myConfig.data.companyzip);
 	txtBusPhone.SetData(myConfig.data.companyphone);
 	txtBusEmail.SetData(myConfig.data.companyemail);
-	txtTaxrate.SetData(round(myConfig.data.taxrate,2));
 }
 
 void CompanyInfoWindow::Cancel()
@@ -36,7 +34,6 @@ void CompanyInfoWindow::Cancel()
 
 void CompanyInfoWindow::Save()
 {
-	myConfig.data.taxrate = round(txtTaxrate.GetData(),2);
 	myConfig.data.companyname = ~txtBusName.GetData();
 	myConfig.data.companyowner = ~txtBusOwner.GetData();
 	myConfig.data.companyaddress = ~txtBusAddress.GetData();

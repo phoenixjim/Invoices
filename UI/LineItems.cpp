@@ -48,7 +48,8 @@ AddLineItem::AddLineItem()
 	cbProducts.WhenAction << [=] { ProdChanged(); };
 	txtPrice.WhenAction << [=] { PriceChanged(); };
 	txtQty.WhenAction << [=] { QtyChanged(); };
-	btnSubtract << [=] { AdjustPrice(); };
+	txtTotal.SetConvert(ConvCurrency());
+	btnTaxReduce << [=] { AdjustPrice(); };
 	lDesc.SetInk(TXTCOLOR);
 	lPrice.SetInk(TXTCOLOR);
 	lQty.SetInk(TXTCOLOR);
@@ -56,15 +57,6 @@ AddLineItem::AddLineItem()
 	lName.SetInk(TXTCOLOR);
 	lNumber.SetInk(TXTCOLOR);
 	optProdTaxable.SetColor(TXTCOLOR);
-}
-
-void AddLineItem::AdjustPrice()
-{
-	if (IsNull(txtPrice)) return;
-	
-	double newPrice = round((double)txtPrice / ( 1 + myConfig.data.taxrate ), 2);
-	txtPrice = newPrice;
-	PriceChanged();
 }
 
 void AddLineItem::QtyChanged()
@@ -85,6 +77,20 @@ void AddLineItem::ProdChanged()
 	// max taxable id is 3 currently
 	if (idNum < 4) optProdTaxable.Set(true);
 	else optProdTaxable.Set(false);
+}
+
+void AddLineItem::AdjustPrice() // subtract sales tax
+{
+	if (IsNull(txtPrice) || IsNull(txtInvoiceNum)) return;
+	
+	int idNum = 1;
+	idNum += getCustFromInvoice(txtInvoiceNum);
+	if (IsNull(idNum) || idNum < 1)
+		return;
+	double salestax = getTaxRate( idNum ) / 100.00;
+	double newPrice = round((double)txtPrice / (double)( 1.00 + salestax ), 2);
+	if ((newPrice + salestax ) < txtPrice) newPrice += 0.01;
+	txtPrice.SetData( newPrice );
 }
 
 LineItemsWindow::LineItemsWindow() {
@@ -296,7 +302,7 @@ void LineItemsWindow::CalcInvoiceTotal(long invoice)
 		}
 		else 	nonTaxable += round((double)tempLI[PRICE] * (double)tempLI[QTY], 2);
 	}
-	if (tempCust[TAXABLE] == 1) salestax = round( taxable * myConfig.data.taxrate, 2);
+	if (tempCust[TAXABLE] == 1) salestax = round( taxable * (getTaxRate(tempCust[CUST_ID] ) / 100.00 ), 2);
 	grandtotal = nonTaxable + taxable + salestax;
 	// String exestring = "Update INVOICES SET TAXABLESUB = " + DblStr(taxable) + "NONTAXABLESUB = " + DblStr( nonTaxable) + "TAX = " + DblStr(salestax) + "GRANDTOTAL = " + DblStr( grandtotal) + "Where INVOICENUMBER == " + IntStr64(invoice);
 	SQL * SqlUpdate(INVOICES)(TAXABLESUB, taxable)(NONTAXABLESUB, nonTaxable)(TAX, salestax)(GRANDTOTAL, grandtotal).Where(INVOICENUMBER == (int64)invoice);

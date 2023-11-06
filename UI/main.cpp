@@ -64,6 +64,13 @@ void Invoices::FileMenu(Bar& bar)
     		typewin.Open(this); 
     		}
     	});
+
+    bar.Add(t_("List Counties"), [=]{ 
+    	if(!countywin.IsOpen()) {
+    		countywin.CountyArray.ReQuery();
+    		countywin.Open(this); 
+    		}
+    	});
 }
 
 void Invoices::ReportsMenu(Bar& bar)

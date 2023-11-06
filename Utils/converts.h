@@ -14,6 +14,7 @@ using namespace Upp;
 Convert& DateIntConvert();
 Convert& ConvDouble();
 Convert& ConvDbl();
+Convert& ConvRate();
 Convert& ConvLineItem();
 Convert& ConvCounty();
 Convert& ConvCurrency();
@@ -23,6 +24,9 @@ double PercentFormat(double d);
 String prnMoney( double money );
 String prnQty( double qty );
 double taxMoney ( double money );
+double getTaxRate(int custId);
+double getCountyTaxRate( int county );
+int getCustFromInvoice(int invoiceId);
 
 // From sergeynikitin @ https://www.ultimatepp.org/forums/index.php?t=usrinfo&id=538&
 LookupHdr(TYPES,TYPENUM,TYPENAME);

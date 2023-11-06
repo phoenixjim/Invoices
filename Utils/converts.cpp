@@ -75,6 +75,39 @@ Convert& ConvDbl()
 	return Single<ConvDblCls>();
 }
 
+struct ConvRateCls : Convert
+{
+	virtual Value Format ( const Value &q ) const;
+	virtual Value Scan ( const Value &q ) const;
+};
+
+Value ConvRateCls::Format ( const Value &q ) const // double to string, formatted
+{
+	// return q.IsNull() ? Null : UPP::Format("%2!,n", q);
+	double real = q;
+	if (real < 0) {
+		return UPP::Format("(%.2f) %%", 0.00);
+	}
+	else {
+		return (real == 0.00) ? "0.00 %" : UPP::Format("%.2f %%", real);
+	}
+}
+	
+Value ConvRateCls::Scan (const Value &q ) const // string to double
+{
+	String text = q;
+	if (text[text.GetCharCount() - 1] == '%')
+		text.TrimLast(); // remove percent sign
+
+	double real = StrDbl(text.ToString());
+	return (double)(real);
+}
+
+Convert& ConvRate()
+{
+	return Single<ConvRateCls>();
+}
+
 struct DateIntConvertCls : ConvertDate {
     virtual Value Format(const Value& q) const;
     virtual Value Scan(const Value& text) const;
@@ -266,6 +299,39 @@ Value ConvCountyCls::Scan(const Value &q) const // use typename to return type n
 Convert& ConvCounty()
 {
 	return Single<ConvCountyCls>();
+}
+
+double getTaxRate(int custId)
+{
+	Sql sqlCustomer;
+ 	sqlCustomer * Select(CTY_NUM).From(CUSTOMERS).Where( CUST_ID == custId );
+ 	sqlCustomer.Fetch();
+
+	Sql sqlCounty;
+	sqlCounty  * Select(COUNTY_RATE).From( COUNTIES ).Where( COUNTY_NUM == sqlCustomer[0]);
+	sqlCounty.Fetch();
+	
+	return sqlCounty[0];
+}
+
+int getCustFromInvoice(int invoiceId)
+{
+	Sql sqlInvoice;
+ 	sqlInvoice * Select(CUSTOMERID).From(INVOICES).Where( INVOICENUMBER == invoiceId );
+ 	sqlInvoice.Fetch();
+	int invNum = sqlInvoice[0];
+	if (( invNum < 0 ) || (invNum > 1000)) return -1;
+	return invNum;
+}
+
+double getCountyTaxRate( int county )
+{
+	Sql sqlCounty;
+	sqlCounty  * Select(COUNTY_RATE).From( COUNTIES ).Where( COUNTY_NUM == county);
+	sqlCounty.Fetch();
+	
+	// double taxrate = StrDbl(sqlCounty[COUNTY_RATE].ToString());
+	return (double)sqlCounty[0]; // taxrate;	
 }
 
 LookupSrc(TYPES,TYPENUM,TYPENAME);

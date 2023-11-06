@@ -117,7 +117,7 @@ void InvoicesWindow::btnPrintClicked()
 			nonTaxable += round((double)linesSQL[PRICE] * (double)linesSQL[QTY], 2);
 		}
 	}
-	if (custSQL[TAXABLE] == 1) salestax = round( taxable * myConfig.data.taxrate, 2);
+	if (custSQL[TAXABLE] == 1) salestax = round( taxable * ( getTaxRate(custSQL[CUST_ID]) / 100.00 ) , 2 );
 	else salestax = 0.00;
 	grandtotal = nonTaxable + taxable + salestax;
 	

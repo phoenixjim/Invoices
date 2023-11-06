@@ -120,6 +120,19 @@ public:
 	void EditRow();
 };
 
+// Counties
+class CountiesWindow : public WithCountiesLayout<TopWindow> {
+public:
+	CountiesWindow();
+	SqlCtrls ctrls;
+	
+	virtual void Paint(Draw& w) {
+        w.DrawRect(GetSize(), COLOR); // <= enter your background color here
+    }
+    void AddNewCounty();
+	void EditRow();
+};
+
 class CompanyInfoWindow : public WithCompanyInfoWindowLayout<TopWindow> {
 	void Save();
 	void Cancel();
@@ -142,6 +155,7 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 	CustomersWindow	custwin;
 	ProductsWindow prodwin;
 	TypesWindow typewin;
+	CountiesWindow countywin;
 	CreateInvoiceWindow createinvoicewin;
 	TaxWindow taxreportwin;
 	IncomeWindow incomewin;
@@ -154,7 +168,7 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 	MenuBar		mainmenu;
 	// added 'save and mark paid' on create invoice window
 
-	String version = "2.1.4.1 & Changed quantities to dbl to allow for partial hours"; // added new report, renamed old profit and loss to yeartoyear
+	String version = "2.1.5.1 & Now fully implemented per county tax rates."; // added new report, renamed old profit and loss to yeartoyear
 
 public:
 	Invoices();

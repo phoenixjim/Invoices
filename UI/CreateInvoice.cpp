@@ -7,7 +7,7 @@ CreateInvoiceWindow::CreateInvoiceWindow()
 	DropList mytypes;
 
  	txtTerms.SetText("Due On Receipt");
- 	txtTaxRate.SetData(myConfig.data.taxrate);
+ 	txtTaxRate.SetConvert(ConvRate()).SetData(0.00);
  	pInvoice = 0;
 	optProdTaxable.WantFocus(true);
 	btnAdd << [=] { AddItem(); };
@@ -78,6 +78,7 @@ void CreateInvoiceWindow::CustChanged()
 	if (IsNull(idNum) || idNum < 1)
 		return;
 	optCustTaxable.Set(SQL % Select(TAXABLE).From(CUSTOMERS).Where(CUST_ID == idNum));
+	txtTaxRate.SetData(getTaxRate(idNum));
 }
 
 void CreateInvoiceWindow::ProdChanged()
@@ -94,12 +95,17 @@ void CreateInvoiceWindow::ProdChanged()
 	optProdTaxable.Set(SQL % Select(TYPETAXABLE).From(TYPES).Where(TYPENUM == idNum));
 }
 
-void CreateInvoiceWindow::AdjustPrice()
+void CreateInvoiceWindow::AdjustPrice() // subtract sales tax
 {
 	if (IsNull(txtPrice)) return;
-	
-	double newPrice = round((double)txtPrice / (double)( 1.00 + myConfig.data.taxrate ), 2);
-	txtPreTax = newPrice;
+	int idNum = 1;
+	idNum += cbCustomers.GetIndex();
+	if (IsNull(idNum) || idNum < 1)
+		return;
+	double salestax = getTaxRate( idNum ) / 100.00;
+	double newPrice = round((double)txtPrice / (double)( 1.00 + salestax ), 2);
+	if ((newPrice + salestax ) < txtPrice) newPrice += 0.01;
+	txtPrice.SetData( newPrice );
 }
 
 void CreateInvoiceWindow::SaveInvoice()
@@ -306,7 +312,7 @@ void CreateInvoiceWindow::CalcInvoiceTotal()
 		}
 		else 	nonTaxable += round((double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY), 2);
 	}
-	if (optCustTaxable.Get() == true) salestax = round( taxable * txtTaxRate, 2);
+	if (optCustTaxable.Get() == true) salestax = round( taxable * txtTaxRate / 100, 2);
 	else salestax = 0.00;
 	
 	grandtotal = nonTaxable + taxable + salestax;

@@ -6,7 +6,6 @@ using namespace Upp;
 #include "../Tables/sqlincludes.h"
 
 struct MyData {
-	double	taxrate;
 	String	dbfile;
 	String	companyname, companyowner, companyaddress, companycity, 
 		companystate, companyzip, companyphone, companyemail;

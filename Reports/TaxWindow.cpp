@@ -106,16 +106,16 @@ void TaxWindow::CreateSalesTaxReport(String start, String end)
 		nowTaxable[ cnumber - 1] += (double) sql[TAXABLESUB];
 		nowNontaxable += (double) sql[NONTAXABLESUB];
 		nowTax[ cnumber - 1 ] += (double) sql[TAX];
+		calcTax += nowTaxable[cnumber - 1] * getTaxRate(cnumber) / 100.00;
+		totTax += nowTax[cnumber - 1];
+		taxableTotal += nowTaxable[cnumber - 1];
+	
 	}
 	plQTF = "{{8500:2500:7000:2000 ";
 	for (int i = 0; i < numCounties; i++) {
-		calcTax += nowTaxable[i] * myConfig.data.taxrate;
-		totTax += nowTax[i];
-		taxableTotal += nowTaxable[i];
-	
-		plQTF << " [* TAXABLE - " << getCountyNameFromNumber( i + 1 ) << " @ " << DblStr ( myConfig.data.taxrate ) << " ]:: [+70>* ";
+		plQTF << " [* TAXABLE - " << getCountyNameFromNumber( i + 1 ) << " @ " << DblStr ( getCountyTaxRate(i + 1) ) << " ]:: [+70>* ";
 		plQTF << prnMoney( nowTaxable[ i ] ) << " ]:: [* TAX COLLECTED ]:: [+70>* " << prnMoney( nowTax[ i ] ) << " ]:: ";
-		plQTF << " [ ]:: [ ]:: [* CALCULATED ON TOTAL: ]:: [+70>* " << prnMoney( nowTaxable[i] * myConfig.data.taxrate ) << " ]::";
+		plQTF << " [ ]:: [ ]:: [* CALCULATED ON TOTAL: ]:: [+70>* " << prnMoney( nowTaxable[i] * getCountyTaxRate(i + 1) / 100.00 ) << " ]::";
 		// if (i < ( numCounties - 1 ) ) plQTF << "::";
 	}
 	
@@ -338,3 +338,4 @@ void TaxWindow::voidedChanged()
 {
 	okPressed();
 }
+

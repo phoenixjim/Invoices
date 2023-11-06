@@ -4,7 +4,6 @@ void MyData::Jsonize ( JsonIO& json )
 
 {
 	json
-		("TaxRate", taxrate)
 		("DBFile", dbfile)
 		("CompanyName", companyname)
 		("CompanyOwner", companyowner)
@@ -43,7 +42,6 @@ void Configs::Populate()
 	if (!FileExists ( cfg ) )
 	// if ( !FileExists ( ConfigFile(GetExeTitle() + ".json") ) )
 	{
-		data.taxrate = 0.08;
 		data.companyname = "Company Name";
 		data.companyowner = "James Lefavour";
 		data.companyaddress = "0 Main Way";
