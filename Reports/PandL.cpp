@@ -82,8 +82,6 @@ void PandLWindow::CreateReport(String start, String end)
 		last = sql[INVOICENUMBER];
 	}
 	
-	String test = " first " << IntStr(first) << " Last " << IntStr( last );
-	PromptOK(test);
 	plQTF << DblStr( nowTaxable + nowNontaxable ) << " ]:: [ [c$1 Gross Revenue] ]:: [ `$ ";
 	plQTF << DblStr( nowTaxable + nowNontaxable ) << " ]}}&][  ]}}&][  &][  &]";
 	plQTF << "[ {{10000f0;g0; &[ [* COST OF GOODS SOLD ] ]:: [ {{5000:5000 [ [c$1 Total COGS]  ]:: [ `$ ";

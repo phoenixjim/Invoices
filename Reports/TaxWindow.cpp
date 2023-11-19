@@ -108,7 +108,7 @@ void TaxWindow::CreateSalesTaxReport(String start, String end)
 		nowTax[ cnumber - 1 ] += (double) sql[TAX];
 		calcTax += nowTaxable[cnumber - 1] * getTaxRate(cnumber) / 100.00;
 		totTax += nowTax[cnumber - 1];
-		taxableTotal += nowTaxable[cnumber - 1];
+		taxableTotal += (double) sql[TAXABLESUB];
 	
 	}
 	plQTF = "{{8500:2500:7000:2000 ";
