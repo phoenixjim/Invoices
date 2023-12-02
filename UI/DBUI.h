@@ -32,7 +32,7 @@ public:
 // CreateInvoice
 class CreateInvoiceWindow : public WithCreateInvoiceWindowLayout<TopWindow> {
 	Configs myConfig;
-	long nextInvoice;
+	long nextInvoice, nextLineItem;
 	int pInvoice;
 	
 	double CalcItemTotal(int itemnumber);

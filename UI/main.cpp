@@ -114,11 +114,17 @@ GUI_APP_MAIN
 		return;
 	}
 
+	Date now = GetSysDate();
+	
 	SQL = sqlite3;
-	SQL * Select(INVOICENUMBER).From(INVOICES).Where(STATUS==1);
+	SQL * Select(INVOICENUMBER, TRANSACTIONDATE).From(INVOICES).Where(STATUS==1);
 	while(SQL.Fetch()) {
-		unpaid++;
-		notpaid << "Invoice number " << SQL[INVOICENUMBER] << "\n";
+		String testit = "Now is: " << IntStr( now - Date( 1970, 1, 1 ) ) << " Inv date is: " << IntStr( SQL[TRANSACTIONDATE] );
+		PromptOK( testit );
+		if ( (int)(now - Date( 1970, 1, 1 ) ) >= (int)SQL[TRANSACTIONDATE]) {
+			unpaid++;
+			notpaid << "Invoice number " << SQL[INVOICENUMBER] << " due: " << now << "\n";
+		}
 	}
 	if (unpaid > 0)
 	{

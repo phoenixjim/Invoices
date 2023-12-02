@@ -43,6 +43,11 @@ CreateInvoiceWindow::CreateInvoiceWindow()
 	SQL.Fetch();
 	
 	nextInvoice = (int)SQL[0] + 1; // stol(SQL[0].ToString().ToStd()) + 1;
+	
+	SQL.Execute("Select MAX(LINEITEM_ID) From LINEITEMS");
+	SQL.Fetch();
+	nextLineItem = (int)SQL[0] + 1;
+	
 	if (nextInvoice < 1) nextInvoice = 1;
 	txtInvoice = nextInvoice; // .SetText(IntStr64(nextInvoice));
 	cbCustomers.WhenAction << [=] { CustChanged(); };
@@ -119,6 +124,10 @@ void CreateInvoiceWindow::SaveInvoice()
 	}
 	double nonTaxable = 0.00, taxable = 0.00, salestax = 0.00, grandTotal = 0.00;
 
+	SQL.Execute("Select MAX(LINEITEM_ID) From LINEITEMS");
+	SQL.Fetch();
+	nextLineItem = (int)SQL[0] + 1;
+	
 	for (int i = 0; i < idNum; i++)
 	{
 		if (optCustTaxable.Get() == true && arrayLineItems.Get(i, ISTAXABLE)  == 1) {
@@ -127,6 +136,7 @@ void CreateInvoiceWindow::SaveInvoice()
 		else 	nonTaxable += (double)arrayLineItems.Get(i, PRICE) * (double)arrayLineItems.Get(i, QTY) ;
 		
 		SQL * Insert(LINEITEMS)
+		(LINEITEM_ID, (int)nextLineItem++)
 		(PRODUCTNAME, arrayLineItems.Get(i,PRODUCTNAME))
 		(DESCRIPTION, arrayLineItems.Get(i, DESCRIPTION))
 		(PRICE, (double)arrayLineItems.Get(i, PRICE))
