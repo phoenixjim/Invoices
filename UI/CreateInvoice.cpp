@@ -192,7 +192,7 @@ void CreateInvoiceWindow::PrintInvoice()
 	Report myInvoice;
 	
 	SaveInvoice();
-	MarkAsPaid();
+	if (optMarkAsPaid.GetData() == 1) MarkAsPaid();
 	// pInvoice = InvoicesArray.GetKey();
 	if (pInvoice == 0 || IsNull(pInvoice))
 	{

@@ -9,6 +9,7 @@ CreateTimeStatementWindow::CreateTimeStatementWindow()
  	// txtTerms.SetText("Due On Receipt");
  	// txtTaxRate.SetConvert(ConvRate()).SetData(0.00);
  	pInvoice = 0;
+
 	// optProdTaxable.WantFocus(true);
 	// btnAdd << [=] { AddItem(); };
 	// btnDelete << [=] { ClearItem(); };
@@ -23,7 +24,7 @@ CreateTimeStatementWindow::CreateTimeStatementWindow()
 	dblMonday.SetData(0.00);
 	dblWednesday.SetData(0.00);
 	dblFriday.SetData(0.00);
- 	SQL * Select(CUST_ID, CUSTNAME).From(CUSTOMERS).Where(CUST_ID == 18);
+ 	SQL * SelectAll().From(CUSTOMERS);
  	while (SQL.Fetch())
  	{
  		cbCustomers.Add(SQL[CUST_ID], SQL[CUSTNAME]);
@@ -42,6 +43,8 @@ CreateTimeStatementWindow::CreateTimeStatementWindow()
 		cbProducts.Add(SQL[TYPENUM], SQL[TYPENAME]);
 	}
 	
+ 	getHourlyRate();
+
 	SQL.Execute("Select MAX(LINEITEM_ID) From LINEITEMS");
 	SQL.Fetch();
 	nextLineItem = (int)SQL[0] + 1;
@@ -53,26 +56,21 @@ CreateTimeStatementWindow::CreateTimeStatementWindow()
 	Date now = GetSysDate();
 	dtpBillDate.SetConvert(DateIntConvert());
 	dtpBillDate.SetText( Format("%", now ).ToString() );
-/*
-	lDesc.SetInk(TXTCOLOR);
-	lNTSub.SetInk(TXTCOLOR);
-	lTSub.SetInk(TXTCOLOR);
-	lTax.SetInk(TXTCOLOR);
-	lTotal.SetInk(TXTCOLOR);
-	lPrice.SetInk(TXTCOLOR);
-	lQty.SetInk(TXTCOLOR);
-	lLIName.SetInk(TXTCOLOR);
-	bCustDetails.SetInk(TXTCOLOR);
+
+ 	totalhours = (double)dblMonday.GetData() +(double)dblTuesday.GetData() +(double)dblWednesday.GetData() +(double)dblThursday.GetData() +(double)dblFriday.GetData() +(double)dblSaturday.GetData();
+
 	lInvNo.SetInk(TXTCOLOR);
 	lBillDate.SetInk(TXTCOLOR);
-	lRate.SetInk(TXTCOLOR);
-	lTerms.SetInk(TXTCOLOR);
 	lName.SetInk(TXTCOLOR);
-	bLineItem.SetInk(TXTCOLOR);
-	bLineItems.SetInk(TXTCOLOR);
-	bTotals.SetInk(TXTCOLOR);
-	lInst.SetInk(TXTCOLOR);
- */
+	lblMonday.SetInk(TXTCOLOR);
+	lblTuesday.SetInk(TXTCOLOR);
+	lblWednesday.SetInk(TXTCOLOR);
+	lblThursday.SetInk(TXTCOLOR);
+	lblFriday.SetInk(TXTCOLOR);
+	lblSaturday.SetInk(TXTCOLOR);
+	lblHourlyRate.SetInk(TXTCOLOR);
+	optMarkAsPaid.SetColor(TXTCOLOR);
+	bCustDetails.SetInk(TXTCOLOR);
  }
  
 void CreateTimeStatementWindow::CustChanged()
@@ -84,21 +82,14 @@ void CreateTimeStatementWindow::CustChanged()
 	// optCustTaxable.Set(SQL % Select(TAXABLE).From(CUSTOMERS).Where(CUST_ID == idNum));
 	taxrate = getTaxRate(idNum);
 }
-/*
-void CreateTimeStatementWindow::ProdChanged()
-{
-	int idNum = cbProducts.GetIndex() + 1;
-	if (IsNull(idNum) || idNum < 1)
-		return;
-	String txt = "" << SQL % Select(TYPEDESCR).From(TYPES).Where(TYPENUM == idNum);
-	txtDescription.SetText(txt);
-	double price = SQL % Select(TYPECOST).From(TYPES).Where(TYPENUM == idNum);
-	txtPrice.SetText(DblStr(price));
-	double quant = SQL % Select (TYPEQUANT).From(TYPES).Where(TYPENUM == idNum);
-	txtQty.SetText(DblStr(quant));
-	optProdTaxable.Set(SQL % Select(TYPETAXABLE).From(TYPES).Where(TYPENUM == idNum));
-}
 
+void CreateTimeStatementWindow::getHourlyRate()
+{
+	String txt = "" << SQL % Select(TYPECOST).From(TYPES).Where(TYPENUM == 15);
+	dblHourlyRate.SetText(txt);
+	hourlyrate = dblHourlyRate.GetData();
+}
+/*
 void CreateTimeStatementWindow::AdjustPrice() // subtract sales tax
 {
 	if (IsNull(txtPrice)) return;
@@ -122,26 +113,81 @@ void CreateTimeStatementWindow::SaveInvoice()
 		PromptOK("Are you missing something? (Customer, Date or items)");
 		return;
 	}
-	double nonTaxable = 0.00, taxable = 0.00, salestax = 0.00, grandTotal = 0.00, totalhours = 0.00;
+	double nonTaxable = 0.00, taxable = 0.00, salestax = 0.00, grandTotal = 0.00;
 
 	// replace next with workday totals mon - sat
 	SQL.Execute("Select MAX(LINEITEM_ID) From LINEITEMS");
 	SQL.Fetch();
 	nextLineItem = (int)SQL[0] + 1;
-	
+
 	totalhours = (double)dblMonday.GetData() +(double)dblTuesday.GetData() +(double)dblWednesday.GetData() +(double)dblThursday.GetData() +(double)dblFriday.GetData() +(double)dblSaturday.GetData();
 	nonTaxable += totalhours * hourlyrate;
-
+	if ((double) dblMonday.GetData() > 0.24) {
 		SQL * Insert(LINEITEMS)
 		(LINEITEM_ID, (int)nextLineItem++)
-		(PRODUCTNAME, "Garage Hourly Rate") // get from table
+		(PRODUCTNAME, 15) // get from table
 		(DESCRIPTION, "Monday hours")
 		(PRICE, hourlyrate)
 		(QTY, (double)dblMonday.GetData())
 		(TOTAL, (double)dblMonday.GetData() * hourlyrate )
 		(INVOICEIDNUMBER, (int64)txtInvoice)
 		(ISTAXABLE, 0);
-
+	}
+	if ((double) dblTuesday.GetData() > 0.24) {
+		SQL * Insert(LINEITEMS)
+		(LINEITEM_ID, (int)nextLineItem++)
+		(PRODUCTNAME, 15) // get from table
+		(DESCRIPTION, "Tuesday hours")
+		(PRICE, hourlyrate)
+		(QTY, (double)dblTuesday.GetData())
+		(TOTAL, (double)dblTuesday.GetData() * hourlyrate )
+		(INVOICEIDNUMBER, (int64)txtInvoice)
+		(ISTAXABLE, 0);
+	}
+	if ((double) dblWednesday.GetData() > 0.24) {
+		SQL * Insert(LINEITEMS)
+		(LINEITEM_ID, (int)nextLineItem++)
+		(PRODUCTNAME, 15) // get from table
+		(DESCRIPTION, "Wednesday hours")
+		(PRICE, hourlyrate)
+		(QTY, (double)dblWednesday.GetData())
+		(TOTAL, (double)dblWednesday.GetData() * hourlyrate )
+		(INVOICEIDNUMBER, (int64)txtInvoice)
+		(ISTAXABLE, 0);
+	}
+	if ((double) dblThursday.GetData() > 0.24) {
+		SQL * Insert(LINEITEMS)
+		(LINEITEM_ID, (int)nextLineItem++)
+		(PRODUCTNAME, 15) // get from table
+		(DESCRIPTION, "Thursday hours")
+		(PRICE, hourlyrate)
+		(QTY, (double)dblThursday.GetData())
+		(TOTAL, (double)dblThursday.GetData() * hourlyrate )
+		(INVOICEIDNUMBER, (int64)txtInvoice)
+		(ISTAXABLE, 0);
+	}
+	if ((double) dblFriday.GetData() > 0.24) {
+		SQL * Insert(LINEITEMS)
+		(LINEITEM_ID, (int)nextLineItem++)
+		(PRODUCTNAME, 15) // get from table
+		(DESCRIPTION, "Friday hours")
+		(PRICE, hourlyrate)
+		(QTY, (double)dblFriday.GetData())
+		(TOTAL, (double)dblFriday.GetData() * hourlyrate )
+		(INVOICEIDNUMBER, (int64)txtInvoice)
+		(ISTAXABLE, 0);
+	}
+	if ((double) dblSaturday.GetData() > 0.24) {
+		SQL * Insert(LINEITEMS)
+		(LINEITEM_ID, (int)nextLineItem++)
+		(PRODUCTNAME, 15) // get from table
+		(DESCRIPTION, "Saturday hours")
+		(PRICE, hourlyrate)
+		(QTY, (double)dblSaturday.GetData())
+		(TOTAL, (double)dblSaturday.GetData() * hourlyrate )
+		(INVOICEIDNUMBER, (int64)txtInvoice)
+		(ISTAXABLE, 0);
+	}
 	salestax = 0.0;
 	
 	grandTotal += salestax + nonTaxable + taxable;
@@ -190,9 +236,9 @@ void CreateTimeStatementWindow::PrintInvoice()
 	SaveInvoice();
 	if (optMarkAsPaid.GetData() == 1)  MarkAsPaid();
 	// pInvoice = InvoicesArray.GetKey();
-	if (pInvoice == 0 || IsNull(pInvoice))
+	if (pInvoice == 0 || IsNull(pInvoice) || totalhours < 0.24)
 	{
-		Exclamation("No invoice number saved!");
+		Exclamation("Invalid - returning.");
 		return;
 	}
 	
@@ -243,7 +289,7 @@ void CreateTimeStatementWindow::PrintInvoice()
 	
 	// Minor adjustment needed to align dollar column
 	double amtPaid = (IsNull(invoiceSQL[AMTPAID]) ?  (double)0.00 : (double)invoiceSQL[AMTPAID]);
-	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Taxable Sub:]::a4/15 [> " << prnMoney(invoiceSQL[TAXABLESUB]) << "]}}]]&";
+	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [  ]:: [  ]:: [ ]:: [ Total Hours:]::a4/15 [> " << prnQty(totalhours) << "]}}]]&";
 	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ NonTaxable Sub:]::a4/15 [> " << prnMoney(invoiceSQL[NONTAXABLESUB]) << "]}}]]&";
 	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Tax:]::a4/15 [> " << prnMoney(invoiceSQL[TAX]) << "]}}]]&";
 	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Total:]::a4/15 [> " << prnMoney(invoiceSQL[GRANDTOTAL]) << "]}}]]&";

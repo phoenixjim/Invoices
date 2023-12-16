@@ -81,7 +81,10 @@ void InvoicesWindow::btnPrintClicked()
 
 	custSQL * SelectAll().From( CUSTOMERS ).Where( CUST_ID == invoiceSQL[CUSTOMERID]);
 	linesSQL * SelectAll().From( LINEITEMS ).Where( INVOICEIDNUMBER == invoiceSQL[INVOICENUMBER]);
-	String taxexempt = ((custSQL[TAXABLE] == 1) ? "" : "Tax exempt form on file, if required");
+	String taxexempt = "";
+	if (invoiceSQL[CUSTOMERID] != 18) taxexempt = ( (custSQL[TAXABLE] == 1) ? "" : "Tax exempt form on file, if required");
+	else taxexempt = ( invoiceSQL[CUSTOMERID] != 18 ? "" : "Employer");
+	
 
 	invoiceQTF = "[ [ &][@6 &][ {{4821:95:482:1266:1666:1670f0;g0; [ " << 
 		custSQL[CUSTNAME] << " ]:: [@6 ]:: [@6 ]:: [@6 ]:: [ Invoice No.:]:: [> " << invoiceSQL[INVOICENUMBER] << " ]:: [ " << 
@@ -95,7 +98,7 @@ void InvoicesWindow::btnPrintClicked()
 	invoiceQTF << "[ [ {{729:2603:1666:1666:1666:1670@L|1 [ Item]:: [ Name]:: [> Price]:: [> Quantity]:: [> Taxable]::|1 [> Subtotal]:: [ ]::-3 [ Description]::-2 [ ]::-1 [ ]:: [ ]:: [ ]}}]]&";
 	int linenumber = 0;
 
-	double nonTaxable = 0.0, taxable = 0.0, salestax = 0.0, grandtotal = 0.0;
+	double nonTaxable = 0.0, taxable = 0.0, salestax = 0.0, grandtotal = 0.0, totalhours = 0.00;
 
 	while (linesSQL.Fetch())
 	{
@@ -115,18 +118,21 @@ void InvoicesWindow::btnPrintClicked()
 		}
 		else {
 			nonTaxable += round((double)linesSQL[PRICE] * (double)linesSQL[QTY], 2);
+			if (invoiceSQL[CUSTOMERID] == 18) totalhours += round((double)linesSQL[QTY], 2);
 		}
 	}
 	if (custSQL[TAXABLE] == 1) salestax = round( taxable * ( getTaxRate(custSQL[CUST_ID]) / 100.00 ) , 2 );
 	else salestax = 0.00;
 	grandtotal = nonTaxable + taxable + salestax;
-	
+
 	SQL * SqlUpdate(INVOICES)(TAXABLESUB,taxable)(NONTAXABLESUB,nonTaxable)(TAX, salestax)(GRANDTOTAL,grandtotal).Where(INVOICENUMBER == thisInvoice); // INVOICENUMBER CHANGED FROM INVOICEID
 	InvoicesArray.ReQuery();
 	
 	// Need to recalc values below...
 	double amtPaid = (IsNull(invoiceSQL[AMTPAID]) ?  (double)0.00 : (double)invoiceSQL[AMTPAID]);
-	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Taxable Sub:]::a4/15 [> " << prnMoney(invoiceSQL[TAXABLESUB]) << "]}}]]&";
+	if (invoiceSQL[CUSTOMERID] == 18)
+		invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [  ]:: [  ]:: [ ]:: [ Total Hours:]::a4/15 [> " << prnQty(totalhours) << "]}}]]&";
+	else invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Taxable Sub:]::a4/15 [> " << prnMoney(invoiceSQL[TAXABLESUB]) << "]}}]]&";
 	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ NonTaxable Sub:]::a4/15 [> " << prnMoney(invoiceSQL[NONTAXABLESUB]) << "]}}]]&";
 	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Tax:]::a4/15 [> " << prnMoney(invoiceSQL[TAX]) << "]}}]]&";
 	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Total:]::a4/15 [> " << prnMoney(invoiceSQL[GRANDTOTAL]) << "]}}]]&";

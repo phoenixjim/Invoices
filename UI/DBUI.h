@@ -60,7 +60,7 @@ public:
 class CreateTimeStatementWindow : public WithCreateTimeStatementWindowLayout<TopWindow> {
 	Configs myConfig;
 	long nextInvoice, nextLineItem;
-	int pInvoice;
+	int pInvoice, totalhours;
 	String terms = "Due on Receipt";
 	String customer = "";
 	double taxrate = 0.00;
@@ -68,7 +68,7 @@ class CreateTimeStatementWindow : public WithCreateTimeStatementWindowLayout<Top
 	double CalcItemTotal(int itemnumber);
 	void CalcInvoiceTotal();
 	void CustChanged();
-	// void ProdChanged();
+	void getHourlyRate();
 	// void AdjustPrice();
 	void SaveInvoice();
 	void CancelInvoice();
@@ -199,7 +199,7 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 	MenuBar		mainmenu;
 	// added 'save and mark paid' on create invoice window
 
-	String version = "2.1.5.2 & Reports bughunt successful."; // added new report, renamed old profit and loss to yeartoyear
+	String version = "2.1.6.1 & Add quick add timesheet statement for my Employer (1099)"; // added new report, renamed old profit and loss to yeartoyear
 
 public:
 	Invoices();
