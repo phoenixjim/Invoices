@@ -107,7 +107,7 @@ void TaxWindow::CreateSalesTaxReport(String start, String end)
 		nowNontaxable += (double) sql[NONTAXABLESUB];
 		nowTax[ cnumber - 1 ] += (double) sql[TAX];
 		calcTax += nowTaxable[cnumber - 1] * getTaxRate(cnumber) / 100.00;
-		totTax += nowTax[cnumber - 1];
+		totTax += (double) sql[TAX];
 		taxableTotal += (double) sql[TAXABLESUB];
 	
 	}
@@ -120,7 +120,7 @@ void TaxWindow::CreateSalesTaxReport(String start, String end)
 	}
 	
 	// plQTF << " }} {{7500:2500:7500:2500 " ;
-	plQTF << " [* TAX EXEMPT RECEIVED ]:: [+70>* " << prnMoney( nowNontaxable ) << " ]:: [* TOTAL TAXES PAYABLE ]:: [+70>* ";
+	plQTF << " [* TAX EXEMPT RECEIVED ]:: [+70>* " << prnMoney( nowNontaxable ) << " ]:: [* TOTAL TAXABLE ]:: [+70>* ";
 	plQTF << prnMoney( totTax > calcTax ? totTax : calcTax ) << " ]:: ";
 	plQTF << "[* TOTAL RECEIVED ]:: [+70>* " << prnMoney( taxableTotal + nowNontaxable ) << " ]:: [ ]:: }} ";
 

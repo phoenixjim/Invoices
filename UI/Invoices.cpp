@@ -133,8 +133,10 @@ void InvoicesWindow::btnPrintClicked()
 	if (invoiceSQL[CUSTOMERID] == 18)
 		invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [  ]:: [  ]:: [ ]:: [ Total Hours:]::a4/15 [> " << prnQty(totalhours) << "]}}]]&";
 	else invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Taxable Sub:]::a4/15 [> " << prnMoney(invoiceSQL[TAXABLESUB]) << "]}}]]&";
-	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ NonTaxable Sub:]::a4/15 [> " << prnMoney(invoiceSQL[NONTAXABLESUB]) << "]}}]]&";
-	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Tax:]::a4/15 [> " << prnMoney(invoiceSQL[TAX]) << "]}}]]&";
+	if (invoiceSQL[CUSTOMERID] != 18) {
+		invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ NonTaxable Sub:]::a4/15 [> " << prnMoney(invoiceSQL[NONTAXABLESUB]) << "]}}]]&";
+		invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Tax:]::a4/15 [> " << prnMoney(invoiceSQL[TAX]) << "]}}]]&";
+	}
 	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Total:]::a4/15 [> " << prnMoney(invoiceSQL[GRANDTOTAL]) << "]}}]]&";
 	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Amount Paid:]::a4/15 [> " << prnMoney(invoiceSQL[AMTPAID]) << "]}}]]&";
 	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Balance Due:]::a4/15 [> " << prnMoney((double)invoiceSQL[GRANDTOTAL] - (double)invoiceSQL[AMTPAID]) << "]}}]]&";

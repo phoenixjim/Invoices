@@ -190,7 +190,7 @@ void CreateTimeStatementWindow::SaveInvoice()
 	}
 	salestax = 0.0;
 	
-	grandTotal += salestax + nonTaxable + taxable;
+	grandTotal += nonTaxable;
 	int custId = 1;
 	custId += cbCustomers.GetIndex();
 
@@ -290,8 +290,8 @@ void CreateTimeStatementWindow::PrintInvoice()
 	// Minor adjustment needed to align dollar column
 	double amtPaid = (IsNull(invoiceSQL[AMTPAID]) ?  (double)0.00 : (double)invoiceSQL[AMTPAID]);
 	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [  ]:: [  ]:: [ ]:: [ Total Hours:]::a4/15 [> " << prnQty(totalhours) << "]}}]]&";
-	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ NonTaxable Sub:]::a4/15 [> " << prnMoney(invoiceSQL[NONTAXABLESUB]) << "]}}]]&";
-	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Tax:]::a4/15 [> " << prnMoney(invoiceSQL[TAX]) << "]}}]]&";
+	// invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ NonTaxable Sub:]::a4/15 [> " << prnMoney(invoiceSQL[NONTAXABLESUB]) << "]}}]]&";
+	// invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Tax:]::a4/15 [> " << prnMoney(invoiceSQL[TAX]) << "]}}]]&";
 	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Total:]::a4/15 [> " << prnMoney(invoiceSQL[GRANDTOTAL]) << "]}}]]&";
 	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Amount Paid:]::a4/15 [> " << prnMoney(amtPaid) << "]}}]]&";
 	invoiceQTF << "[ [ {{729:2603:1666:866:2466:1695f0;g0; [ ]:: [ ]:: [ ]:: [ ]:: [ Balance Due:]::a4/15 [> " << prnMoney((double)invoiceSQL[GRANDTOTAL] - (double)amtPaid) << "]}}]]&";
