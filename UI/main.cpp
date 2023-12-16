@@ -30,6 +30,11 @@ void Invoices::FileMenu(Bar& bar)
 		createinvoicewin.Open(this);
 		}
 	});
+	bar.Add(t_("New Time Statement"), [=]{ if(!timestatementwin.IsOpen()) {
+		timestatementwin.ActiveFocus(timestatementwin.cbCustomers);
+		timestatementwin.Open(this);
+		}
+	});
 	bar.Add(t_("List Invoices"), [=]{
 		if(!invoiceswin.IsOpen())	{
 			invoiceswin.InvoicesArray.ReQuery();

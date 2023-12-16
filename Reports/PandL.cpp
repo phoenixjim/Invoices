@@ -143,14 +143,6 @@ if (nowParts > 0.00) {
 	
 }
 
-double PandLWindow::GetPartsCost ( int invId )
-{
-	SQL * Select ( SqlSum ( COST ) ).From ( PRODUCTS ).Where ( INVOICEID == invId );
-	SQL.Fetch();
-	double parts = IsNull(SQL[0]) ? 0.00 : round(SQL[0], 2);
-	return parts;
-}
-
 void PandLWindow::refreshAll()
 {
 	

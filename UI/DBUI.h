@@ -56,6 +56,36 @@ public:
      }
 };
 
+// CreateTimeStatement
+class CreateTimeStatementWindow : public WithCreateTimeStatementWindowLayout<TopWindow> {
+	Configs myConfig;
+	long nextInvoice, nextLineItem;
+	int pInvoice;
+	String terms = "Due on Receipt";
+	String customer = "";
+	double taxrate = 0.00;
+	double hourlyrate = 0.00;
+	double CalcItemTotal(int itemnumber);
+	void CalcInvoiceTotal();
+	void CustChanged();
+	// void ProdChanged();
+	// void AdjustPrice();
+	void SaveInvoice();
+	void CancelInvoice();
+	// void AddItem();
+	// void ClearItem();
+	// void DeleteRow();
+	void PrintInvoice();
+	void MarkAsPaid();
+	
+public:
+	CreateTimeStatementWindow();
+	CreateTimeStatementWindow(int invoice);
+	void Paint(Draw& w) {
+        w.DrawRect(GetSize(), COLOR); // <= enter your background color here
+     }
+};
+
 // ListInvoices
 class InvoicesWindow : public WithInvoicesWindowLayout<TopWindow> {
 	Configs myConfig;
@@ -157,6 +187,7 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 	TypesWindow typewin;
 	CountiesWindow countywin;
 	CreateInvoiceWindow createinvoicewin;
+	CreateTimeStatementWindow timestatementwin;
 	TaxWindow taxreportwin;
 	IncomeWindow incomewin;
 	YearToYearWindow year2yearwin;

@@ -19,15 +19,6 @@ Convert& ConvLineItem();
 Convert& ConvCounty();
 Convert& ConvCurrency();
 
-double round(double d, int n);
-double PercentFormat(double d);
-String prnMoney( double money );
-String prnQty( double qty );
-double taxMoney ( double money );
-double getTaxRate(int custId);
-double getCountyTaxRate( int county );
-int getCustFromInvoice(int invoiceId);
-
 // From sergeynikitin @ https://www.ultimatepp.org/forums/index.php?t=usrinfo&id=538&
 LookupHdr(TYPES,TYPENUM,TYPENAME);
 LookupHdr(COUNTIES,COUNTY_NUM,COUNTY_NAME);

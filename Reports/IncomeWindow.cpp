@@ -38,14 +38,6 @@ IncomeWindow::IncomeWindow() {
 	voided.Set(1).SetColor(TXTCOLOR);
 }
 
-double IncomeWindow::GetPartsCost ( int invId )
-{
-	SQL * Select ( SqlSum ( COST ) ).From ( PRODUCTS ).Where ( INVOICEID == invId );
-	SQL.Fetch();
-	double parts = IsNull(SQL[0]) ? 0.00 : round(SQL[0], 2);
-	return parts;
-}
-
 String IncomeWindow::GetCustomerName ( int custId )
 {
 	SQL * Select ( CUSTNAME ).From ( CUSTOMERS ).Where ( CUST_ID == custId );

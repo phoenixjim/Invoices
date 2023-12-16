@@ -10,6 +10,7 @@ using namespace Upp;
 
 #include "../Tables/sqlincludes.h"
 #include "../Utils/converts.h"
+#include "../Utils/utils.h"
 #include "../Utils/configs.h"
 
 #define COLOR Color(102, 0, 102) // dark violet background, text should be white...
@@ -22,7 +23,6 @@ struct TaxWindow : WithTaxWindowLayout<TopWindow> {
 	void cancelPressed();
 	void anonChanged();
 	void noCustChanged();
-	double GetPartsCost(int invId);
 	void CreateReport(String start, String end);
 	void CreateSalesTaxReport(String start, String end);
 	void ExportQTF();
@@ -43,7 +43,6 @@ struct IncomeWindow : WithIncomeByCustomerLayout<TopWindow> {
 	void voidedChanged();
 	void cancelPressed();
 	void CustChanged();
-	double GetPartsCost(int invId);
 	void CreateReport(String start, String end);
 	void ExportQTF();
 	
@@ -65,7 +64,6 @@ struct YearToYearWindow : WithYearToYearWindowLayout<TopWindow> {
 	void cancelPressed();
 	void okPressed();
 	void CreateReport(String start, String end);
-	double GetPartsCost(int invId);
 public:
 	YearToYearWindow();
 	void Paint(Draw& w) {
@@ -78,7 +76,6 @@ struct PandLWindow : public WithPandLWindowLayout<TopWindow> {
 	void okPressed();
 	void cancelPressed();
 	void CreateReport(String start, String end);
-	double GetPartsCost ( int invId );
 	void refreshAll();
 	public:
 		PandLWindow();
