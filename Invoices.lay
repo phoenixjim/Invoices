@@ -114,6 +114,7 @@ LAYOUT(InvoicesWindowLayout, 1128, 584)
 	ITEM(Upp::Button, btnByDates, SetLabel(t_("Date Range")).LeftPosZ(12, 76).TopPosZ(240, 15))
 	ITEM(Upp::Button, btnByCustomer, SetLabel(t_("By Customer")).LeftPosZ(52, 80).TopPosZ(176, 15))
 	ITEM(Upp::Button, btnByVoided, SetLabel(t_("All Voided")).LeftPosZ(12, 76).TopPosZ(216, 15))
+	ITEM(Upp::Button, btnTest, SetLabel(t_("Test get selected")).LeftPosZ(44, 84).TopPosZ(40, 15))
 END_LAYOUT
 
 LAYOUT(ProductAddLayout, 360, 360)

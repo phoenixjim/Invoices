@@ -100,7 +100,6 @@ class InvoicesWindow : public WithInvoicesWindowLayout<TopWindow> {
 	void btnByCustomerClicked();
 	void btnByVoidedClicked();
 	void btnAllClicked();
-		
 public:
 	InvoicesWindow();
 	virtual void Paint(Draw& w) {
@@ -199,7 +198,7 @@ class Invoices : public WithInvoicesLayout<TopWindow> {
 	MenuBar		mainmenu;
 	// added 'save and mark paid' on create invoice window
 
-	String version = "2.1.6.1 & Add quick add timesheet statement for my Employer (1099)"; // added new report, renamed old profit and loss to yeartoyear
+	String version = "2.1.6.2 & Add quick add timesheet statement for my Employer (1099) & Enable print of multiple invoices one after & the other (individual cancel capable)."; // added new report, renamed old profit and loss to yeartoyear
 
 public:
 	Invoices();
