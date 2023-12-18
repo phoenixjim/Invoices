@@ -30,7 +30,7 @@ InvoicesWindow::InvoicesWindow()
 	InvoicesArray.AddColumn ( AMTPAID, "Amount Paid" ).SetConvert ( ConvDouble() ).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignRight();
 	InvoicesArray.AddColumn ( DATEPAID, "Date Paid" ).SetConvert ( DateIntConvert() ).SetDisplay ( StdRightDisplay() ).HeaderTab().AlignCenter();
 	InvoicesArray.AddColumn ( STATUS, "Status" );
-	InvoicesArray.ColumnWidths("15 15 20 30 25 20 20 20 20 20 10");
+	InvoicesArray.ColumnWidths("12 15 25 0 25 20 20 20 20 20 10");
 	InvoicesArray.Appending().Removing().MultiSelect();
 
 	InvoicesArray.SetOrderBy ( INVOICENUMBER );
@@ -61,10 +61,10 @@ void InvoicesWindow::btnPrintClicked()
 		myConfig.data.companyname << " @$2022; " << myConfig.data.companyaddress << " @$2022; " << myConfig.data.companycity << ", " << myConfig.data.companystate <<
 		" "  << myConfig.data.companyzip << " @$2022; " << myConfig.data.companyphone << " @$2022; " << myConfig.data.companyemail << "]]]";
 	
-	if(!InvoicesArray.IsCursor())
+	if(InvoicesArray.GetSelectCount() < 1)
 		return;
 
-	int selected = InvoicesArray.GetSelectCount();
+	// int selected = InvoicesArray.GetSelectCount();
 	Vector<int> keys = InvoicesArray.GetSelKeys();
 
 	for (int i = 0; i < keys.GetCount(); i++) {
@@ -178,25 +178,35 @@ void InvoicesWindow::btnApplyPaymentClicked()
 
 void InvoicesWindow::btnVoidClicked()
 {
-	if(!InvoicesArray.IsCursor())
+	if(InvoicesArray.GetSelectCount() < 1)
 		return;
-	int thisInvoice = InvoicesArray.GetKey();
-	if (IsNull(thisInvoice))
-		return;
-	Sql inv;
-	inv * SelectAll().From(INVOICES).Where(INVOICENUMBER == thisInvoice); // INVOICENUMBER CHANGED FROM INVOICEID
-	inv.Fetch();
-	if ((double)inv[AMTPAID] > 0.0) {
-		Exclamation("Can't void after receiving payment");
-		return;
-	}
-	if (PromptOKCancel("Are you sure? This can't be undone...")) {
-		long invoice = (int64)inv[INVOICENUMBER];
-		inv * SqlUpdate(INVOICES)(STATUS, 0).Where(INVOICENUMBER == thisInvoice); // Void = 0,  // INVOICENUMBER CHANGED FROM INVOICEID
-		Sql li;
-		li * Delete(LINEITEMS).Where(INVOICEIDNUMBER == (int64)invoice);
-		InvoicesArray.ReQuery();
-		InvoicesArray.FindSetCursor(thisInvoice);
+
+	int thisInvoice = -1;
+	Vector<int> keys = InvoicesArray.GetSelKeys();
+
+	for (int i = 0; i < keys.GetCount(); i++) {
+
+	// int thisInvoice = InvoicesArray.GetKey();
+		thisInvoice = keys[i];
+	
+		if (thisInvoice == -1)
+			return;
+	
+		Sql inv;
+		inv * SelectAll().From(INVOICES).Where(INVOICENUMBER == thisInvoice); // INVOICENUMBER CHANGED FROM INVOICEID
+		inv.Fetch();
+		if ((double)inv[AMTPAID] > 0.0) {
+			Exclamation("Can't void after receiving payment");
+			return;
+		}
+		if (PromptOKCancel("Are you sure? This can't be undone...")) {
+			long invoice = (int64)inv[INVOICENUMBER];
+			inv * SqlUpdate(INVOICES)(STATUS, 0).Where(INVOICENUMBER == thisInvoice); // Void = 0,  // INVOICENUMBER CHANGED FROM INVOICEID
+			Sql li;
+			li * Delete(LINEITEMS).Where(INVOICEIDNUMBER == (int64)thisInvoice);
+			InvoicesArray.ReQuery();
+			InvoicesArray.FindSetCursor(thisInvoice);
+		}
 	}
 }
 
