@@ -145,7 +145,7 @@ void CreateInvoiceWindow::SaveInvoice()
 		(INVOICEIDNUMBER, (int64)txtInvoice)
 		(ISTAXABLE, (int)arrayLineItems.Get(i, ISTAXABLE));
 	}
-	if (optCustTaxable.Get() == true) salestax = (double)round(taxable * (double)txtTaxRate, 2);
+	if (optCustTaxable.Get() == true) salestax = (double)round(taxable * (double)txtTaxRate / 100, 2);
 	else salestax = 0.0;
 	
 	grandTotal += salestax + nonTaxable + taxable;
@@ -164,6 +164,7 @@ void CreateInvoiceWindow::SaveInvoice()
 		(AMTPAID, 0.0)
 		(STATUS, 1);
 	pInvoice = (int64)txtInvoice;
+	if (optMarkAsPaid.GetData() == 1) MarkAsPaid();
 	ClearItem();
 	txtInvoice = StrInt(txtInvoice.GetData().ToString()) + 1;
 }
@@ -192,7 +193,7 @@ void CreateInvoiceWindow::PrintInvoice()
 	Report myInvoice;
 	
 	SaveInvoice();
-	if (optMarkAsPaid.GetData() == 1) MarkAsPaid();
+	// if (optMarkAsPaid.GetData() == 1) MarkAsPaid();
 	// pInvoice = InvoicesArray.GetKey();
 	if (pInvoice == 0 || IsNull(pInvoice))
 	{

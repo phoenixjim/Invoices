@@ -100,6 +100,7 @@ class InvoicesWindow : public WithInvoicesWindowLayout<TopWindow> {
 	void btnByCustomerClicked();
 	void btnByVoidedClicked();
 	void btnAllClicked();
+	void exportCSV();
 public:
 	InvoicesWindow();
 	virtual void Paint(Draw& w) {
@@ -128,6 +129,7 @@ class ProductsWindow : public WithProductsWindowLayout<TopWindow> {
 public:
 	ProductsWindow();
 	SqlCtrls ctrls;
+	void exportCSV();
 	
 	virtual void Paint(Draw& w) {
         w.DrawRect(GetSize(), COLOR); // <= enter your background color here

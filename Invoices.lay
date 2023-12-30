@@ -36,7 +36,8 @@ LAYOUT(CustomersWindowLayout, 1016, 500)
 END_LAYOUT
 
 LAYOUT(ProductsWindowLayout, 580, 500)
-	ITEM(Upp::Button, btnAddProduct, SetLabel(t_("Add New Product")).SetFont(Upp::SansSerifZ(16)).SetFrame(Upp::ButtonFrame()).LeftPosZ(210, 160).TopPosZ(456, 28))
+	ITEM(Upp::Button, btnAddProduct, SetLabel(t_("Add New Product")).SetFont(Upp::SansSerifZ(16)).SetFrame(Upp::ButtonFrame()).LeftPosZ(44, 160).TopPosZ(456, 28))
+	ITEM(Upp::Button, btnExportCSV, SetLabel(t_("Export to CSV")).SetFont(Upp::SansSerifZ(16)).SetFrame(Upp::ButtonFrame()).LeftPosZ(364, 160).TopPosZ(456, 28))
 	ITEM(SqlArray, ProductArray, SetFrame(Upp::ThinInsetFrame()).LeftPosZ(4, 572).TopPosZ(4, 440))
 END_LAYOUT
 
@@ -98,22 +99,23 @@ END_LAYOUT
 
 LAYOUT(InvoicesWindowLayout, 904, 328)
 	ITEM(SqlArray, InvoicesArray, SetFrame(Upp::ThinInsetFrame()).RightPosZ(4, 708).VSizePosZ(8, 4))
-	ITEM(Upp::Button, btnPrint, SetLabel(t_("Print Selected")).LeftPosZ(4, 80).TopPosZ(16, 15))
-	ITEM(Upp::Button, btnApplyPayment, SetLabel(t_("Apply Payment")).LeftPosZ(4, 80).TopPosZ(36, 15))
-	ITEM(Upp::Button, btnVoid, SetLabel(t_("Void Selected")).LeftPosZ(96, 80).TopPosZ(16, 15))
-	ITEM(Upp::Button, btnFixDate, SetLabel(t_("Fix Dates")).LeftPosZ(4, 80).TopPosZ(56, 15))
+	ITEM(Upp::Button, btnPrint, SetLabel(t_("Print Selected")).LeftPosZ(8, 80).TopPosZ(16, 15))
+	ITEM(Upp::Button, btnApplyPayment, SetLabel(t_("Apply Payment")).LeftPosZ(8, 80).TopPosZ(36, 15))
+	ITEM(Upp::Button, btnVoid, SetLabel(t_("Void Selected")).LeftPosZ(100, 80).TopPosZ(16, 15))
+	ITEM(Upp::Button, btnFixDate, SetLabel(t_("Fix Dates")).LeftPosZ(8, 80).TopPosZ(56, 15))
 	ITEM(Upp::Button, btnByPaid, SetLabel(t_("All Paid")).LeftPosZ(12, 76).TopPosZ(188, 15))
 	ITEM(Upp::Button, btnByBalanceDue, SetLabel(t_("Balance Due")).LeftPosZ(100, 72).TopPosZ(188, 15))
 	ITEM(Upp::LabelBox, dv___7, SetLabel(t_("Show:")).LeftPosZ(4, 180).TopPosZ(168, 152))
 	ITEM(Upp::Button, btnAll, SetLabel(t_("Show All")).LeftPosZ(60, 56).TopPosZ(292, 15))
-	ITEM(Upp::EditDouble, edbPayment, AlignRight(true).Tip(t_("Single invoice")).LeftPosZ(96, 80).TopPosZ(36, 19))
-	ITEM(Upp::EditDate, ddFixDate, Tip(t_("Single invoice")).LeftPosZ(96, 80).TopPosZ(56, 19))
+	ITEM(Upp::EditDouble, edbPayment, AlignRight(true).Tip(t_("Single invoice")).LeftPosZ(100, 80).TopPosZ(36, 19))
+	ITEM(Upp::EditDate, ddFixDate, Tip(t_("Single invoice")).LeftPosZ(100, 80).TopPosZ(56, 19))
 	ITEM(Upp::DropList, cbCustomers, LeftPosZ(12, 164).TopPosZ(224, 19))
 	ITEM(Upp::EditDate, ddRange1, Tip(t_("Start Date")).LeftPosZ(92, 84).TopPosZ(244, 19))
 	ITEM(Upp::EditDate, ddRange2, Tip(t_("End Date")).LeftPosZ(92, 84).TopPosZ(268, 19))
 	ITEM(Upp::Button, btnByDates, SetLabel(t_("Date Range")).LeftPosZ(12, 76).TopPosZ(272, 15))
 	ITEM(Upp::Button, btnByCustomer, SetLabel(t_("By Customer")).LeftPosZ(52, 80).TopPosZ(208, 15))
 	ITEM(Upp::Button, btnByVoided, SetLabel(t_("All Voided")).LeftPosZ(12, 76).TopPosZ(248, 15))
+	ITEM(Upp::Button, btnExportCSV, SetLabel(t_("Export date range to csv")).Tip(t_("If no date selected, export all")).LeftPosZ(8, 172).TopPosZ(88, 15))
 END_LAYOUT
 
 LAYOUT(ProductAddLayout, 360, 360)

@@ -16,6 +16,7 @@ InvoicesWindow::InvoicesWindow()
 	btnByCustomer << [=] { btnByCustomerClicked(); };
 	btnByVoided << [=] { btnByVoidedClicked(); };
 	btnAll << [=] { btnAllClicked(); };
+	btnExportCSV << [=] {exportCSV(); };
 	InvoicesArray.SetTable ( INVOICES, INVOICENUMBER ).AllSorting(); // INVOICENUMBER CHANGED FROM INVOICEID
 
 	// InvoicesArray.Join(BOOK_ID, book); // joins id from other db to this id
@@ -257,6 +258,70 @@ void InvoicesWindow::btnByDatesClicked()
 	SqlBool where;
 	where = Between(DATEPAID, ddRange1.GetData().ToString(), ddRange2.GetData().ToString());
 	InvoicesArray.ReQuery(where);
+}
+void InvoicesWindow::exportCSV() 
+{
+	String filename = "";
+	FileSel fs;
+	fs.Type("csv", "*.csv");
+
+	#ifdef PLATFORM_WIN32
+	fs.PreSelect(GetCurrentDirectory());
+	#else
+	fs.PreSelect(GetExeFilePath());
+	#endif
+	
+	fs.DefaultName("INVOICES");
+	fs.DefaultExt("csv");
+	if(!fs.ExecuteSaveAs()) {
+		PromptOK("No file selected.");
+		return;
+	}
+	filename = fs;
+	// SaveFile(filename, "INVOICES");
+	FileOut out(filename);
+	if(!out) {
+		Exclamation(t_("Failed opening ") + filename);
+		return;
+	}
+	int i = 0;
+	out << "ID,CUSTNAME,DATE,TERMS,NONTAXABLESUB,TAXABLESUB,TAX,GRANDTOTAL,AMTPAID,DATEPAID,STATUS\n";
+	String transdate = "", paiddate = "", nonTaxable = "", taxable = "", tax = "", total = "", paid = "";
+	Sql sql;
+	if ( IsNull ( ddRange1 ) || IsNull ( ddRange2 ))
+	{
+		sql * SelectAll().From(INVOICES);
+	}
+	else {
+		SqlBool where;
+		where = Between(DATEPAID, ddRange1.GetData().ToString(), ddRange2.GetData().ToString());
+		
+		sql * SelectAll().From(INVOICES).Where(where);
+	}
+
+	while ( sql.Fetch() )
+	{
+		if (sql[STATUS].IsNull()) continue;
+		Sql custSQL;
+		// Vector <Value> row = InvoicesArray.ReadRow(i++);
+		custSQL * Select(CUSTNAME).From( CUSTOMERS ).Where( CUST_ID == (int)sql[1]);
+		transdate = ::Format(Date( 1970, 1, 1) + (int)sql[2]); // TRANSACTIONDATE
+		paiddate = ::Format(Date( 1970, 1, 1) + (int)sql[9]); // DATEPAID
+
+		nonTaxable = (!sql[4].IsNull()) ? prnMoney(sql[4]) : prnMoney(0.00);
+		taxable = (!sql[5].IsNull()) ? prnMoney(sql[5]) : prnMoney(0.00);
+		tax = (!sql[6].IsNull()) ? prnMoney(sql[6]) : prnMoney(0.00);
+		total = (!sql[7].IsNull()) ? prnMoney(sql[7]) : prnMoney(0.00);
+		paid = (!sql[8].IsNull()) ? prnMoney(sql[8]) : prnMoney(0.00);
+
+		String r = IntStr(sql[0]) << "," << custSQL[0] << "," << transdate << "," << 
+		    sql[3] << "," <<  nonTaxable << "," << taxable << "," << 
+		    tax << "," << total << "," << paid << "," << 
+		    paiddate << "," << IntStr(sql[10]) << "\n";
+
+		out << r;
+	}
+	out.Close();
 }
 
 void InvoicesWindow::btnByCustomerClicked()
