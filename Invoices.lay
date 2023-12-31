@@ -22,33 +22,33 @@ LAYOUT(CompanyInfoWindowLayout, 360, 279)
 	ITEM(Upp::Button, cancel, SetLabel(t_("Cancel")).SetFont(Upp::SansSerifZ(12)).LeftPosZ(212, 56).TopPosZ(244, 15))
 END_LAYOUT
 
-LAYOUT(LineItemsWindowLayout, 808, 576)
-	ITEM(Upp::Button, btnAddItem, SetLabel(t_("New Line Item")).SetFont(Upp::SansSerifZ(12)).LeftPosZ(224, 112).TopPosZ(548, 19))
-	ITEM(Upp::Label, lblInvoice, SetLabel(t_("Invoice #:")).SetAlign(Upp::ALIGN_RIGHT).SetFont(Upp::StdFontZ(12).Bold()).LeftPosZ(12, 72).TopPosZ(548, 19))
-	ITEM(Upp::DropList, cbInvoice, LeftPosZ(104, 64).TopPosZ(548, 19))
-	ITEM(SqlArray, LineItemsArray, SetFrame(Upp::ThinInsetFrame()).LeftPosZ(4, 800).TopPosZ(4, 528))
-	ITEM(Upp::Button, btnDelItem, SetLabel(t_("Delete Line Item")).SetFont(Upp::SansSerifZ(12)).LeftPosZ(440, 112).TopPosZ(544, 19))
+LAYOUT(LineItemsWindowLayout, 688, 368)
+	ITEM(Upp::Button, btnAddItem, SetLabel(t_("New Line Item")).SetFont(Upp::SansSerifZ(12)).LeftPosZ(224, 112).TopPosZ(324, 19))
+	ITEM(Upp::Label, lblInvoice, SetLabel(t_("Invoice #:")).SetAlign(Upp::ALIGN_RIGHT).SetFont(Upp::StdFontZ(12).Bold()).LeftPosZ(12, 72).TopPosZ(324, 19))
+	ITEM(Upp::DropList, cbInvoice, LeftPosZ(104, 64).TopPosZ(324, 19))
+	ITEM(SqlArray, LineItemsArray, SetFrame(Upp::ThinInsetFrame()).LeftPosZ(20, 652).TopPosZ(4, 296))
+	ITEM(Upp::Button, btnDelItem, SetLabel(t_("Delete Line Item")).SetFont(Upp::SansSerifZ(12)).LeftPosZ(400, 112).TopPosZ(324, 19))
 END_LAYOUT
 
-LAYOUT(CustomersWindowLayout, 1016, 500)
-	ITEM(Upp::Button, btnNewCustomer, SetLabel(t_("Add New Customer")).SetFrame(Upp::ThinInsetFrame()).LeftPosZ(448, 120).TopPosZ(456, 15))
-	ITEM(SqlArray, CustArray, AutoHideSb(true).LeftPosZ(4, 1008).TopPosZ(4, 420))
+LAYOUT(CustomersWindowLayout, 928, 348)
+	ITEM(Upp::Button, btnNewCustomer, SetLabel(t_("Add New Customer")).SetFrame(Upp::ThinInsetFrame()).LeftPosZ(404, 120).TopPosZ(312, 15))
+	ITEM(SqlArray, CustArray, AutoHideSb(true).LeftPosZ(14, 900).TopPosZ(4, 288))
 END_LAYOUT
 
-LAYOUT(ProductsWindowLayout, 580, 500)
-	ITEM(Upp::Button, btnAddProduct, SetLabel(t_("Add New Product")).SetFont(Upp::SansSerifZ(16)).SetFrame(Upp::ButtonFrame()).LeftPosZ(44, 160).TopPosZ(456, 28))
-	ITEM(Upp::Button, btnExportCSV, SetLabel(t_("Export to CSV")).SetFont(Upp::SansSerifZ(16)).SetFrame(Upp::ButtonFrame()).LeftPosZ(364, 160).TopPosZ(456, 28))
-	ITEM(SqlArray, ProductArray, SetFrame(Upp::ThinInsetFrame()).LeftPosZ(4, 572).TopPosZ(4, 440))
+LAYOUT(ProductsWindowLayout, 580, 312)
+	ITEM(Upp::Button, btnAddProduct, SetLabel(t_("Add New Product")).SetFont(Upp::SansSerifZ(16)).SetFrame(Upp::ButtonFrame()).LeftPosZ(44, 160).TopPosZ(272, 28))
+	ITEM(Upp::Button, btnExportCSV, SetLabel(t_("Export to CSV")).SetFont(Upp::SansSerifZ(16)).SetFrame(Upp::ButtonFrame()).LeftPosZ(364, 160).TopPosZ(272, 28))
+	ITEM(SqlArray, ProductArray, SetFrame(Upp::ThinInsetFrame()).LeftPosZ(4, 572).TopPosZ(4, 252))
 END_LAYOUT
 
-LAYOUT(TypesWindowLayout, 580, 500)
-	ITEM(Upp::Button, btnAddType, SetLabel(t_("Add New Type")).SetFont(Upp::SansSerifZ(16)).SetFrame(Upp::ButtonFrame()).LeftPosZ(210, 160).TopPosZ(456, 28))
-	ITEM(SqlArray, TypeArray, SetFrame(Upp::ThinInsetFrame()).LeftPosZ(4, 572).TopPosZ(4, 440))
+LAYOUT(TypesWindowLayout, 580, 348)
+	ITEM(Upp::Button, btnAddType, SetLabel(t_("Add New Type")).SetFont(Upp::SansSerifZ(16)).SetFrame(Upp::ButtonFrame()).LeftPosZ(210, 160).TopPosZ(308, 28))
+	ITEM(SqlArray, TypeArray, SetFrame(Upp::ThinInsetFrame()).LeftPosZ(4, 572).TopPosZ(4, 280))
 END_LAYOUT
 
-LAYOUT(CountiesLayout, 580, 500)
-	ITEM(Upp::Button, btnAddCounty, SetLabel(t_("Add New County")).SetFont(Upp::SansSerifZ(16)).SetFrame(Upp::ButtonFrame()).LeftPosZ(210, 160).TopPosZ(456, 28))
-	ITEM(SqlArray, CountyArray, SetFrame(Upp::ThinInsetFrame()).LeftPosZ(4, 572).TopPosZ(4, 440))
+LAYOUT(CountiesLayout, 580, 324)
+	ITEM(Upp::Button, btnAddCounty, SetLabel(t_("Add New County")).SetFont(Upp::SansSerifZ(16)).SetFrame(Upp::ButtonFrame()).LeftPosZ(210, 160).TopPosZ(280, 28))
+	ITEM(SqlArray, CountyArray, SetFrame(Upp::ThinInsetFrame()).LeftPosZ(4, 572).TopPosZ(4, 244))
 END_LAYOUT
 
 LAYOUT(CreateInvoiceWindowLayout, 935, 478)
@@ -97,8 +97,8 @@ LAYOUT(CreateInvoiceWindowLayout, 935, 478)
 	ITEM(Upp::StaticText, lInst, SetText(t_("Prices are decimal, ie: 140.00")).SetAlign(Upp::ALIGN_RIGHT).LeftPosZ(296, 196).TopPosZ(96, 19))
 END_LAYOUT
 
-LAYOUT(InvoicesWindowLayout, 904, 328)
-	ITEM(SqlArray, InvoicesArray, SetFrame(Upp::ThinInsetFrame()).RightPosZ(4, 708).VSizePosZ(8, 4))
+LAYOUT(InvoicesWindowLayout, 832, 328)
+	ITEM(SqlArray, InvoicesArray, SetFrame(Upp::ThinInsetFrame()).RightPosZ(12, 628).VSizePosZ(8, 4))
 	ITEM(Upp::Button, btnPrint, SetLabel(t_("Print Selected")).LeftPosZ(8, 80).TopPosZ(16, 15))
 	ITEM(Upp::Button, btnApplyPayment, SetLabel(t_("Apply Payment")).LeftPosZ(8, 80).TopPosZ(36, 15))
 	ITEM(Upp::Button, btnVoid, SetLabel(t_("Void Selected")).LeftPosZ(100, 80).TopPosZ(16, 15))

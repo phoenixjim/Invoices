@@ -49,6 +49,7 @@ InvoicesWindow::InvoicesWindow()
 		cbCustomers.Add(custSql[CUST_ID], custSql[CUSTNAME]);
 	}
 	InvoicesArray.Query();
+	InvoicesArray.FindSetCursor(InvoicesArray.GetCount()-1);
 
 	dv___7.SetInk(TXTCOLOR);
 }
